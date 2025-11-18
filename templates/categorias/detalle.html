@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}{{ categoria.nombre }} - Categoría - ChoriFans{% endblock %}
+
+{% block content %}
+  <section class="categoria-detalle-container">
+    <h1>{{ categoria.nombre }}</h1>
+
+    {% if categoria.descripcion %}
+      <p class="categoria-descripcion">
+        {{ categoria.descripcion }}
+      </p>
+    {% endif %}
+
+    <h2>Parrillas en esta categoría</h2>
+
+    {% if parrillas %}
+      <div class="parrillas-grid">
+        {% for parrilla in parrillas %}
+          <article class="parrilla-card">
+            <div class="parrilla-card-img">
+              {% if parrilla.foto_principal %}
+                <img
+                  src="{{ parrilla.foto_principal.url }}"
+                  alt="Foto de {{ parrilla.nombre }}"
+                  class="parrilla-card-img-tag"
+                />
+              {% else %}
+                <div class="parrilla-card-img-placeholder">
+                  Sin foto
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="parrilla-card-body">
+              <h3 class="parrilla-card-titulo">
+                {{ parrilla.nombre }}
+              </h3>
+
+              <p class="parrilla-card-ubicacion">
+                {{ parrilla.ubicacion.nombre_barrio }} - {{ parrilla.ubicacion.nombre_ciudad }}
+              </p>
+
+              {% if parrilla.promedio_puntaje %}
+                <p class="parrilla-card-puntaje">
+                  Puntaje promedio: {{ parrilla.promedio_puntaje }} / 5
+                </p>
+              {% endif %}
+
+              <p class="parrilla-card-descripcion">
+                {{ parrilla.descripcion|truncatechars:120 }}
+              </p>
+
+              <a href="{% url 'parrillas:detalle' parrilla.id %}" class="btn-ver">
+                Ver más
+              </a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No hay parrillas en esta categoría por el momento.</p>
+    {% endif %}
+
+    <p style="margin-top: 1.5rem;">
+      <a href="{% url 'categorias:lista' %}">← Volver a categorías</a>
+    </p>
+  </section>
+{% endblock %}

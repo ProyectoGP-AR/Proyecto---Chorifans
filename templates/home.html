@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+
+{% block title %}Inicio - ChoriFans{% endblock %}
+
+
+{% block content %}
+  <h2>Parrillas destacadas</h2>
+
+ 
+  {% if parrillas %}
+    <div class="parrilla-grid">
+      {% for parrilla in parrillas %}
+        <div class="parrilla-card">
+          
+         {% if parrilla.foto_principal %}
+          <div class="parrilla-image">
+          <img src="{{ parrilla.foto_principal.url }}" alt="Foto de {{ parrilla.nombre }}">
+          </div>
+        {% endif %}
+
+          <!-- Nombre de la parrilla -->
+          <div class="parrilla-title">
+            {{ parrilla.nombre }}
+          </div>
+
+          <!-- Categoría (si existe) -->
+          <div class="parrilla-info">
+            Categoría:
+            {% if parrilla.categoria %}
+              {{ parrilla.categoria.nombre }}
+            {% else %}
+              Sin categoría
+            {% endif %}
+          </div>
+
+          <!-- Ubicación (si existe) -->
+          <div class="parrilla-info">
+            Ubicación:
+            {% if parrilla.ubicacion %}
+              {{ parrilla.ubicacion }}
+              {# Si definimos __str__ en Ubicacion, se verá lindo, ej: "Buenos Aires - Caballito" #}
+            {% else %}
+              Sin ubicación
+            {% endif %}
+          </div>
+
+          <!-- Puntaje en choripanes -->
+          <div class="parrilla-rating">
+         
+            {% with puntaje=parrilla.promedio_puntaje|default:0 %}
+              {% with entero=puntaje|floatformat:0 %}
+                {% for i in "12345" %}
+                  {% if forloop.counter <= entero|add:"0" %}
+                    🌭
+                  {% endif %}
+                {% endfor %}
+                ({{ puntaje }})
+              {% endwith %}
+            {% endwith %}
+          </div>
+
+          <!-- Botón "Ver más" (por ahora sin link real) -->
+          <a href="{% url 'parrillas:detalle' parrilla.id %}" class="btn-ver">
+              Ver más
+          </a>
+
+
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>No hay parrillas cargadas todavía. Probá agregarlas desde el admin.</p>
+  {% endif %}
+{% endblock %}
+

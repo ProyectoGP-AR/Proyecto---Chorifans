@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{# 
+  Template: Login de usuarios
+  Usa la plantilla base y muestra el formulario clásico de Django (AuthenticationForm).
+#}
+
+{% block title %}Iniciar sesión - ChoriFans{% endblock %}
+
+{% block content %}
+  <div class="auth-container">
+    <h2>🌭 Iniciar sesión 🌭</h2>
+    <p class="auth-subtitle">
+      Accedé a tu cuenta para dejar reseñas y puntuar parrillas 
+    </p>
+
+    {# Si hay errores generales del formulario (usuario/contraseña inválidos) #}
+    {% if form.non_field_errors %}
+      <div class="auth-errors">
+        {% for error in form.non_field_errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+
+      {# Recorremos los campos del formulario uno por uno #}
+      {% for field in form %}
+        <div class="form-row">
+          <label for="{{ field.id_for_label }}">{{ field.label }}:</label>
+          {{ field }}
+
+          {% if field.errors %}
+            <div class="field-errors">
+              {% for error in field.errors %}
+                <small>{{ error }}</small>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <button type="submit" class="btn-primary">
+        Iniciar sesión
+      </button>
+    </form>
+
+    <p class="auth-alt-link">
+      ¿No tenés cuenta?
+      <a href="{% url 'accounts:register' %}">Registrate acá</a>.
+    </p>
+  </div>
+{% endblock %}

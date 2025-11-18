@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{# 
+  Template: Registro de usuarios
+  Misma estructura visual que el login.
+#}
+
+{% block title %}Registrate - ChoriFans{% endblock %}
+
+{% block content %}
+  <div class="auth-container">
+    <h2>🌭 Crear cuenta 🌭</h2>
+    <p class="auth-subtitle">
+      Unite a ChoriFans para dejar reseñas y puntuar parrillas
+    </p>
+
+    {# Errores generales del formulario (por ejemplo validaciones de conjunto) #}
+    {% if form.non_field_errors %}
+      <div class="auth-errors">
+        {% for error in form.non_field_errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <form method="post" class="auth-form">
+      {% csrf_token %}
+
+      {# Recorremos los campos del formulario uno por uno #}
+      {% for field in form %}
+        <div class="form-row">
+          <label for="{{ field.id_for_label }}">
+            {{ field.label }}{% if field.field.required %} *{% endif %}
+          </label>
+
+          {{ field }}
+
+          {# Errores de ese campo puntual #}
+          {% if field.errors %}
+            <div class="field-errors">
+              {% for error in field.errors %}
+                <small>{{ error }}</small>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+
+      <button type="submit" class="btn-primary">
+        Registrarme
+      </button>
+    </form>
+
+    <p class="auth-alt-link">
+      ¿Ya tenés cuenta?
+      <a href="{% url 'accounts:login' %}">Iniciá sesión acá</a>.
+    </p>
+  </div>
+{% endblock %}
+

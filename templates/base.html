@@ -1,0 +1,95 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+
+    <title>{% block title %}ChoriFans{% endblock %}</title>
+
+    {# CSS principal #}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+    {# Fuentes y Material Icons como en codigo.html #}
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Bungee&family=Bungee+Shade&family=Fredoka+One&family=Righteous&display=swap"
+      rel="stylesheet"
+    />
+
+    {# Bloque opcional para CSS/JS extra #}
+    {% block extra_head %}{% endblock %}
+  </head>
+
+  <body>
+    {# Ingredientes decorativos como en el diseño original #}
+    <div class="ingredient-decoration tomato-decoration"></div>
+    <div class="ingredient-decoration onion-decoration"></div>
+    <div class="ingredient-decoration herbs-decoration"></div>
+
+    {# HEADER estilo codigo.html, adaptado a Django #}
+    <header>
+      <div class="container">
+        <div class="header-content">
+          <div class="logo">
+            <div class="logo-icon">
+              <img
+                src="{% static 'css/img/logo_chorifans.png' %}"
+                alt="ChoriFans logo"
+              />
+            </div>
+            <div class="logo-text">ChoriFans</div>
+          </div>
+
+          <nav>
+            <ul>
+              <li><a href="{% url 'home' %}">Inicio</a></li>
+              <li><a href="{% url 'parrillas:lista' %}">Parrillas</a></li>
+              <li><a href="{% url 'categorias:lista' %}">Categorías</a></li>
+              <li><a href="{% url 'ubicaciones:lista' %}">Ubicaciones</a></li>
+              <li><a href="{% url 'promociones:lista' %}">Promociones</a></li>
+            </ul>
+          </nav>
+
+          <div class="auth-buttons">
+            {% if user.is_authenticated %}
+              <span class="header-username">Hola, {{ user.username }}</span>
+              <a
+                href="{% url 'accounts:logout' %}"
+                class="auth-button login-btn"
+              >
+                Cerrar sesión
+              </a>
+            {% else %}
+              <a
+                href="{% url 'accounts:login' %}"
+                class="auth-button login-btn"
+              >
+                Iniciar sesión
+              </a>
+              <a
+                href="{% url 'accounts:register' %}"
+                class="auth-button register-btn"
+              >
+                Registrarse
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </header>
+
+    {# CONTENIDO PRINCIPAL #}
+    <main>
+      {% block content %}
+      {% endblock %}
+    </main>
+
+    {# FOOTER simple por ahora (después lo podemos hacer igual al del HTML de ejemplo) #}
+    <footer>
+      Proyecto ChoriFans — TP Django & Django Ninja — 2025
+    </footer>
+  </body>
+</html>

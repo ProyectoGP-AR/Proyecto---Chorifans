@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Ubicaciones - ChoriFans{% endblock %}
+
+{% block content %}
+  <section class="ubicaciones-lista-container">
+    <h1>Ubicaciones</h1>
+    <p class="ubicaciones-intro">
+      Elegí un barrio o ciudad para ver las parrillas que hay en esa zona.
+    </p>
+
+    {% if ubicaciones %}
+      <ul class="ubicaciones-lista">
+        {% for u in ubicaciones %}
+          <li class="ubicacion-item">
+            <h2 class="ubicacion-titulo">
+              <a href="{% url 'ubicaciones:detalle' u.id %}">
+                {{ u.nombre_barrio }} - {{ u.nombre_ciudad }}
+              </a>
+            </h2>
+
+            {% if u.descripcion %}
+              <p class="ubicacion-descripcion">
+                {{ u.descripcion }}
+              </p>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No hay ubicaciones cargadas todavía.</p>
+    {% endif %}
+  </section>
+{% endblock %}

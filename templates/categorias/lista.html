@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Categorías - ChoriFans{% endblock %}
+
+{% block content %}
+  <section class="categorias-lista-container">
+    <h1>Categorías</h1>
+    <p class="categorias-intro">
+      Explorá las categorías de parrillas y encontrá el estilo que más te guste.
+    </p>
+
+    {% if categorias %}
+      <ul class="categorias-lista">
+        {% for cat in categorias %}
+          <li class="categoria-item">
+            <h2 class="categoria-titulo">
+              <a href="{% url 'categorias:detalle' cat.slug %}">
+                {{ cat.nombre }}
+              </a>
+            </h2>
+
+            {% if cat.descripcion %}
+              <p class="categoria-descripcion">
+                {{ cat.descripcion }}
+              </p>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No hay categorías cargadas todavía.</p>
+    {% endif %}
+  </section>
+{% endblock %}

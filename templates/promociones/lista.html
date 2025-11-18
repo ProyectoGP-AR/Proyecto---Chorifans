@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Promociones - ChoriFans{% endblock %}
+
+{% block content %}
+  <div class="promos-container">
+    <h1 class="page-title">Promociones vigentes</h1>
+
+    {% if promociones %}
+      <ul class="promos-lista">
+        {% for promo in promociones %}
+          <li class="promo-item">
+            <div class="promo-header">
+              <h2 class="promo-titulo">
+                {{ promo.titulo }}
+              </h2>
+              {% if promo.precio_promocional %}
+                <span class="promo-precio">
+                  $ {{ promo.precio_promocional }}
+                </span>
+              {% endif %}
+            </div>
+          <div class="promo-content">
+          <p class="promo-parrilla">
+            Parrilla:
+            <a href="{% url 'parrillas:detalle' promo.parrilla.id %}">
+              {{ promo.parrilla.nombre }}
+            </a>
+          </p>
+
+          <p class="promo-descripcion">
+            {{ promo.descripcion }}
+          </p>
+
+          <p class="promo-fechas">
+            Válida del {{ promo.fecha_inicio|date:"d/m/Y" }}
+            al {{ promo.fecha_fin|date:"d/m/Y" }}
+          </p>
+        </div>
+  
+            
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>
+        No hay promociones vigentes en este momento.
+      </p>
+    {% endif %}
+  </div>
+{% endblock %}

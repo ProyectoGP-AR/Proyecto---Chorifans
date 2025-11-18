@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}{{ ubicacion.nombre_barrio }} - {{ ubicacion.nombre_ciudad }} - ChoriFans{% endblock %}
+
+{% block content %}
+  <section class="ubicacion-detalle-container">
+    <h1>
+      {{ ubicacion.nombre_barrio }} - {{ ubicacion.nombre_ciudad }}
+    </h1>
+
+    {% if ubicacion.descripcion %}
+      <p class="ubicacion-descripcion">
+        {{ ubicacion.descripcion }}
+      </p>
+    {% endif %}
+
+    <h2>Parrillas en esta ubicación</h2>
+
+    {% if parrillas %}
+      <div class="parrillas-grid">
+        {% for parrilla in parrillas %}
+          <article class="parrilla-card">
+            <div class="parrilla-card-img">
+              {% if parrilla.foto_principal %}
+                <img
+                  src="{{ parrilla.foto_principal.url }}"
+                  alt="Foto de {{ parrilla.nombre }}"
+                  class="parrilla-card-img-tag"
+                />
+              {% else %}
+                <div class="parrilla-card-img-placeholder">
+                  Sin foto
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="parrilla-card-body">
+              <h3 class="parrilla-card-titulo">
+                {{ parrilla.nombre }}
+              </h3>
+
+              <p class="parrilla-card-categoria">
+                {{ parrilla.categoria.nombre }}
+              </p>
+
+              {% if parrilla.promedio_puntaje %}
+                <p class="parrilla-card-puntaje">
+                  Puntaje promedio: {{ parrilla.promedio_puntaje }} / 5
+                </p>
+              {% endif %}
+
+              <p class="parrilla-card-descripcion">
+                {{ parrilla.descripcion|truncatechars:120 }}
+              </p>
+
+              <a href="{% url 'parrillas:detalle' parrilla.id %}" class="btn-ver">
+                Ver más
+              </a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No hay parrillas cargadas en esta ubicación por el momento.</p>
+    {% endif %}
+
+    <p style="margin-top: 1.5rem;">
+      <a href="{% url 'ubicaciones:lista' %}">← Volver a ubicaciones</a>
+    </p>
+  </section>
+{% endblock %}

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Parrillas - ChoriFans{% endblock %}
+
+{% block content %}
+  <section class="parrillas-lista-container">
+    <h1>Parrillas</h1>
+    <p class="parrillas-intro">
+      Explorá todas las parrillas de ChoriFans y encontrá tu próximo chori.
+    </p>
+
+    {% if parrillas %}
+      <div class="parrillas-grid">
+        {% for parrilla in parrillas %}
+          <article class="parrilla-card">
+            <div class="parrilla-card-img">
+              {% if parrilla.foto_principal %}
+                <img
+                  src="{{ parrilla.foto_principal.url }}"
+                  alt="Foto de {{ parrilla.nombre }}"
+                />
+              {% else %}
+                <div class="parrilla-card-img-placeholder">
+                  Sin foto
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="parrilla-card-body">
+              <h2 class="parrilla-card-title">
+                {{ parrilla.nombre }}
+              </h2>
+
+              <p class="parrilla-card-meta">
+                {{ parrilla.ubicacion.nombre_barrio }} - {{ parrilla.ubicacion.nombre_ciudad }}
+                · {{ parrilla.categoria.nombre }}
+              </p>
+
+              <p class="parrilla-card-desc">
+                {{ parrilla.descripcion|truncatechars:120 }}
+              </p>
+
+              <p class="parrilla-card-rating">
+                <strong>Puntaje promedio:</strong>
+                {% if parrilla.promedio_puntaje %}
+                  {{ parrilla.promedio_puntaje }} / 5
+                {% else %}
+                  Sin puntajes todavía.
+                {% endif %}
+              </p>
+
+              <a href="{% url 'parrillas:detalle' parrilla.id %}" class="btn-ver">
+                Ver más
+              </a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p>No hay parrillas cargadas todavía.</p>
+    {% endif %}
+  </section>
+{% endblock %}

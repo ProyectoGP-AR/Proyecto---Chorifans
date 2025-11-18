@@ -1,0 +1,1584 @@
+/* ======================================
+   ESTILOS GENERALES DEL SITIO CHORIFANS
+   Archivo: static/css/style.css
+   ====================================== */
+
+/* Paleta base estilo ChoriFans */
+:root {
+  --primary-blue: #2196F3;
+  --dark-blue: #0D47A1;
+  --black: #000000;
+  --dark-gray: #212121;
+  --medium-gray: #424242;
+  --light-gray: #757575;
+  --extra-light-gray: #F5F5F5;
+  --white: #FFFFFF;
+  --accent-orange: #FF9800;
+  --accent-yellow: #FFEB3B;
+  --accent-red: #D32F2F;
+  --accent-dark-red: #B71C1C;
+}
+
+/* ----- ESTILOS BASE DEL BODY Y CONTENEDOR PRINCIPAL ----- */
+
+body {
+  font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--dark-gray); /* Fondo oscuro */
+  color: var(--extra-light-gray);
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Contenedor principal donde cada página inyecta su contenido */
+main {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px 40px;
+  background: transparent;           /* ya no es cartón blanco */
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--extra-light-gray);    /* texto claro por defecto */
+}
+
+/* Pie de página común a todo el sitio */
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: #cccccc;
+  padding: 20px;
+}
+
+/* Contenedor genérico usado en el header y otras secciones */
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* ======================================
+   DECORACIONES DE FONDO (ingredientes)
+   ====================================== */
+
+.ingredient-decoration {
+  position: absolute;
+  opacity: 0.12;
+  z-index: -1;
+}
+
+/* Tomate, cebolla y hierbas como en el HTML de referencia */
+.tomato-decoration {
+  top: 20%;
+  right: 5%;
+  width: 150px;
+  height: 150px;
+  background: url('./img/tomato-dec.png')
+    no-repeat center;
+  /*background: url('https://sfile.chatglm.cn/images-ppt/200ac1d735c7.jpg')
+    no-repeat center;*/
+  background-size: contain;
+  transform: rotate(15deg);
+}
+
+.onion-decoration {
+  bottom: 30%;
+  left: 5%;
+  width: 120px;
+  height: 120px;
+  background: url('./img/onion-dec.png')
+    no-repeat center;
+ /* background: url('https://sfile.chatglm.cn/images-ppt/e68a2966d363.jpg')
+    no-repeat center;*/
+  background-size: contain;
+  transform: rotate(-10deg);
+}
+
+.herbs-decoration {
+  top: 50%;
+  left: 8%;
+  width: 100px;
+  height: 100px;
+  background: url('./img/herbs-dec.png')
+    no-repeat center;
+  /*background: url('https://sfile.chatglm.cn/images-ppt/e915b88ee6b2.jpg')
+    no-repeat center;*/
+  background-size: contain;
+  transform: rotate(5deg);
+}
+
+/* ======================================
+   HEADER PRINCIPAL - ESTILO CHORIFANS
+   ====================================== */
+
+header {
+  background-color: rgba(33, 33, 33, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+}
+
+/* ----- LOGO ----- */
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* contenedor logo img */
+.logo-icon {
+  width: 90px;
+  height: 90px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-icon img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: brightness(1.1) saturate(1.3);
+  transform: rotate(-12deg);
+}
+
+.logo-text {
+  font-family: 'Righteous', cursive;
+  font-size: 32px;
+  font-weight: 700;
+  background: linear-gradient(to right, var(--accent-orange), var(--accent-yellow));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 1px;
+}
+
+/* ----- MENÚ DE NAVEGACIÓN ----- */
+
+header nav ul {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+header nav li {
+  margin-left: 24px;
+}
+
+header nav a {
+  text-decoration: none;
+  color: var(--extra-light-gray);
+  font-weight: 500;
+  transition: color 0.3s;
+  font-family: 'Righteous', cursive;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+header nav a:hover {
+  color: var(--accent-orange);
+}
+
+/* ----- BOTONES LOGIN / REGISTRO ----- */
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.header-username {
+  font-size: 0.9rem;
+  color: #e5e5e5;
+}
+
+/* Estilo base para los botones de auth */
+.auth-button {
+  padding: 8px 16px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 500;
+  transition: all 0.3s;
+  font-family: 'Righteous', cursive;
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border: 2px solid transparent;
+}
+
+/* Botón login (fantasma) */
+.login-btn {
+  background-color: transparent;
+  color: var(--extra-light-gray);
+  border-color: var(--accent-orange);
+}
+
+.login-btn:hover {
+  background-color: var(--accent-orange);
+  color: var(--white);
+}
+
+/* Botón registrarse (lleno) */
+.register-btn {
+  background-color: var(--accent-orange);
+  color: var(--white);
+  border-color: var(--accent-orange);
+}
+
+.register-btn:hover {
+  background-color: var(--accent-yellow);
+  border-color: var(--accent-yellow);
+  color: var(--black);
+}
+
+/* ======================================
+   AJUSTES RESPONSIVE (CELULARES/TABLETS)
+   ====================================== */
+
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  header nav ul {
+    flex-wrap: wrap;
+  }
+
+  .auth-buttons {
+    align-self: flex-start;
+    flex-wrap: wrap;
+  }
+
+  main {
+    margin: 20px;
+    padding: 0 0 24px;
+  }
+}
+
+/* ======================================
+   CARDS DE PARRILLAS - INICIO
+   ====================================== */
+
+.parrilla-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+/* 🎯 Card con borde sutil, sin franja naranja y foto integrada */
+.parrilla-card {
+  position: relative;
+  background: rgba(66, 66, 66, 0.96);
+  border-radius: 20px;
+  padding: 16px 16px 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0.55); /* borde negro sutil */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: var(--extra-light-gray);
+  overflow: hidden;
+}
+
+.parrilla-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
+}
+
+/* La imagen se “mete” en la card, ocupando todo el ancho */
+.parrilla-image {
+  width: auto;
+  height: 190px;
+  overflow: hidden;
+  margin: -16px -16px 12px;   /* truco para que toque los bordes */
+}
+
+.parrilla-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+/* Texto bien centrado en el cuerpo de la card */
+.parrilla-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent-orange);
+  margin-bottom: 6px;
+}
+
+.parrilla-info {
+  font-size: 14px;
+  color: #e0e0e0;
+  margin-bottom: 4px;
+}
+
+.parrilla-rating {
+  font-size: 20px;
+  margin: 8px 0;
+}
+
+.parrilla-rating span {
+  margin-right: 4px;
+}
+
+/* Botón “ver más” */
+.btn-ver {
+  display: inline-block;
+  background: var(--accent-orange);
+  color: #000;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+}
+
+.btn-ver:hover {
+  background: #ffb300;
+}
+
+/* ============================
+   FORMULARIOS DE AUTENTICACIÓN
+   (login y registro)
+   ============================ */
+
+.auth-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  background-color: #111827;        /* gris oscuro */
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.auth-container h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  color: #ffffff;  /* TEXTO BLANCO */
+  text-align: center;
+}
+
+.auth-subtitle {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #9ca3af;  /* gris clarito */
+  font-size: 0.95rem;
+}
+
+.auth-form .form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.auth-form label {
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  color: #ffffff;  /* LABELS BLANCOS */
+}
+
+.auth-form input {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #4b5563;
+  background-color: #020617;
+  color: #e5e7eb;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: #f97316;        /* naranja */
+  box-shadow: 0 0 0 1px #f97316;
+}
+
+.auth-errors {
+  background-color: #7f1d1d;
+  color: #fee2e2;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.field-errors small {
+  color: #fca5a5;
+  font-size: 0.8rem;
+}
+
+.auth-alt-link {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: hsl(0, 20%, 99%);
+}
+
+.auth-alt-link a {
+  color: #f97316;
+  text-decoration: none;
+}
+
+.auth-alt-link a:hover {
+  text-decoration: underline;
+}
+
+/* Botón principal reutilizable para formularios de auth */
+.btn-primary {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(90deg, #f97316, #ea580c);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+/* ============================
+   RESEÑAS (estilo oscuro)
+   ============================ */
+
+.resena-formulario {
+  margin-top: 28px;
+  padding: 20px 18px;
+  background: rgba(24, 24, 24, 0.96);
+  border-radius: 18px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7);
+  color: var(--extra-light-gray);
+}
+
+/* subtítulo "Tu reseña" ya usa .parrilla-detalle-subtitulo */
+
+.resena-form textarea {
+  width: 100%;
+}
+
+/* Mensaje cuando ya reseñó */
+.resena-ya-hecha {
+  padding: 0.8rem 1rem;
+  background: rgba(127, 29, 29, 0.9);
+  border-radius: 12px;
+  border-left: 4px solid #ff5757;
+  color: #fee2e2;
+  margin-bottom: 1rem;
+}
+
+/* Mensaje cuando tiene que iniciar sesión */
+.resena-login-msg {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #e5e5e5;
+}
+
+.resena-login-msg a {
+  font-weight: 600;
+  color: var(--accent-orange);
+  text-decoration: none;
+}
+
+.resena-login-msg a:hover {
+  text-decoration: underline;
+}
+
+/* ============================
+   PROMOCIONES
+   ============================ */
+
+.promos-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.promos-lista {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.promo-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.promo-item:last-child {
+  border-bottom: none;
+}
+
+.promo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.promo-titulo {
+  margin: 0;
+  font-size: 1.1rem;
+}
+
+.promo-precio {
+  font-weight: bold;
+}
+
+.promo-parrilla a {
+  font-weight: 600;
+}
+
+.promo-fechas {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* ============================
+   CATEGORÍAS
+   ============================ */
+
+.categorias-lista-container,
+.categoria-detalle-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.categorias-lista {
+  list-style: none;
+  padding: 0;
+}
+
+.categoria-item {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.categoria-item:last-child {
+  border-bottom: none;
+}
+
+.categoria-titulo a {
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.categoria-titulo a:hover {
+  text-decoration: underline;
+}
+
+/* ============================
+   UBICACIONES
+   ============================ */
+
+.ubicaciones-lista-container,
+.ubicacion-detalle-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.ubicaciones-lista {
+  list-style: none;
+  padding: 0;
+}
+
+.ubicacion-item {
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.ubicacion-item:last-child {
+  border-bottom: none;
+}
+
+.ubicacion-titulo a {
+  text-decoration: none;
+  font-size: 1.05rem;
+}
+
+.ubicacion-titulo a:hover {
+  text-decoration: underline;
+}
+/* ======================================
+   TITULO PRINCIPAL DEL HOME
+   ====================================== */
+
+main h2 {
+  font-family: 'Righteous', cursive;
+  font-size: 30px;
+  text-align: center;
+  letter-spacing: 1px;
+  margin: 30px 0 40px;
+  color: var(--accent-orange);
+  text-transform: uppercase;
+}
+/* ======================================
+   DETALLE DE PARRILLA
+   ====================================== */
+
+.parrilla-detalle-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 28px 24px 36px;
+  background: rgba(33, 33, 33, 0.95);
+  border-radius: 24px;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+  color: var(--extra-light-gray);
+}
+
+/* Título principal del detalle */
+.parrilla-detalle-titulo {
+  font-family: 'Righteous', cursive;
+  font-size: 32px;
+  margin: 0 0 20px;
+  text-align: center;
+  letter-spacing: 1px;
+  color: var(--accent-orange);
+}
+
+/* Layout: foto + info */
+
+.parrilla-detalle-layout {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.parrilla-detalle-foto {
+  flex: 1 1 320px;
+  max-width: 420px;
+}
+
+.parrilla-detalle-img {
+  width: 100%;
+  border-radius: 18px;
+  object-fit: cover;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+
+.parrilla-detalle-info {
+  flex: 1 1 320px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.parrilla-detalle-info p {
+  margin: 0 0 10px;
+}
+
+.parrilla-detalle-info strong {
+  color: var(--accent-orange);
+}
+
+.parrilla-detalle-info a {
+  color: var(--accent-yellow);
+  text-decoration: none;
+}
+
+.parrilla-detalle-info a:hover {
+  text-decoration: underline;
+}
+
+/* Subtítulos de secciones (reseñas, promos, reseña nueva) */
+
+.parrilla-detalle-subtitulo {
+  font-family: 'Righteous', cursive;
+  font-size: 22px;
+  margin: 0 0 16px;
+  color: var(--accent-orange);
+}
+
+/* Bloque de reseñas y promos como tarjetas oscuras */
+
+.parrilla-detalle-resenas,
+.parrilla-detalle-promos {
+  margin-top: 28px;
+  padding: 20px 18px 22px;
+  background: rgba(24, 24, 24, 0.95);
+  border-radius: 18px;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.7);
+}
+
+/* Lista de reseñas */
+
+.resenas-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.resena-item {
+  padding: 12px 10px;
+  border-radius: 12px;
+  background: rgba(66, 66, 66, 0.8);
+}
+
+.resena-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  font-size: 0.85rem;
+}
+
+.resena-puntaje {
+  font-weight: 600;
+  color: var(--accent-yellow);
+}
+
+.resena-usuario {
+  color: #e0e0e0;
+}
+
+.resena-fecha {
+  color: #aaaaaa;
+}
+
+.resena-comentario {
+  margin: 0;
+  font-size: 0.95rem;
+}
+
+.resena-empty {
+  font-size: 0.95rem;
+  color: #e0e0e0;
+}
+
+/* Promos dentro del detalle */
+
+.parrilla-detalle-promos .promos-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.parrilla-detalle-promos .promo-item {
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.parrilla-detalle-promos .promo-item:last-child {
+  border-bottom: none;
+}
+
+.parrilla-detalle-promos .promo-titulo {
+  font-size: 1rem;
+  color: var(--accent-orange);
+}
+
+.parrilla-detalle-promos .promo-precio {
+  font-weight: 700;
+  color: var(--accent-yellow);
+}
+
+.parrilla-detalle-promos .promo-descripcion {
+  margin: 6px 0;
+  font-size: 0.95rem;
+  color: #e5e5e5;
+}
+
+.parrilla-detalle-promos .promo-fechas {
+  font-size: 0.85rem;
+  color: #b0b0b0;
+}
+
+.promo-empty {
+  font-size: 0.95rem;
+  color: #e0e0e0;
+}
+
+/* Responsive: apilar foto y datos en pantallas chicas */
+
+@media (max-width: 768px) {
+  .parrilla-detalle-container {
+    margin: 24px 12px 32px;
+    padding: 18px 14px 24px;
+  }
+
+  .parrilla-detalle-layout {
+    flex-direction: column;
+  }
+
+  .parrilla-detalle-foto,
+  .parrilla-detalle-info {
+    flex: 1 1 auto;
+    max-width: 100%;
+  }
+
+  .parrilla-detalle-titulo {
+    font-size: 26px;
+  }
+}
+
+
+/* ======================================
+   LISTA DE PARRILLAS (vista parrillas:lista)
+   ====================================== */
+
+.parrillas-lista-container {
+  max-width: 1100px;
+  margin: 40px auto 50px;
+  padding: 0 20px;
+}
+
+/* Título "Parrillas" de la página de lista */
+
+.parrillas-lista-container h1 {
+  font-family: 'Righteous', cursive;
+  font-size: 34px;
+  color: var(--accent-orange);
+  margin: 0 0 8px;
+}
+
+/* Texto introductorio debajo del título */
+.parrillas-intro {
+  margin: 0 0 24px;
+  font-size: 0.98rem;
+  color: #e0e0e0;
+}
+
+/* Contenedor de las cards en lista (una debajo de otra) */
+.parrillas-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;              /* espacio entre parrilla y parrilla */
+}
+
+/* Card en modo "fila": foto izquierda, texto derecha */
+.parrillas-grid .parrilla-card {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  background: rgba(66, 66, 66, 0.96);
+  border-radius: 20px;
+  padding: 16px 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0.55);
+  color: var(--extra-light-gray);
+  overflow: hidden;       /* para que la imagen respete el borde redondeado */
+}
+
+/* Columna de la imagen */
+.parrillas-grid .parrilla-card-img {
+  flex: 0 0 260px;
+  max-width: 260px;
+}
+
+/* Imagen dentro de la card de lista */
+.parrillas-grid .parrilla-card-img img,
+.parrillas-grid .parrilla-card-img-placeholder {
+  width: 100%;
+  height: 160px;
+  border-radius: 14px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Placeholder si no hay foto */
+.parrillas-grid .parrilla-card-img-placeholder {
+  background: #424242;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #bbbbbb;
+  font-size: 0.9rem;
+}
+
+/* Columna del contenido textual */
+.parrillas-grid .parrilla-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Título de la parrilla en la lista */
+.parrillas-grid .parrilla-card-title {
+  font-family: 'Righteous', cursive;
+  font-size: 20px;
+  margin: 0 0 6px;
+  color: var(--accent-orange);
+}
+
+/* Línea barrio / ciudad / categoría */
+.parrillas-grid .parrilla-card-meta {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  color: #e0e0e0;
+}
+
+/* Descripción corta */
+.parrillas-grid .parrilla-card-desc {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+  color: #f3f3f3;
+}
+
+/* Puntaje promedio */
+.parrillas-grid .parrilla-card-rating {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+}
+
+.parrillas-grid .parrilla-card-rating strong {
+  color: var(--accent-orange);
+}
+
+/* Botón "Ver más" reaprovechando .btn-ver, solo alineación */
+
+.parrillas-grid .btn-ver {
+  align-self: flex-start;
+}
+
+/* Responsive: en mobile apilamos la imagen arriba */
+
+@media (max-width: 768px) {
+  .parrillas-grid .parrilla-card {
+    flex-direction: column;
+  }
+
+  .parrillas-grid .parrilla-card-img {
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+
+  .parrillas-grid .parrilla-card-img img,
+  .parrillas-grid .parrilla-card-img-placeholder {
+    height: 190px;
+  }
+}
+/* ======================================
+   CATEGORÍAS - LISTA
+   ====================================== */
+
+.categorias-lista-container {
+  max-width: 1100px;
+  margin: 40px auto 50px;
+  padding: 0 20px;
+}
+
+.categorias-lista-container h1 {
+  font-family: 'Righteous', cursive;
+  font-size: 34px;
+  color: var(--accent-orange);
+  margin: 0 0 8px;
+}
+
+.categorias-intro {
+  margin: 0 0 24px;
+  font-size: 0.98rem;
+  color: #e0e0e0;
+}
+
+.categorias-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.categoria-item {
+  padding: 16px 18px;
+  background: rgba(66, 66, 66, 0.96);
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0.6);
+}
+
+.categoria-titulo {
+  margin: 0 0 6px;
+}
+
+/* título de categoría: naranja, fuente Righteous, sin violeta */
+.categoria-titulo a {
+  font-family: 'Righteous', cursive;
+  font-size: 20px;
+  text-decoration: none;
+  color: var(--accent-orange);
+  letter-spacing: 0.5px;
+}
+
+.categoria-titulo a:hover {
+  color: var(--accent-yellow);
+}
+
+.categoria-item .categoria-descripcion {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #f3f3f3;
+}
+
+/* ======================================
+   CATEGORÍAS - DETALLE
+   ====================================== */
+
+.categoria-detalle-container {
+  max-width: 1100px;
+  margin: 40px auto 50px;
+  padding: 0 20px;
+}
+
+.categoria-detalle-container h1 {
+  font-family: 'Righteous', cursive;
+  font-size: 32px;
+  color: var(--accent-orange);
+  margin: 0 0 12px;
+}
+
+.categoria-detalle-container .categoria-descripcion {
+  max-width: 800px;
+  margin: 0 0 24px;
+  font-size: 0.98rem;
+  color: #e0e0e0;
+}
+
+/* subtítulos dentro del detalle (Parrillas en esta categoría, Tu reseña, etc) */
+.categoria-detalle-container h2 {
+  font-family: 'Righteous', cursive;
+  font-size: 22px;
+  margin: 0 0 16px;
+  color: var(--accent-orange);
+}
+
+/* Aca reutilizamos parrillas-grid, pero ajustamos las clases propias de este template */
+
+.categoria-detalle-container .parrillas-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* mismas cards de la lista de parrillas */
+
+.categoria-detalle-container .parrillas-grid .parrilla-card {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  background: rgba(66, 66, 66, 0.96);
+  border-radius: 20px;
+  padding: 16px 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0.55);
+  color: var(--extra-light-gray);
+  overflow: hidden;
+}
+
+.categoria-detalle-container .parrilla-card-img {
+  flex: 0 0 260px;
+  max-width: 260px;
+}
+
+.categoria-detalle-container .parrilla-card-img img,
+.categoria-detalle-container .parrilla-card-img-placeholder,
+.categoria-detalle-container .parrilla-card-img-tag {
+  width: 100%;
+  height: 160px;
+  border-radius: 14px;
+  object-fit: cover;
+  display: block;
+}
+
+.categoria-detalle-container .parrilla-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* título de parrilla en el detalle de categoría */
+.categoria-detalle-container .parrilla-card-titulo {
+  font-family: 'Righteous', cursive;
+  font-size: 20px;
+  margin: 0 0 6px;
+  color: var(--accent-orange);
+}
+
+/* ubicación, puntaje y descripción dentro de la card */
+.categoria-detalle-container .parrilla-card-ubicacion {
+  margin: 0 0 6px;
+  font-size: 0.9rem;
+  color: #e0e0e0;
+}
+
+.categoria-detalle-container .parrilla-card-puntaje {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+}
+
+.categoria-detalle-container .parrilla-card-descripcion {
+  margin: 0 0 10px;
+  font-size: 0.95rem;
+  color: #f3f3f3;
+}
+
+.categoria-detalle-container .parrilla-card-puntaje strong {
+  color: var(--accent-orange);
+}
+
+/* Botón "Ver más" en las cards del detalle */
+.categoria-detalle-container .parrilla-card .btn-ver {
+  align-self: flex-start;
+}
+
+/* responsive para las cards dentro del detalle de categoría */
+@media (max-width: 768px) {
+  .categoria-detalle-container .parrillas-grid .parrilla-card {
+    flex-direction: column;
+  }
+
+  .categoria-detalle-container .parrilla-card-img {
+    flex: 0 0 auto;
+    max-width: 100%;
+  }
+
+  .categoria-detalle-container .parrilla-card-img img,
+  .categoria-detalle-container .parrilla-card-img-placeholder,
+  .categoria-detalle-container .parrilla-card-img-tag {
+    height: 190px;
+  }
+}
+
+
+/* ======================================
+   CATEGORÍAS — Cards centradas y más angostas
+   ====================================== */
+
+/* Hace que la lista siga vertical pero centrada */
+.categorias-lista {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* ⭐ centra todas las cards */
+  gap: 16px;
+}
+
+/* Card más angosta y centrada */
+.categoria-item {
+  width: 100%;
+  max-width: 600px;      /* ⭐ ancho máximo más chico */
+  padding: 18px 22px;
+  background: rgba(66, 66, 66, 0.96);
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0.6);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* ⭐ contenido centrado */
+  text-align: center;    /* ⭐ texto centrado */
+}
+
+/* Título centrado y compacto */
+.categoria-titulo a {
+  font-family: 'Righteous', cursive;
+  font-size: 22px;
+  color: var(--accent-orange);
+  text-decoration: none;
+  margin-bottom: 6px;
+}
+
+/* Descripción centrada más armónica */
+.categoria-descripcion {
+  font-size: 0.95rem;
+  color: #dedede;
+  margin: 0;
+  max-width: 500px; /* ⭐ para que no quede muy larga */
+}
+
+
+/* ======================================
+   UBICACIONES - LISTA
+   ====================================== */
+
+.ubicaciones-lista-container {
+  max-width: 1100px;
+  margin: 40px auto 50px;
+  padding: 0 20px;
+}
+
+/* Título "Ubicaciones" */
+.ubicaciones-lista-container h1 {
+  font-family: 'Righteous', cursive;
+  font-size: 34px;
+  color: var(--accent-orange);
+  margin: 0 0 8px;
+}
+
+/* Intro debajo del título */
+.ubicaciones-intro {
+  margin: 0 0 24px;
+  font-size: 1rem;
+  color: #dcdcdc;
+}
+
+/* Lista centrada con cards */
+.ubicaciones-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;      /* ⭐ centra las cards */
+  gap: 18px;
+}
+
+/* Card de ubicación (compacta y centrada) */
+.ubicacion-item {
+  width: 100%;
+  max-width: 600px;         /* ⭐ más angosta */
+  padding: 18px 22px;
+  background: rgba(66, 66, 66, 0.96);
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0.6);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ubicacion-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+}
+
+/* Título con iconito de ubicación */
+.ubicacion-titulo {
+  margin: 0 0 6px;
+}
+
+.ubicacion-titulo a {
+  font-family: 'Righteous', cursive;
+  font-size: 22px;
+  color: var(--accent-orange);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;                 /* espacio icono-texto */
+}
+
+/* 📍 Icono de ubicación */
+.ubicacion-titulo a::before {
+  content: "📍";
+  font-size: 22px;
+  display: inline-block;
+}
+
+/* Descripción (si existe) */
+.ubicacion-descripcion {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #dedede;
+  max-width: 480px;
+}
+
+
+/* ======================================
+   PROMOCIONES — Cards estilo parrillas
+   ====================================== */
+
+.promos-container {
+  max-width: 1100px;
+  margin: 40px auto 70px;
+  padding: 0 20px;
+}
+
+.promos-container .page-title {
+  font-family: 'Righteous', cursive;
+  color: var(--accent-orange);
+  font-size: 34px;
+  margin-bottom: 25px;
+}
+
+/* Lista centrada como categorías y ubicaciones */
+.promos-lista {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Card */
+.promo-item {
+  background: rgba(66, 66, 66, 0.96);
+  border-radius: 20px;
+  padding: 22px 26px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0.55);
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.promo-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6);
+}
+
+/* HEADER: título y precio alineados */
+.promo-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Título */
+.promo-titulo {
+  font-family: 'Righteous', cursive;
+  font-size: 24px;
+  color: var(--accent-orange);
+  margin: 0;
+}
+
+/* Precio */
+.promo-precio {
+  font-size: 22px;
+  font-weight: bold;
+  color: #ffffff;
+  background: var(--accent-orange);
+  padding: 6px 16px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(255, 140, 0, 0.45);
+}
+
+/* Parrilla */
+.promo-parrilla {
+  font-size: 1rem;
+  margin: 0;
+  color: #e3e3e3;
+}
+
+.promo-parrilla a {
+  color: #8ab4ff;
+  text-decoration: none;
+}
+.promo-parrilla a:hover {
+  text-decoration: underline;
+}
+
+/* Descripción */
+.promo-descripcion {
+  font-size: 1rem;
+  margin: 0;
+  color: #f2f2f2;
+}
+
+/* Fechas */
+.promo-fechas {
+  margin: 0;
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: #cfcfcf;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .promo-header {
+    flex-direction: column;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .promo-precio {
+    align-self: flex-start;
+  }
+}
+
+/* ======================================
+   PROMOCIONES — Estilo CUPÓN / TICKET
+   ====================================== */
+
+.promo-item {
+  background: rgba(38, 38, 38, 0.96);
+  border-radius: 20px;
+  padding: 26px 32px;
+  border: 2px dashed var(--accent-orange);
+  position: relative;
+
+  box-shadow: inset 0 0 10px rgba(255, 153, 0, 0.15),
+              0 6px 18px rgba(0, 0, 0, 0.45);
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.promo-item:hover {
+  transform: translateY(-3px);
+  box-shadow: inset 0 0 16px rgba(255, 153, 0, 0.25),
+              0 10px 26px rgba(0, 0, 0, 0.55);
+}
+
+/* “Perforaciones” tipo ticket (círculos a los lados) */
+.promo-item::before,
+.promo-item::after {
+  content: "";
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  background: #1c1c1c;
+  border-radius: 50%;
+  top: 50%;
+  transform: translateY(-50%);
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+}
+
+.promo-item::before {
+  left: -13px;
+}
+
+.promo-item::after {
+  right: -13px;
+}
+
+/* Título */
+.promo-titulo {
+  font-family: 'Righteous', cursive;
+  font-size: 26px;
+  color: var(--accent-orange);
+  margin: 0;
+  letter-spacing: 1px;
+}
+
+/* Precio sticker */
+.promo-precio {
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(90deg, #ff9800, #ffb84d);
+  padding: 8px 20px;
+  border-radius: 50px;
+  box-shadow: 0 4px 12px rgba(255, 153, 0, 0.45);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+/* Texto */
+.promo-parrilla,
+.promo-descripcion,
+.promo-fechas {
+  margin: 0;
+  color: #e6e6e6;
+  font-size: 1rem;
+}
+
+.promo-parrilla a {
+  color: #8ab4ff;
+  text-decoration: none;
+}
+.promo-parrilla a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .promo-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .promo-precio {
+    align-self: flex-start;
+  }
+}
+/* ======================================
+   PROMOCIONES — Layout 3 columnas
+   ====================================== */
+
+.promo-item {
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
+  align-items: center;
+  column-gap: 30px;
+  padding: 26px 32px;
+}
+
+.promo-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.promo-titulo {
+  margin: 0;
+  text-align: left;
+}
+
+.promo-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  row-gap: 10px;
+}
+
+.promo-content p {
+  margin: 0;
+}
+
+.promo-precio {
+  justify-self: end;
+}
+
+/* Vista móvil */
+@media (max-width: 800px) {
+  .promo-item {
+    grid-template-columns: 1fr;
+    row-gap: 15px;
+  }
+
+  .promo-precio {
+    justify-self: start;
+  }
+}
+/* Enlace "Volver al inicio" en detalle de parrilla */
+
+.parrilla-detalle-container .volver-inicio {
+  margin-top: 20px;
+}
+
+.parrilla-detalle-container .volver-inicio-link {
+  font-size: 0.95rem;
+  color: #9ca3af;
+  text-decoration: none;
+}
+
+.parrilla-detalle-container .volver-inicio-link::before {
+  content: "← ";
+}
+
+.parrilla-detalle-container .volver-inicio-link:hover {
+  color: var(--accent-orange);
+  text-decoration: underline;
+}

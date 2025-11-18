@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}{{ promocion.titulo }} - Promociones - ChoriFans{% endblock %}
+
+{% block content %}
+  <section class="home-section">
+    <h2>{{ promocion.titulo }}</h2>
+
+    <p class="promocion-parrilla">
+      Parrilla:
+      <a href="{% url 'parrillas:detalle' parrilla.id %}">
+        {{ parrilla.nombre }}
+      </a>
+    </p>
+
+    {% if promocion.descripcion %}
+      <p class="promocion-descripcion">
+        {{ promocion.descripcion }}
+      </p>
+    {% endif %}
+
+    <p class="promocion-fechas">
+      Vigencia:
+      {{ promocion.fecha_inicio|date:"d/m/Y" }} –
+      {{ promocion.fecha_fin|date:"d/m/Y" }}
+    </p>
+
+    {% if promocion.is_active %}
+      <p class="promocion-estado promocion-estado-activa">
+        Promo activa ✅
+      </p>
+    {% else %}
+      <p class="promocion-estado promocion-estado-inactiva">
+        Promo inactiva ❌
+      </p>
+    {% endif %}
+
+    <p style="margin-top: 1.5rem;">
+      <a href="{% url 'promociones:lista' %}">← Volver al listado de promociones</a>
+    </p>
+  </section>
+{% endblock %}
