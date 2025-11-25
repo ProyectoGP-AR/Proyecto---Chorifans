@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Valorar reseñas - ChoriFans{% endblock %}
+
+{% block content %}
+<section class="seccion seccion--valorar-resenas">
+  <div class="valorar-resenas-container">
+
+    <h1 class="valorar-resenas-titulo">
+      Valorar reseñas
+    </h1>
+
+    <p class="valorar-resenas-subtitulo">
+      Respondé y valorá las reseñas que hicieron sobre tu parrilla.
+    </p>
+
+    {% if resenas %}
+      <div class="resenas-list">
+        {% for resena in resenas %}
+          <article class="resena-card resena-card--panel">
+
+            {# CABECERA-POST COMPLETA (nombre + comentario + fecha) #}
+            <header class="resena-header">
+              <div class="resena-header__info">
+
+                {# Nombre + choripanes (arriba) #}
+                <div class="resena-usuario">
+                  <span class="resena-usuario-nombre">
+                    @{{ resena.usuario.username }}
+                  </span>
+                  <span class="resena-puntaje-choris">
+                    {% for i in "12345"|make_list %}
+                      {% if forloop.counter <= resena.puntaje %}
+                        🌭
+                      {% endif %}
+                    {% endfor %}
+                  </span>
+                </div>
+
+                {# Comentario del usuario va EN EL MEDIO #}
+                <p class="resena-texto">
+                  {{ resena.comentario }}
+                </p>
+
+                {# Fecha + parrilla (abajo) #}
+                <div class="resena-meta">
+                  {{ resena.created_at|date:"d/m/Y H:i" }}
+                  · {{ resena.parrilla.nombre }}
+                </div>
+
+              </div>
+            </header>
+
+            {# ===  RESPUESTA DE LA PARRILLA (si existe) === #}
+            {% if resena.respuesta_parrilla %}
+              <div class="respuesta-parrilla-card">
+                <div class="respuesta-header">
+                  <span class="respuesta-nombre-parrilla">
+  {{ resena.parrilla.nombre|upper }}
+</span>
+
+        <span
+          class="respuesta-verificado-icon"
+          aria-hidden="true"
+          style="background-image: url('{% static "css/img/verified.png" %}');"
+        ></span>
+
+        <span class="respuesta-valoracion">
+          {% if resena.respuesta_parrilla.valoracion == "happy" %}
+            😊
+          {% else %}
+            ☹️
+          {% endif %}
+        </span>
+
+
+                </div>
+
+                <p class="respuesta-texto">
+                  {{ resena.respuesta_parrilla.texto }}
+                </p>
+
+                <p class="respuesta-meta">
+                  Respuesta oficial ·
+                  {{ resena.respuesta_parrilla.updated_at|date:"d/m/Y H:i" }}
+                </p>
+              </div>
+            {% else %}
+              <p class="resena-estado--pendiente">
+                Esta reseña aún no tiene respuesta oficial de la parrilla.
+              </p>
+            {% endif %}
+
+            {# Botón de acción: crear o editar respuesta #}
+            <div class="resena-acciones">
+              <a
+                href="{% url 'resenas:responder_resena' resena.id %}"
+                class="btn-ver btn-responder"
+              >
+                {% if resena.respuesta_parrilla %}
+                  Editar respuesta
+                {% else %}
+                  Responder reseña
+                {% endif %}
+              </a>
+            </div>
+
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="resena-empty">
+        No hay reseñas pendientes para tu parrilla en este momento.
+      </p>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

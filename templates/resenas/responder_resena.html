@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}
+  {% if respuesta_existente %}
+    Editar respuesta a reseña - ChoriFans
+  {% else %}
+    Responder reseña - ChoriFans
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="seccion seccion--responder-resena">
+  <div class="valorar-resenas-container">
+
+    <h1 class="valorar-resenas-titulo">
+      {% if respuesta_existente %}
+        Editar respuesta a reseña
+      {% else %}
+        Responder reseña
+      {% endif %}
+    </h1>
+
+    <p class="valorar-resenas-subtitulo">
+      Parrilla: <strong>{{ parrilla_duenio.nombre }}</strong>
+    </p>
+
+    {# PREVIEW DE LA RESEÑA DEL USUARIO #}
+    <article class="resena-card resena-card--panel">
+      <header class="resena-header">
+        <div class="resena-header__info">
+          <div class="resena-usuario">
+            <span class="resena-usuario-nombre">
+              @{{ resena.usuario.username }}
+            </span>
+            <span class="resena-puntaje-choris">
+              {% for i in "12345"|make_list %}
+                {% if forloop.counter <= resena.puntaje %}
+                  🌭
+                {% endif %}
+              {% endfor %}
+            </span>
+          </div>
+
+          <p class="resena-texto">
+            {{ resena.comentario }}
+          </p>
+
+          <div class="resena-meta">
+            {{ resena.created_at|date:"d/m/Y H:i" }}
+            · {{ resena.parrilla.nombre }}
+          </div>
+        </div>
+      </header>
+
+      {# Si ya había respuesta, mostramos un preview abajo #}
+      {% if respuesta_existente %}
+        <div class="respuesta-parrilla-card">
+          <div class="respuesta-header">
+            <span class="respuesta-nombre-parrilla">
+              {{ parrilla_duenio.nombre|upper }}
+              <span class="respuesta-verificado">✔</span>
+              <span class="respuesta-valoracion">
+                {% if form.initial.valoracion == "happy" %}
+                  😊
+                {% else %}
+                  ☹️
+                {% endif %}
+              </span>
+            </span>
+          </div>
+
+          <p class="respuesta-texto">
+            {{ form.initial.texto }}
+          </p>
+
+          <p class="respuesta-meta">
+            Respuesta actual (podés editarla abajo)
+          </p>
+        </div>
+      {% endif %}
+    </article>
+
+        {# FORMULARIO PARA CREAR / EDITAR RESPUESTA #}
+    <div class="form-wrapper-respuesta">
+      <form method="post" class="form form--respuesta-resena">
+        {% csrf_token %}
+
+        {# Campo valoracion: lo dibujamos como toggle de emojis #}
+        <div class="form-group form-group--valoracion">
+          <label>Valoración de la reseña:</label>
+
+          <div class="emoji-toggle">
+            <label class="emoji-option">
+              <input
+                type="radio"
+                name="valoracion"
+                value="happy"
+                {% if form.initial.valoracion == "happy" or not form.initial.valoracion %}checked{% endif %}
+              >
+              <span class="emoji-face">😊</span>
+              <span class="emoji-text">Buena experiencia</span>
+            </label>
+
+            <label class="emoji-option">
+              <input
+                type="radio"
+                name="valoracion"
+                value="sad"
+                {% if form.initial.valoracion == "sad" %}checked{% endif %}
+              >
+              <span class="emoji-face">☹️</span>
+              <span class="emoji-text">Mala experiencia</span>
+            </label>
+          </div>
+
+          {% if form.valoracion.errors %}
+            <div class="form-errors">
+              {{ form.valoracion.errors }}
+            </div>
+          {% endif %}
+        </div>
+
+        {# Campo texto de la respuesta #}
+        <div class="form-group">
+          {{ form.texto.label_tag }}
+          {{ form.texto }}
+          {% if form.texto.errors %}
+            <div class="form-errors">
+              {{ form.texto.errors }}
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn-ver">
+            {% if respuesta_existente %}
+              Guardar cambios
+            {% else %}
+              Publicar respuesta
+            {% endif %}
+          </button>
+
+          <a href="{% url 'resenas:valorar_resenas' %}" class="btn-volver-panel">
+            Volver al panel de reseñas
+          </a>
+        </div>
+      </form>
+    </div>
+
+
+  </div>
+</section>
+{% endblock %}

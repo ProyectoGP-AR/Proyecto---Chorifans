@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ categoria.nombre }} - Categoría - ChoriFans{% endblock %}
 
@@ -18,20 +19,25 @@
       <div class="parrillas-grid">
         {% for parrilla in parrillas %}
           <article class="parrilla-card">
+
+            {# ============================FOTO DE LA PARRILLA EN LA CARD- Si tiene foto_principal → mostramos esa. - Si NO tiene → usamos sin-foto.png desde static. ============================ #}
             <div class="parrilla-card-img">
               {% if parrilla.foto_principal %}
                 <img
                   src="{{ parrilla.foto_principal.url }}"
                   alt="Foto de {{ parrilla.nombre }}"
-                  class="parrilla-card-img-tag"
+                  class="parrilla-card-img-el"
                 />
               {% else %}
-                <div class="parrilla-card-img-placeholder">
-                  Sin foto
-                </div>
+                <img
+                  src="{% static 'css/img/sin-foto.png' %}"
+                  alt="Foto no disponible de {{ parrilla.nombre }}"
+                  class="parrilla-card-img-el parrilla-card-img--placeholder"
+                />
               {% endif %}
             </div>
 
+            {# ============================ CUERPO DE LA CARDNombre, ubicación, puntaje y descripción.============================ #}
             <div class="parrilla-card-body">
               <h3 class="parrilla-card-titulo">
                 {{ parrilla.nombre }}
@@ -41,16 +47,28 @@
                 {{ parrilla.ubicacion.nombre_barrio }} - {{ parrilla.ubicacion.nombre_ciudad }}
               </p>
 
-              {% if parrilla.promedio_puntaje %}
-                <p class="parrilla-card-puntaje">
-                  Puntaje promedio: {{ parrilla.promedio_puntaje }} / 5
-                </p>
-              {% endif %}
+              {# Puntaje promedio en choripanes, con soporte para valores decimales #}
+              <p class="parrilla-card-puntaje">
+                {% with puntaje=parrilla.promedio_puntaje|default_if_none:0 %}
+                  <span class="puntaje-promedio-iconos" aria-label="Puntaje {{ puntaje }} de 5">
+                    {% for i in "12345" %}
+                      {% if puntaje >= forloop.counter %}
+                        <span class="chori chori--lleno">🌭</span>
+                      {% elif puntaje >= forloop.counter|add:"-0.5" %}
+                        <span class="chori chori--medio">🌭</span>
+                      {% else %}
+                        <span class="chori chori--gris">🌭</span>
+                      {% endif %}
+                    {% endfor %}
+                  </span>
+                {% endwith %}
+              </p>
 
               <p class="parrilla-card-descripcion">
                 {{ parrilla.descripcion|truncatechars:120 }}
               </p>
 
+              {# Link para ir al detalle completo de la parrilla #}
               <a href="{% url 'parrillas:detalle' parrilla.id %}" class="btn-ver">
                 Ver más
               </a>
@@ -62,8 +80,9 @@
       <p>No hay parrillas en esta categoría por el momento.</p>
     {% endif %}
 
-    <p style="margin-top: 1.5rem;">
-      <a href="{% url 'categorias:lista' %}">← Volver a categorías</a>
+    <p class="volver-box">
+      <a href="{% url 'categorias:lista' %}" class="volver-btn">← Volver</a>
     </p>
+
   </section>
 {% endblock %}

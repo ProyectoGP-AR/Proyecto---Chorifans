@@ -1,9 +1,12 @@
 /* ======================================
-   ESTILOS GENERALES DEL SITIO CHORIFANS
+   ESTILOS GENERALES DE CHORIFANS
    Archivo: static/css/style.css
    ====================================== */
 
-/* Paleta base estilo ChoriFans */
+/* ======================================
+   PALETA DE COLORES (CSS CUSTOM PROPERTIES)
+   ====================================== */
+
 :root {
   --primary-blue: #2196F3;
   --dark-blue: #0D47A1;
@@ -19,31 +22,37 @@
   --accent-dark-red: #B71C1C;
 }
 
-/* ----- ESTILOS BASE DEL BODY Y CONTENEDOR PRINCIPAL ----- */
+/* ======================================
+   BASE: BODY, MAIN, FOOTER, CONTENEDOR
+   ====================================== */
 
 body {
   font-family: 'Poppins', system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", Roboto, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: var(--dark-gray); /* Fondo oscuro */
+  background-color: var(--dark-gray);
   color: var(--extra-light-gray);
   position: relative;
   overflow-x: hidden;
+
+  /* Para que el contenido no quede debajo del footer fijo */
+  padding-bottom: 80px;
 }
 
-/* Contenedor principal donde cada página inyecta su contenido */
+/* Contenedor principal de cada vista */
 main {
   max-width: 1100px;
   margin: 40px auto;
   padding: 0 20px 40px;
-  background: transparent;           /* ya no es cartón blanco */
+  background: transparent;
   border-radius: 0;
   box-shadow: none;
-  color: var(--extra-light-gray);    /* texto claro por defecto */
+  color: var(--extra-light-gray);
 }
 
-/* Pie de página común a todo el sitio */
+/* Pie de página genérico (parte tipográfica)
+   El comportamiento fijo se define más abajo en .site-footer */
 footer {
   text-align: center;
   font-size: 12px;
@@ -51,15 +60,74 @@ footer {
   padding: 20px;
 }
 
-/* Contenedor genérico usado en el header y otras secciones */
+/* Contenedor genérico ancho */
 .container {
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
+/* Utilidad accesible para ocultar texto, por ejemplo labels visualmente ocultos */
+.visually-hidden {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+/* Título principal genérico del home */
+main h2 {
+  font-family: 'Righteous', cursive;
+  font-size: 30px;
+  text-align: center;
+  letter-spacing: 1px;
+  margin: 30px 0 40px;
+  color: var(--accent-orange);
+  text-transform: uppercase;
+}
+
+/* Botón “ver más” / CTA general */
+.btn-ver {
+  display: inline-block;
+  background: var(--accent-orange);
+  color: #000;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-ver:hover {
+  background: #ffb300;
+}
+
+/* Botón principal genérico (auth, formularios, etc.) */
+.btn-primary {
+  width: 100%;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(90deg, #f97316, #ea580c);
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+}
+
+.btn-primary:hover {
+  filter: brightness(1.1);
+}
+
+
 /* ======================================
-   DECORACIONES DE FONDO (ingredientes)
+   DECORACIONES DE FONDO
    ====================================== */
 
 .ingredient-decoration {
@@ -68,16 +136,12 @@ footer {
   z-index: -1;
 }
 
-/* Tomate, cebolla y hierbas como en el HTML de referencia */
 .tomato-decoration {
   top: 20%;
   right: 5%;
   width: 150px;
   height: 150px;
-  background: url('./img/tomato-dec.png')
-    no-repeat center;
-  /*background: url('https://sfile.chatglm.cn/images-ppt/200ac1d735c7.jpg')
-    no-repeat center;*/
+  background: url('./img/tomato-dec.png') no-repeat center;
   background-size: contain;
   transform: rotate(15deg);
 }
@@ -87,10 +151,7 @@ footer {
   left: 5%;
   width: 120px;
   height: 120px;
-  background: url('./img/onion-dec.png')
-    no-repeat center;
- /* background: url('https://sfile.chatglm.cn/images-ppt/e68a2966d363.jpg')
-    no-repeat center;*/
+  background: url('./img/onion-dec.png') no-repeat center;
   background-size: contain;
   transform: rotate(-10deg);
 }
@@ -100,16 +161,14 @@ footer {
   left: 8%;
   width: 100px;
   height: 100px;
-  background: url('./img/herbs-dec.png')
-    no-repeat center;
-  /*background: url('https://sfile.chatglm.cn/images-ppt/e915b88ee6b2.jpg')
-    no-repeat center;*/
+  background: url('./img/herbs-dec.png') no-repeat center;
   background-size: contain;
   transform: rotate(5deg);
 }
 
+
 /* ======================================
-   HEADER PRINCIPAL - ESTILO CHORIFANS
+   HEADER PRINCIPAL + NAV
    ====================================== */
 
 header {
@@ -128,7 +187,7 @@ header {
   padding: 15px 0;
 }
 
-/* ----- LOGO ----- */
+/* ---------- Logo ---------- */
 
 .logo {
   display: flex;
@@ -136,7 +195,6 @@ header {
   gap: 12px;
 }
 
-/* contenedor logo img */
 .logo-icon {
   width: 90px;
   height: 90px;
@@ -153,20 +211,22 @@ header {
   object-fit: contain;
   filter: brightness(1.1) saturate(1.3);
   transform: rotate(-12deg);
+  margin-bottom: 30px;
 }
 
 .logo-text {
   font-family: 'Righteous', cursive;
-  font-size: 32px;
+  font-size: 30px;
   font-weight: 700;
   background: linear-gradient(to right, var(--accent-orange), var(--accent-yellow));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   letter-spacing: 1px;
+  margin-bottom: 7px;
 }
 
-/* ----- MENÚ DE NAVEGACIÓN ----- */
+/* ---------- Menú de navegación ---------- */
 
 header nav ul {
   display: flex;
@@ -194,22 +254,25 @@ header nav a:hover {
   color: var(--accent-orange);
 }
 
-/* ----- BOTONES LOGIN / REGISTRO ----- */
+/* ---------- Bloque usuario + botones ---------- */
 
 .auth-buttons {
   display: flex;
-  gap: 10px;
   align-items: center;
+  margin-left: 24px;
+  gap: 14px;
 }
 
 .header-username {
-  font-size: 0.9rem;
-  color: #e5e5e5;
+  font-family: 'Righteous', cursive;
+  font-size: 18px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--extra-light-gray);
 }
 
-/* Estilo base para los botones de auth */
 .auth-button {
-  padding: 8px 16px;
+  padding: 6px 16px;
   border-radius: 999px;
   text-decoration: none;
   font-weight: 500;
@@ -219,36 +282,32 @@ header nav a:hover {
   text-transform: uppercase;
   letter-spacing: 1px;
   border: 2px solid transparent;
+  min-width: 110px;
+  text-align: center;
 }
 
-/* Botón login (fantasma) */
-.login-btn {
-  background-color: transparent;
-  color: var(--extra-light-gray);
-  border-color: var(--accent-orange);
-}
-
-.login-btn:hover {
-  background-color: var(--accent-orange);
-  color: var(--white);
-}
-
-/* Botón registrarse (lleno) */
+.login-btn,
 .register-btn {
   background-color: var(--accent-orange);
   color: var(--white);
   border-color: var(--accent-orange);
 }
 
+.login-btn:hover,
 .register-btn:hover {
   background-color: var(--accent-yellow);
   border-color: var(--accent-yellow);
   color: var(--black);
 }
 
-/* ======================================
-   AJUSTES RESPONSIVE (CELULARES/TABLETS)
-   ====================================== */
+/* Evitar cortes de texto en el header */
+.header-username,
+.auth-button,
+header nav a {
+  white-space: nowrap;
+}
+
+/* ---------- Header responsive ---------- */
 
 @media (max-width: 768px) {
   .header-content {
@@ -264,6 +323,8 @@ header nav a:hover {
   .auth-buttons {
     align-self: flex-start;
     flex-wrap: wrap;
+    margin-left: 0;
+    gap: 8px;
   }
 
   main {
@@ -272,8 +333,9 @@ header nav a:hover {
   }
 }
 
+
 /* ======================================
-   CARDS DE PARRILLAS - INICIO
+   CARDS DE PARRILLAS – HOME (GRID)
    ====================================== */
 
 .parrilla-grid {
@@ -283,14 +345,14 @@ header nav a:hover {
   margin-top: 24px;
 }
 
-/* 🎯 Card con borde sutil, sin franja naranja y foto integrada */
+/* Card del home (grid de 6 cards) */
 .parrilla-card {
   position: relative;
   background: rgba(66, 66, 66, 0.96);
   border-radius: 20px;
   padding: 16px 16px 18px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(0, 0, 0, 0.55); /* borde negro sutil */
+  border: 1px solid rgba(0, 0, 0, 0.55);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   color: var(--extra-light-gray);
   overflow: hidden;
@@ -301,12 +363,11 @@ header nav a:hover {
   box-shadow: 0 10px 24px rgba(0, 0, 0, 0.6);
 }
 
-/* La imagen se “mete” en la card, ocupando todo el ancho */
 .parrilla-image {
   width: auto;
   height: 190px;
   overflow: hidden;
-  margin: -16px -16px 12px;   /* truco para que toque los bordes */
+  margin: -16px -16px 12px;
 }
 
 .parrilla-image img {
@@ -318,7 +379,6 @@ header nav a:hover {
   border-top-right-radius: 20px;
 }
 
-/* Texto bien centrado en el cuerpo de la card */
 .parrilla-title {
   font-size: 18px;
   font-weight: 700;
@@ -341,299 +401,9 @@ header nav a:hover {
   margin-right: 4px;
 }
 
-/* Botón “ver más” */
-.btn-ver {
-  display: inline-block;
-  background: var(--accent-orange);
-  color: #000;
-  padding: 8px 14px;
-  border-radius: 999px;
-  font-size: 14px;
-  text-decoration: none;
-  font-weight: 600;
-  border: none;
-}
 
-.btn-ver:hover {
-  background: #ffb300;
-}
-
-/* ============================
-   FORMULARIOS DE AUTENTICACIÓN
-   (login y registro)
-   ============================ */
-
-.auth-container {
-  max-width: 400px;
-  margin: 2rem auto;
-  background-color: #111827;        /* gris oscuro */
-  padding: 1.5rem;
-  border-radius: 16px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-}
-
-.auth-container h2 {
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-  font-size: 1.5rem;
-  color: #ffffff;  /* TEXTO BLANCO */
-  text-align: center;
-}
-
-.auth-subtitle {
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-  color: #9ca3af;  /* gris clarito */
-  font-size: 0.95rem;
-}
-
-.auth-form .form-row {
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-}
-
-.auth-form label {
-  margin-bottom: 0.25rem;
-  font-weight: 500;
-  color: #ffffff;  /* LABELS BLANCOS */
-}
-
-.auth-form input {
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  border: 1px solid #4b5563;
-  background-color: #020617;
-  color: #e5e7eb;
-}
-
-.auth-form input:focus {
-  outline: none;
-  border-color: #f97316;        /* naranja */
-  box-shadow: 0 0 0 1px #f97316;
-}
-
-.auth-errors {
-  background-color: #7f1d1d;
-  color: #fee2e2;
-  padding: 0.5rem 0.75rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  font-size: 0.9rem;
-}
-
-.field-errors small {
-  color: #fca5a5;
-  font-size: 0.8rem;
-}
-
-.auth-alt-link {
-  margin-top: 1rem;
-  text-align: center;
-  font-size: 0.9rem;
-  color: hsl(0, 20%, 99%);
-}
-
-.auth-alt-link a {
-  color: #f97316;
-  text-decoration: none;
-}
-
-.auth-alt-link a:hover {
-  text-decoration: underline;
-}
-
-/* Botón principal reutilizable para formularios de auth */
-.btn-primary {
-  width: 100%;
-  padding: 0.6rem 1rem;
-  border-radius: 999px;
-  border: none;
-  background: linear-gradient(90deg, #f97316, #ea580c);
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 0.5rem;
-}
-
-.btn-primary:hover {
-  filter: brightness(1.1);
-}
-
-/* ============================
-   RESEÑAS (estilo oscuro)
-   ============================ */
-
-.resena-formulario {
-  margin-top: 28px;
-  padding: 20px 18px;
-  background: rgba(24, 24, 24, 0.96);
-  border-radius: 18px;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7);
-  color: var(--extra-light-gray);
-}
-
-/* subtítulo "Tu reseña" ya usa .parrilla-detalle-subtitulo */
-
-.resena-form textarea {
-  width: 100%;
-}
-
-/* Mensaje cuando ya reseñó */
-.resena-ya-hecha {
-  padding: 0.8rem 1rem;
-  background: rgba(127, 29, 29, 0.9);
-  border-radius: 12px;
-  border-left: 4px solid #ff5757;
-  color: #fee2e2;
-  margin-bottom: 1rem;
-}
-
-/* Mensaje cuando tiene que iniciar sesión */
-.resena-login-msg {
-  margin: 0;
-  font-size: 0.95rem;
-  color: #e5e5e5;
-}
-
-.resena-login-msg a {
-  font-weight: 600;
-  color: var(--accent-orange);
-  text-decoration: none;
-}
-
-.resena-login-msg a:hover {
-  text-decoration: underline;
-}
-
-/* ============================
-   PROMOCIONES
-   ============================ */
-
-.promos-container {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.promos-lista {
-  list-style: none;
-  padding: 0;
-  margin: 1.5rem 0;
-}
-
-.promo-item {
-  padding: 1rem 0;
-  border-bottom: 1px solid #eee;
-}
-
-.promo-item:last-child {
-  border-bottom: none;
-}
-
-.promo-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.promo-titulo {
-  margin: 0;
-  font-size: 1.1rem;
-}
-
-.promo-precio {
-  font-weight: bold;
-}
-
-.promo-parrilla a {
-  font-weight: 600;
-}
-
-.promo-fechas {
-  font-size: 0.9rem;
-  color: #666;
-}
-
-/* ============================
-   CATEGORÍAS
-   ============================ */
-
-.categorias-lista-container,
-.categoria-detalle-container {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.categorias-lista {
-  list-style: none;
-  padding: 0;
-}
-
-.categoria-item {
-  padding: 0.8rem 0;
-  border-bottom: 1px solid #eee;
-}
-
-.categoria-item:last-child {
-  border-bottom: none;
-}
-
-.categoria-titulo a {
-  font-size: 1.1rem;
-  text-decoration: none;
-}
-
-.categoria-titulo a:hover {
-  text-decoration: underline;
-}
-
-/* ============================
-   UBICACIONES
-   ============================ */
-
-.ubicaciones-lista-container,
-.ubicacion-detalle-container {
-  max-width: 900px;
-  margin: 0 auto;
-}
-
-.ubicaciones-lista {
-  list-style: none;
-  padding: 0;
-}
-
-.ubicacion-item {
-  padding: 0.8rem 0;
-  border-bottom: 1px solid #eee;
-}
-
-.ubicacion-item:last-child {
-  border-bottom: none;
-}
-
-.ubicacion-titulo a {
-  text-decoration: none;
-  font-size: 1.05rem;
-}
-
-.ubicacion-titulo a:hover {
-  text-decoration: underline;
-}
 /* ======================================
-   TITULO PRINCIPAL DEL HOME
-   ====================================== */
-
-main h2 {
-  font-family: 'Righteous', cursive;
-  font-size: 30px;
-  text-align: center;
-  letter-spacing: 1px;
-  margin: 30px 0 40px;
-  color: var(--accent-orange);
-  text-transform: uppercase;
-}
-/* ======================================
-   DETALLE DE PARRILLA
+   DETALLE DE PARRILLA + RESEÑAS + PROMOS
    ====================================== */
 
 .parrilla-detalle-container {
@@ -646,7 +416,6 @@ main h2 {
   color: var(--extra-light-gray);
 }
 
-/* Título principal del detalle */
 .parrilla-detalle-titulo {
   font-family: 'Righteous', cursive;
   font-size: 32px;
@@ -655,8 +424,6 @@ main h2 {
   letter-spacing: 1px;
   color: var(--accent-orange);
 }
-
-/* Layout: foto + info */
 
 .parrilla-detalle-layout {
   display: flex;
@@ -675,7 +442,7 @@ main h2 {
   width: 100%;
   border-radius: 18px;
   object-fit: cover;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
 }
 
 .parrilla-detalle-info {
@@ -701,8 +468,7 @@ main h2 {
   text-decoration: underline;
 }
 
-/* Subtítulos de secciones (reseñas, promos, reseña nueva) */
-
+/* Subtítulos en las secciones de detalle */
 .parrilla-detalle-subtitulo {
   font-family: 'Righteous', cursive;
   font-size: 22px;
@@ -710,19 +476,17 @@ main h2 {
   color: var(--accent-orange);
 }
 
-/* Bloque de reseñas y promos como tarjetas oscuras */
-
+/* Bloques reseñas y promos */
 .parrilla-detalle-resenas,
 .parrilla-detalle-promos {
   margin-top: 28px;
   padding: 20px 18px 22px;
   background: rgba(24, 24, 24, 0.95);
   border-radius: 18px;
-  box-shadow: 0 8px 22px rgba(0,0,0,0.7);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7);
 }
 
-/* Lista de reseñas */
-
+/* Lista de reseñas genérica */
 .resenas-lista {
   list-style: none;
   padding: 0;
@@ -752,7 +516,7 @@ main h2 {
   color: var(--accent-yellow);
 }
 
-.resena-usuario {
+.resena-usuario{
   color: #e0e0e0;
 }
 
@@ -768,6 +532,7 @@ main h2 {
 .resena-empty {
   font-size: 0.95rem;
   color: #e0e0e0;
+  text-align: center;
 }
 
 /* Promos dentro del detalle */
@@ -811,9 +576,11 @@ main h2 {
 .promo-empty {
   font-size: 0.95rem;
   color: #e0e0e0;
+  text-align: center;
+  justify-content: center;
 }
 
-/* Responsive: apilar foto y datos en pantallas chicas */
+/* Responsive detalle de parrilla */
 
 @media (max-width: 768px) {
   .parrilla-detalle-container {
@@ -836,6 +603,235 @@ main h2 {
   }
 }
 
+/* Enlace “Volver al inicio” en detalle de parrilla */
+
+.parrilla-detalle-container .volver-inicio {
+  margin-top: 20px;
+}
+
+.parrilla-detalle-container .volver-inicio-link {
+  font-size: 0.95rem;
+  color: #9ca3af;
+  text-decoration: none;
+}
+
+.parrilla-detalle-container .volver-inicio-link::before {
+  content: "← ";
+}
+
+.parrilla-detalle-container .volver-inicio-link:hover {
+  color: var(--accent-orange);
+  text-decoration: underline;
+}
+
+
+/* ======================================
+   RESEÑAS – FORMULARIO
+   ====================================== */
+
+.resena-formulario {
+  margin-top: 28px;
+  padding: 20px 18px;
+  background: rgba(24, 24, 24, 0.96);
+  border-radius: 18px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.7);
+  color: var(--extra-light-gray);
+  text-align: center;
+}
+
+.resena-form textarea {
+  width: 100%;
+}
+
+.resena-ya-hecha {
+  padding: 0.8rem 1rem;
+  background: rgba(127, 29, 29, 0.9);
+  border-radius: 12px;
+  border-left: 4px solid #ff5757;
+  color: #fee2e2;
+  margin-bottom: 1rem;
+}
+
+.resena-login-msg {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #e5e5e5;
+}
+
+.resena-login-msg a {
+  font-weight: 600;
+  color: var(--accent-orange);
+  text-decoration: none;
+}
+
+.resena-login-msg a:hover {
+  text-decoration: underline;
+}
+
+
+/* ======================================
+   MIS RESEÑAS – PANTALLA PROPIA
+   ====================================== */
+
+.mis-resenas-wrapper,
+.mis-resenas-container {
+  max-width: 1100px;
+  margin: 40px auto 60px;
+  padding: 0 20px;
+}
+
+/* Card grande tipo “buscar” */
+
+.mis-resenas-card {
+  position: relative;
+  background: rgba(33, 33, 33, 0.96);
+  border-radius: 26px;
+  padding: 28px 26px 30px;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  overflow: hidden;
+}
+
+.mis-resenas-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top,
+    rgba(255, 152, 0, 0.25),
+    transparent 55%);
+  pointer-events: none;
+}
+
+.mis-resenas-title {
+  position: relative;
+  z-index: 1;
+  font-family: 'Righteous', cursive;
+  font-size: 28px;
+  margin: 0 0 6px;
+  text-align: center;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent-orange);
+}
+
+.mis-resenas-intro {
+  position: relative;
+  z-index: 1;
+  margin: 0 0 20px;
+  text-align: center;
+  font-size: 0.98rem;
+  color: #e5e5e5;
+}
+
+.mis-resenas-card .resenas-lista {
+  gap: 14px;
+}
+
+.mis-resenas-empty {
+  position: relative;
+  z-index: 1;
+  margin: 10px 0 0;
+  text-align: center;
+  font-size: 0.98rem;
+  color: #e5e5e5;
+}
+
+@media (max-width: 768px) {
+  .mis-resenas-card {
+    padding: 20px 16px 24px;
+    border-radius: 20px;
+  }
+
+  .mis-resenas-title {
+    font-size: 24px;
+  }
+}
+
+
+/* ======================================
+   FORMULARIOS DE AUTENTICACIÓN
+   ====================================== */
+
+.auth-container {
+  max-width: 400px;
+  margin: 2rem auto;
+  background-color: #111827;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.auth-container h2 {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+  color: #ffffff;
+  text-align: center;
+}
+
+.auth-subtitle {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  color: #9ca3af;
+  font-size: 0.95rem;
+}
+
+.auth-form .form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
+}
+
+.auth-form label {
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  color: #ffffff;
+}
+
+.auth-form input {
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #4b5563;
+  background-color: #020617;
+  color: #e5e7eb;
+}
+
+.auth-form input:focus {
+  outline: none;
+  border-color: #f97316;
+  box-shadow: 0 0 0 1px #f97316;
+}
+
+.auth-errors {
+  background-color: #7f1d1d;
+  color: #fee2e2;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.field-errors small {
+  color: #fca5a5;
+  font-size: 0.8rem;
+}
+
+.auth-alt-link {
+  margin-top: 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: hsl(0, 20%, 99%);
+}
+
+.auth-alt-link a {
+  color: #f97316;
+  text-decoration: none;
+}
+
+.auth-alt-link a:hover {
+  text-decoration: underline;
+}
+
 
 /* ======================================
    LISTA DE PARRILLAS (vista parrillas:lista)
@@ -847,30 +843,29 @@ main h2 {
   padding: 0 20px;
 }
 
-/* Título "Parrillas" de la página de lista */
-
 .parrillas-lista-container h1 {
   font-family: 'Righteous', cursive;
   font-size: 34px;
   color: var(--accent-orange);
   margin: 0 0 8px;
+  text-align: center;
 }
 
-/* Texto introductorio debajo del título */
 .parrillas-intro {
   margin: 0 0 24px;
   font-size: 0.98rem;
   color: #e0e0e0;
+  text-align: center;
 }
 
-/* Contenedor de las cards en lista (una debajo de otra) */
+/* Lista tipo cards horizontales (diseño de la página de parrillas) */
+
 .parrillas-grid {
   display: flex;
   flex-direction: column;
-  gap: 20px;              /* espacio entre parrilla y parrilla */
+  gap: 20px;
 }
 
-/* Card en modo "fila": foto izquierda, texto derecha */
 .parrillas-grid .parrilla-card {
   display: flex;
   gap: 20px;
@@ -881,16 +876,14 @@ main h2 {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(0, 0, 0, 0.55);
   color: var(--extra-light-gray);
-  overflow: hidden;       /* para que la imagen respete el borde redondeado */
+  overflow: hidden;
 }
 
-/* Columna de la imagen */
 .parrillas-grid .parrilla-card-img {
   flex: 0 0 260px;
   max-width: 260px;
 }
 
-/* Imagen dentro de la card de lista */
 .parrillas-grid .parrilla-card-img img,
 .parrillas-grid .parrilla-card-img-placeholder {
   width: 100%;
@@ -900,7 +893,6 @@ main h2 {
   display: block;
 }
 
-/* Placeholder si no hay foto */
 .parrillas-grid .parrilla-card-img-placeholder {
   background: #424242;
   display: flex;
@@ -910,7 +902,6 @@ main h2 {
   font-size: 0.9rem;
 }
 
-/* Columna del contenido textual */
 .parrillas-grid .parrilla-card-body {
   flex: 1;
   display: flex;
@@ -918,29 +909,26 @@ main h2 {
   justify-content: space-between;
 }
 
-/* Título de la parrilla en la lista */
 .parrillas-grid .parrilla-card-title {
   font-family: 'Righteous', cursive;
   font-size: 20px;
   margin: 0 0 6px;
   color: var(--accent-orange);
+  text-align: start;
 }
 
-/* Línea barrio / ciudad / categoría */
 .parrillas-grid .parrilla-card-meta {
   margin: 0 0 8px;
   font-size: 0.9rem;
   color: #e0e0e0;
 }
 
-/* Descripción corta */
 .parrillas-grid .parrilla-card-desc {
   margin: 0 0 10px;
   font-size: 0.95rem;
   color: #f3f3f3;
 }
 
-/* Puntaje promedio */
 .parrillas-grid .parrilla-card-rating {
   margin: 0 0 12px;
   font-size: 0.9rem;
@@ -950,13 +938,11 @@ main h2 {
   color: var(--accent-orange);
 }
 
-/* Botón "Ver más" reaprovechando .btn-ver, solo alineación */
-
 .parrillas-grid .btn-ver {
   align-self: flex-start;
 }
 
-/* Responsive: en mobile apilamos la imagen arriba */
+/* Responsive lista parrillas */
 
 @media (max-width: 768px) {
   .parrillas-grid .parrilla-card {
@@ -973,8 +959,173 @@ main h2 {
     height: 190px;
   }
 }
+
+
 /* ======================================
-   CATEGORÍAS - LISTA
+   BUSCAR PARRILLAS (buscar.html)
+   ====================================== */
+
+.buscar-container {
+  position: relative;
+}
+
+/* Card principal de búsqueda */
+
+.buscar-card {
+  max-width: 900px;
+  margin: 40px auto 50px;
+  padding: 32px 32px 28px;
+  border-radius: 26px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 152, 0, 0.18), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(255, 235, 59, 0.18), transparent 55%),
+    rgba(24, 24, 24, 0.96);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(14px);
+  text-align: center;
+}
+
+.buscar-title {
+  font-family: 'Righteous', cursive;
+  font-size: 30px;
+  margin: 0 0 10px;
+  color: var(--accent-orange);
+  letter-spacing: 1px;
+}
+
+.buscar-intro {
+  margin: 0 0 22px;
+  font-size: 0.98rem;
+  color: #f1f1f1;
+}
+
+.buscar-form {
+  margin: 0;
+}
+
+/* Input pill + botón */
+
+.buscar-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.65);
+  border-radius: 999px;
+  padding: 6px 6px 6px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.6);
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+.buscar-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  color: var(--extra-light-gray);
+  font-size: 0.95rem;
+  padding: 8px 10px;
+  outline: none;
+  text-align: center;
+}
+
+.buscar-input::placeholder {
+  color: #b0b0b0;
+  text-align: center;
+}
+
+.buscar-btn {
+  margin-left: 8px;
+  padding: 10px 26px;
+  font-size: 0.9rem;
+  border-radius: 999px;
+  background: var(--accent-orange);
+  color: #000;
+  white-space: nowrap;
+}
+
+/* Resultados debajo de la card de búsqueda */
+
+.buscar-resultados {
+  margin-top: 10px;
+}
+
+/* Cards de resultados con mismo ancho/estilo que la card de buscar */
+
+.buscar-resultados .parrillas-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center;
+}
+
+.buscar-resultados .parrilla-card {
+  max-width: 900px;
+  width: 100%;
+  padding: 20px 22px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 152, 0, 0.14), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(255, 235, 59, 0.14), transparent 55%),
+    rgba(24, 24, 24, 0.96);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.85);
+  border: 1px solid rgba(0, 0, 0, 0.7);
+}
+
+/* Layout horizontal imagen + texto */
+
+.buscar-resultados .parrilla-card-img {
+  flex: 0 0 260px;
+  max-width: 260px;
+}
+
+.buscar-resultados .parrilla-card-img img,
+.buscar-resultados .parrilla-card-img-placeholder {
+  height: 160px;
+}
+
+/* Mensaje sin resultados */
+
+.buscar-sin-resultados {
+  margin-top: 10px;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+/* Responsive buscar */
+
+@media (max-width: 768px) {
+  .buscar-card {
+    margin: 30px auto 40px;
+    padding: 22px 18px 24px;
+  }
+
+  .buscar-title {
+    font-size: 24px;
+  }
+
+  .buscar-input-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+    border-radius: 20px;
+    padding: 10px 10px 10px 14px;
+  }
+
+  .buscar-btn {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 8px;
+    text-align: center;
+  }
+
+  .buscar-resultados .parrilla-card {
+    padding: 18px 16px;
+  }
+}
+
+
+/* ======================================
+   CATEGORÍAS – LISTA (CENTRADAS)
    ====================================== */
 
 .categorias-lista-container {
@@ -988,13 +1139,17 @@ main h2 {
   font-size: 34px;
   color: var(--accent-orange);
   margin: 0 0 8px;
+  text-align: center;
 }
 
 .categorias-intro {
   margin: 0 0 24px;
   font-size: 0.98rem;
   color: #e0e0e0;
+  text-align: center;
 }
+
+/* Lista vertical, centrada */
 
 .categorias-lista {
   list-style: none;
@@ -1002,27 +1157,43 @@ main h2 {
   margin: 0;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 16px;
 }
 
+/* Card centrada y más angosta */
+
 .categoria-item {
-  padding: 16px 18px;
+  width: 100%;
+  max-width: 600px;
+  padding: 18px 22px;
   background: rgba(66, 66, 66, 0.96);
-  border-radius: 18px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  border-radius: 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Hover en cards de Categorías */
+
+.categoria-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .categoria-titulo {
   margin: 0 0 6px;
 }
 
-/* título de categoría: naranja, fuente Righteous, sin violeta */
 .categoria-titulo a {
   font-family: 'Righteous', cursive;
-  font-size: 20px;
-  text-decoration: none;
+  font-size: 22px;
   color: var(--accent-orange);
+  text-decoration: none;
   letter-spacing: 0.5px;
 }
 
@@ -1030,20 +1201,26 @@ main h2 {
   color: var(--accent-yellow);
 }
 
-.categoria-item .categoria-descripcion {
-  margin: 0;
+/* Descripción dentro de la card de categoría */
+
+.categoria-descripcion,
+.categoria-item {
   font-size: 0.95rem;
-  color: #f3f3f3;
+  color: #dedede;
+  margin: 0;
+  max-width: 500px;
 }
 
+
 /* ======================================
-   CATEGORÍAS - DETALLE
+   CATEGORÍAS – DETALLE
    ====================================== */
 
 .categoria-detalle-container {
   max-width: 1100px;
   margin: 40px auto 50px;
   padding: 0 20px;
+  justify-content: center;
 }
 
 .categoria-detalle-container h1 {
@@ -1051,6 +1228,7 @@ main h2 {
   font-size: 32px;
   color: var(--accent-orange);
   margin: 0 0 12px;
+  text-align: center;
 }
 
 .categoria-detalle-container .categoria-descripcion {
@@ -1058,9 +1236,12 @@ main h2 {
   margin: 0 0 24px;
   font-size: 0.98rem;
   color: #e0e0e0;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  display: block;
 }
 
-/* subtítulos dentro del detalle (Parrillas en esta categoría, Tu reseña, etc) */
 .categoria-detalle-container h2 {
   font-family: 'Righteous', cursive;
   font-size: 22px;
@@ -1068,15 +1249,13 @@ main h2 {
   color: var(--accent-orange);
 }
 
-/* Aca reutilizamos parrillas-grid, pero ajustamos las clases propias de este template */
+/* Reutilizamos parrillas-grid como lista vertical */
 
 .categoria-detalle-container .parrillas-grid {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
-
-/* mismas cards de la lista de parrillas */
 
 .categoria-detalle-container .parrillas-grid .parrilla-card {
   display: flex;
@@ -1113,7 +1292,6 @@ main h2 {
   justify-content: space-between;
 }
 
-/* título de parrilla en el detalle de categoría */
 .categoria-detalle-container .parrilla-card-titulo {
   font-family: 'Righteous', cursive;
   font-size: 20px;
@@ -1121,7 +1299,6 @@ main h2 {
   color: var(--accent-orange);
 }
 
-/* ubicación, puntaje y descripción dentro de la card */
 .categoria-detalle-container .parrilla-card-ubicacion {
   margin: 0 0 6px;
   font-size: 0.9rem;
@@ -1143,12 +1320,12 @@ main h2 {
   color: var(--accent-orange);
 }
 
-/* Botón "Ver más" en las cards del detalle */
 .categoria-detalle-container .parrilla-card .btn-ver {
   align-self: flex-start;
 }
 
-/* responsive para las cards dentro del detalle de categoría */
+/* Responsive detalle categoria */
+
 @media (max-width: 768px) {
   .categoria-detalle-container .parrillas-grid .parrilla-card {
     flex-direction: column;
@@ -1168,53 +1345,7 @@ main h2 {
 
 
 /* ======================================
-   CATEGORÍAS — Cards centradas y más angostas
-   ====================================== */
-
-/* Hace que la lista siga vertical pero centrada */
-.categorias-lista {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* ⭐ centra todas las cards */
-  gap: 16px;
-}
-
-/* Card más angosta y centrada */
-.categoria-item {
-  width: 100%;
-  max-width: 600px;      /* ⭐ ancho máximo más chico */
-  padding: 18px 22px;
-  background: rgba(66, 66, 66, 0.96);
-  border-radius: 16px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(0, 0, 0, 0.6);
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;   /* ⭐ contenido centrado */
-  text-align: center;    /* ⭐ texto centrado */
-}
-
-/* Título centrado y compacto */
-.categoria-titulo a {
-  font-family: 'Righteous', cursive;
-  font-size: 22px;
-  color: var(--accent-orange);
-  text-decoration: none;
-  margin-bottom: 6px;
-}
-
-/* Descripción centrada más armónica */
-.categoria-descripcion {
-  font-size: 0.95rem;
-  color: #dedede;
-  margin: 0;
-  max-width: 500px; /* ⭐ para que no quede muy larga */
-}
-
-
-/* ======================================
-   UBICACIONES - LISTA
+   UBICACIONES – LISTA
    ====================================== */
 
 .ubicaciones-lista-container {
@@ -1223,47 +1354,45 @@ main h2 {
   padding: 0 20px;
 }
 
-/* Título "Ubicaciones" */
 .ubicaciones-lista-container h1 {
   font-family: 'Righteous', cursive;
   font-size: 34px;
   color: var(--accent-orange);
   margin: 0 0 8px;
+  text-align: center;
 }
 
-/* Intro debajo del título */
 .ubicaciones-intro {
   margin: 0 0 24px;
   font-size: 1rem;
   color: #dcdcdc;
+  text-align: center;
 }
 
-/* Lista centrada con cards */
 .ubicaciones-lista {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;      /* ⭐ centra las cards */
+  align-items: center;
   gap: 18px;
 }
 
-/* Card de ubicación (compacta y centrada) */
+/* Card centrada */
+
 .ubicacion-item {
   width: 100%;
-  max-width: 600px;         /* ⭐ más angosta */
+  max-width: 600px;
   padding: 18px 22px;
   background: rgba(66, 66, 66, 0.96);
   border-radius: 16px;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
   border: 1px solid rgba(0, 0, 0, 0.6);
-
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -1272,7 +1401,6 @@ main h2 {
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.6);
 }
 
-/* Título con iconito de ubicación */
 .ubicacion-titulo {
   margin: 0 0 6px;
 }
@@ -1284,17 +1412,17 @@ main h2 {
   text-decoration: none;
   display: flex;
   align-items: center;
-  gap: 8px;                 /* espacio icono-texto */
+  gap: 8px;
 }
 
-/* 📍 Icono de ubicación */
+/* Icono de ubicación en el título */
+
 .ubicacion-titulo a::before {
   content: "📍";
   font-size: 22px;
   display: inline-block;
 }
 
-/* Descripción (si existe) */
 .ubicacion-descripcion {
   margin: 0;
   font-size: 0.95rem;
@@ -1302,9 +1430,13 @@ main h2 {
   max-width: 480px;
 }
 
+.ubicacion-detalle-container h1 {
+  text-align: center;
+}
+
 
 /* ======================================
-   PROMOCIONES — Cards estilo parrillas
+   PROMOCIONES – LISTA TIPO CUPÓN
    ====================================== */
 
 .promos-container {
@@ -1318,9 +1450,9 @@ main h2 {
   color: var(--accent-orange);
   font-size: 34px;
   margin-bottom: 25px;
+  text-align: center;
 }
 
-/* Lista centrada como categorías y ubicaciones */
 .promos-lista {
   list-style: none;
   padding: 0;
@@ -1330,97 +1462,7 @@ main h2 {
   gap: 20px;
 }
 
-/* Card */
-.promo-item {
-  background: rgba(66, 66, 66, 0.96);
-  border-radius: 20px;
-  padding: 22px 26px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
-  border: 1px solid rgba(0, 0, 0, 0.55);
-
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.promo-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.6);
-}
-
-/* HEADER: título y precio alineados */
-.promo-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-/* Título */
-.promo-titulo {
-  font-family: 'Righteous', cursive;
-  font-size: 24px;
-  color: var(--accent-orange);
-  margin: 0;
-}
-
-/* Precio */
-.promo-precio {
-  font-size: 22px;
-  font-weight: bold;
-  color: #ffffff;
-  background: var(--accent-orange);
-  padding: 6px 16px;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(255, 140, 0, 0.45);
-}
-
-/* Parrilla */
-.promo-parrilla {
-  font-size: 1rem;
-  margin: 0;
-  color: #e3e3e3;
-}
-
-.promo-parrilla a {
-  color: #8ab4ff;
-  text-decoration: none;
-}
-.promo-parrilla a:hover {
-  text-decoration: underline;
-}
-
-/* Descripción */
-.promo-descripcion {
-  font-size: 1rem;
-  margin: 0;
-  color: #f2f2f2;
-}
-
-/* Fechas */
-.promo-fechas {
-  margin: 0;
-  margin-top: 6px;
-  font-size: 0.95rem;
-  color: #cfcfcf;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  .promo-header {
-    flex-direction: column;
-    gap: 8px;
-    align-items: flex-start;
-  }
-  .promo-precio {
-    align-self: flex-start;
-  }
-}
-
-/* ======================================
-   PROMOCIONES — Estilo CUPÓN / TICKET
-   ====================================== */
+/* Card tipo ticket */
 
 .promo-item {
   background: rgba(38, 38, 38, 0.96);
@@ -1428,10 +1470,12 @@ main h2 {
   padding: 26px 32px;
   border: 2px dashed var(--accent-orange);
   position: relative;
-
   box-shadow: inset 0 0 10px rgba(255, 153, 0, 0.15),
               0 6px 18px rgba(0, 0, 0, 0.45);
-
+  display: grid;
+  grid-template-columns: 1fr 2fr auto;
+  align-items: center;
+  column-gap: 30px;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -1441,7 +1485,8 @@ main h2 {
               0 10px 26px rgba(0, 0, 0, 0.55);
 }
 
-/* “Perforaciones” tipo ticket (círculos a los lados) */
+/* “Perforaciones” tipo ticket */
+
 .promo-item::before,
 .promo-item::after {
   content: "";
@@ -1463,67 +1508,7 @@ main h2 {
   right: -13px;
 }
 
-/* Título */
-.promo-titulo {
-  font-family: 'Righteous', cursive;
-  font-size: 26px;
-  color: var(--accent-orange);
-  margin: 0;
-  letter-spacing: 1px;
-}
-
-/* Precio sticker */
-.promo-precio {
-  font-size: 22px;
-  font-weight: 800;
-  color: #fff;
-  background: linear-gradient(90deg, #ff9800, #ffb84d);
-  padding: 8px 20px;
-  border-radius: 50px;
-  box-shadow: 0 4px 12px rgba(255, 153, 0, 0.45);
-  border: 2px solid rgba(255, 255, 255, 0.25);
-}
-
-/* Texto */
-.promo-parrilla,
-.promo-descripcion,
-.promo-fechas {
-  margin: 0;
-  color: #e6e6e6;
-  font-size: 1rem;
-}
-
-.promo-parrilla a {
-  color: #8ab4ff;
-  text-decoration: none;
-}
-.promo-parrilla a:hover {
-  text-decoration: underline;
-}
-
-/* Responsive */
-@media (max-width: 600px) {
-  .promo-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-  }
-
-  .promo-precio {
-    align-self: flex-start;
-  }
-}
-/* ======================================
-   PROMOCIONES — Layout 3 columnas
-   ====================================== */
-
-.promo-item {
-  display: grid;
-  grid-template-columns: 1fr 2fr auto;
-  align-items: center;
-  column-gap: 30px;
-  padding: 26px 32px;
-}
+/* Header título del ticket */
 
 .promo-header {
   display: flex;
@@ -1532,9 +1517,14 @@ main h2 {
 }
 
 .promo-titulo {
+  font-family: 'Righteous', cursive;
+  font-size: 26px;
+  color: var(--accent-orange);
   margin: 0;
-  text-align: left;
+  letter-spacing: 1px;
 }
+
+/* Contenido central: descripción + fechas */
 
 .promo-content {
   display: flex;
@@ -1547,11 +1537,46 @@ main h2 {
   margin: 0;
 }
 
+/* Precio tipo sticker */
+
 .promo-precio {
-  justify-self: end;
+  font-size: 22px;
+  font-weight: 800;
+  color: #fff;
+  background: linear-gradient(90deg, #ff9800, #ffb84d);
+  padding: 8px 20px;
+  border-radius: 50px;
+  box-shadow: 0 4px 12px rgba(255, 153, 0, 0.45);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  text-align: center;
 }
 
-/* Vista móvil */
+.promo-parrilla {
+  font-size: 1rem;
+  color: #e3e3e3;
+}
+
+.promo-parrilla a {
+  color: #8ab4ff;
+  text-decoration: none;
+}
+
+.promo-parrilla a:hover {
+  text-decoration: underline;
+}
+
+.promo-descripcion {
+  font-size: 1rem;
+  color: #f2f2f2;
+}
+
+.promo-fechas {
+  font-size: 0.95rem;
+  color: #cfcfcf;
+}
+
+/* Responsive promos */
+
 @media (max-width: 800px) {
   .promo-item {
     grid-template-columns: 1fr;
@@ -1561,24 +1586,866 @@ main h2 {
   .promo-precio {
     justify-self: start;
   }
-}
-/* Enlace "Volver al inicio" en detalle de parrilla */
 
-.parrilla-detalle-container .volver-inicio {
-  margin-top: 20px;
+  .promo-header {
+    align-items: flex-start;
+    gap: 10px;
+  }
 }
 
-.parrilla-detalle-container .volver-inicio-link {
+
+/* ======================================
+   PUNTAJE PROMEDIO CON CHORIPANES
+   ====================================== */
+
+.puntaje-promedio-iconos {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.puntaje-promedio-iconos .chori {
+  font-size: 1.45rem;
+  line-height: 1;
+  display: inline-block;
+}
+
+/* Choripán lleno (activos) */
+.chori--lleno {
+  filter: drop-shadow(0 0 2px rgba(255, 153, 0, 0.5));
+}
+
+/* Choripán apagado (gris) */
+.chori--gris {
+  opacity: 0.25;
+}
+
+/* Número al lado, si se quisiera mostrar */
+.puntaje-num {
   font-size: 0.95rem;
-  color: #9ca3af;
+  color: #e0e0e0;
+  margin-left: 4px;
+}
+
+
+/* ======================================
+   PAGINACIÓN
+   ====================================== */
+
+.pagination-container {
+  margin: 30px auto 10px;
+  text-align: center;
+}
+
+.pagination {
+  display: inline-flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.page-btn {
+  padding: 8px 14px;
+  border-radius: 12px;
+  background: rgba(255, 152, 0, 0.15);
+  color: var(--accent-orange);
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(255, 152, 0, 0.25);
+}
+
+.page-btn:hover {
+  background: rgba(255, 152, 0, 0.35);
+  color: #fff;
+}
+
+.page-btn.active {
+  background: var(--accent-orange);
+  color: #000;
+  border-color: var(--accent-orange);
+}
+
+.page-btn.disabled {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+
+/* ======================================
+   AJUSTE ANTI-SCROLL PARA PANTALLAS GRANDES
+   (>= 1440px)
+   ====================================== */
+
+@media (min-width: 1440px) {
+
+  /* Menos margen vertical general */
+  main {
+    margin: 24px auto 24px;
+    padding: 0 20px 24px;
+  }
+
+  /* Secciones principales con menos aire vertical */
+  .parrillas-lista-container,
+  .categorias-lista-container,
+  .ubicaciones-lista-container,
+  .promos-container,
+  .categoria-detalle-container,
+  .mis-resenas-wrapper,
+  .mis-resenas-container {
+    margin-top: 24px;
+    margin-bottom: 30px;
+  }
+
+  /* Título principal un poco más compacto */
+  main h2 {
+    margin: 20px 0 28px;
+  }
+
+  /* Cards de listas un poquito más compactas
+     (sin romper el diseño horizontal) */
+  .parrillas-grid .parrilla-card,
+  .categoria-detalle-container .parrillas-grid .parrilla-card {
+    padding: 14px 16px;
+  }
+
+  .parrillas-grid .parrilla-card-img img,
+  .parrillas-grid .parrilla-card-img-placeholder,
+  .categoria-detalle-container .parrilla-card-img img,
+  .categoria-detalle-container .parrilla-card-img-placeholder,
+  .categoria-detalle-container .parrilla-card-img-tag {
+    height: 150px;
+  }
+}
+
+
+/* ======================================
+   UBICACIONES – DETALLE
+   (MISMO DISEÑO QUE CATEGORÍAS DETALLE)
+   ====================================== */
+
+.ubicacion-detalle-container {
+  max-width: 1100px;
+  margin: 40px auto 50px;
+  padding: 0 20px;
+}
+
+.ubicacion-detalle-container h1 {
+  font-family: 'Righteous', cursive;
+  font-size: 32px;
+  color: var(--accent-orange);
+  margin: 0 0 12px;
+  text-align: center;
+}
+
+.ubicacion-descripcion-detalle {
+  max-width: 800px;
+  margin: 0 auto 24px;
+  font-size: 0.98rem;
+  color: #e0e0e0;
+  text-align: center;
+}
+
+.ubicacion-detalle-container h2 {
+  font-family: 'Righteous', cursive;
+  font-size: 22px;
+  margin: 0 0 16px;
+  color: var(--accent-orange);
+  text-align: center;
+}
+
+/* Cards de parrillas dentro del detalle de ubicación */
+
+.ubicacion-detalle-container .parrillas-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ubicacion-detalle-container .parrilla-card {
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  background: rgba(66, 66, 66, 0.96);
+  border-radius: 20px;
+  padding: 16px 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0.55);
+  color: var(--extra-light-gray);
+  overflow: hidden;
+}
+
+.ubicacion-detalle-container .parrilla-card-img {
+  flex: 0 0 260px;
+  max-width: 260px;
+}
+
+.ubicacion-detalle-container .parrilla-card-img img,
+.ubicacion-detalle-container .parrilla-card-img-placeholder {
+  width: 100%;
+  height: 160px;
+  border-radius: 14px;
+  object-fit: cover;
+}
+
+.ubicacion-detalle-container .parrilla-card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.ubicacion-detalle-container .parrilla-card-titulo {
+  font-family: 'Righteous', cursive;
+  font-size: 20px;
+  margin: 0 0 6px;
+  color: var(--accent-orange);
+}
+
+.ubicacion-detalle-container .parrilla-card-ubicacion {
+  font-size: 0.9rem;
+  margin: 0 0 6px;
+  color: #e0e0e0;
+}
+
+.ubicacion-detalle-container .parrilla-card-descripcion {
+  font-size: 0.95rem;
+  margin: 0 0 10px;
+  color: #f3f3f3;
+}
+
+.ubicacion-detalle-container .btn-ver {
+  align-self: flex-start;
+}
+
+/* Responsive ubicaciones detalle */
+
+@media (max-width: 768px) {
+  .ubicacion-detalle-container .parrilla-card {
+    flex-direction: column;
+  }
+
+  .ubicacion-detalle-container .parrilla-card-img {
+    max-width: 100%;
+  }
+
+  .ubicacion-detalle-container .parrilla-card-img img {
+    height: 190px;
+  }
+}
+
+
+/* ======================================
+   BOTÓN VOLVER – ESTILO CHORIFANS
+   ====================================== */
+
+.volver-box {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.volver-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  border-radius: 999px;
+  background: rgba(255, 152, 0, 0.2);
+  color: var(--accent-orange);
+  font-family: 'Righteous', cursive;
+  font-size: 16px;
+  letter-spacing: 1px;
+  text-decoration: none;
+  text-transform: uppercase;
+  border: 1px solid rgba(255, 152, 0, 0.35);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transition: all 0.25s ease;
+}
+
+/* Hover del botón volver */
+
+.volver-btn:hover {
+  background: var(--accent-orange);
+  color: #000;
+  border-color: var(--accent-orange);
+  box-shadow: 0 6px 18px rgba(255, 152, 0, 0.55);
+  transform: translateY(-2px);
+}
+
+/* Estado active del botón volver */
+
+.volver-btn:active {
+  transform: translateY(0px);
+  box-shadow: 0 3px 10px rgba(255, 152, 0, 0.35);
+}
+
+
+/* ======================================
+   FOOTER FIJO AL FONDO
+   ====================================== */
+
+/* Contenedor principal del footer fijo */
+.site-footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  z-index: 40;
+  background: #111111;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.7);
+}
+
+/* Interior del footer: centrado y un poco más alto */
+.footer-inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 18px 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Texto del copy del TP */
+.footer-copy {
+  font-size: 0.85rem;
+  letter-spacing: 0.03em;
+  color: #e5e5e5;
+  opacity: 0.85;
+  text-transform: uppercase;
+}
+
+/* Detalle glow encima del footer (decorativo) */
+.site-footer::before {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 152, 0, 0),
+    rgba(255, 152, 0, 0.9),
+    rgba(255, 152, 0, 0)
+  );
+}
+
+
+/*ESTO ES ESTILO DE FUNCIONALIDAD LEAN*/
+/* ===========================
+   RESEÑAS - PANEL VALORAR RESEÑAS
+   =========================== */
+
+.seccion--valorar-resenas {
+  padding: 3rem 0 4rem;
+}
+
+.valorar-resenas-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.valorar-resenas-titulo {
+  text-align: center;
+  color: var(--accent-orange);
+  font-family: "Bungee", system-ui, sans-serif;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.valorar-resenas-subtitulo {
+  text-align: center;
+  color: var(--extra-light-gray);
+  margin-bottom: 2.5rem;
+}
+
+.resenas-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Contenedor principal (card grande) */
+.resena-card--panel {
+  background-color: #161616;
+  border-radius: 18px;
+  padding: 1.5rem 1.2rem 1.6rem;
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.55);
+  border: 1px solid #262626;
+  overflow: hidden;
+}
+
+/* -------- CARD INTERNA: RESEÑA DEL USUARIO -------- */
+
+/* Matamos cualquier fondo del header global */
+.resena-card--panel .resena-header {
+  background: transparent !important;
+  padding: 0 !important;
+  margin: 0 0 0.8rem 0 !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Card interna del usuario: MÁS GRANDE y centrada */
+.resena-card--panel .resena-header__info {
+  width: 90% !important;
+  max-width: 90% !important;
+  margin: 0 auto 0.75rem;         /* centrada */
+
+  background-color: #202020;
+  border-radius: 16px;
+  border: 1px solid #333333;
+  padding: 0.75rem 1rem 0.7rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+/* Fila de nombre de usuario + choripanes */
+.resena-usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.resena-usuario-nombre {
+  font-weight: 600;
+  color: var(--accent-orange);
+}
+
+.resena-puntaje-choris {
+  font-size: 1rem;
+}
+
+/* Comentario del usuario */
+.resena-texto {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Fecha + nombre de parrilla */
+.resena-meta {
+  font-size: 0.8rem;
+  color: var(--light-gray);
+}
+
+/* -------- CARD INTERNA: RESPUESTA DE LA PARRILLA -------- */
+
+/* Card del dueño: un poco MÁS CHICA y centrada */
+.respuesta-parrilla-card {
+  width: 75% !important;
+  max-width: 75% !important;
+  margin: 0 auto;                 /* centrada */
+
+  padding: 0.45rem 1rem 0.4rem;
+  border-radius: 16px;
+  background-color: #202020;
+  border: 1px solid #c3932a8d;
+  margin-top: 0.3rem;
+}
+
+/* Header: nombre + verificado + carita, alineados en fila */
+.respuesta-header {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.4rem;
+}
+
+.respuesta-nombre-parrilla {
+  font-weight: 600;
+  color: var(--accent-orange);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ==== ICONO AZUL VERIFICADO ==== */
+
+/* Versión recomendada: usamos <span class="respuesta-verificado-icon"></span> */
+.respuesta-verificado-icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-left: 0.2rem;
+  vertical-align: text-bottom;
+
+  /* desde static/css/style.css → static/css/img/verified.png */
+  background-image: url("../img/verified.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+/* Fallback: si en algún template quedó un <img class="respuesta-verificado-icon"> */
+img.respuesta-verificado-icon {
+  width: 16px;
+  height: 16px;
+}
+
+/* ================================ */
+
+.respuesta-valoracion {
+  margin-left: 0.2rem;
+  font-size: 1.2rem;
+}
+
+.respuesta-texto {
+  font-size: 0.95rem;
+  color: var(--extra-light-gray);
+  margin-bottom: 0.25rem;
+}
+
+.respuesta-meta {
+  font-size: 0.78rem;
+  color: var(--light-gray);
+}
+
+/* Estado cuando aún no hay respuesta (mismo ancho que la card del dueño) */
+.resena-estado--pendiente {
+  font-size: 0.85rem;
+  color: var(--light-gray);
+  margin-top: 0.6rem;
+
+  width: 75% !important;
+  max-width: 75% !important;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+
+
+/* -------- BOTÓN / ACCIONES -------- */
+
+.resena-acciones {
+  margin-top: 1.1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-responder {
+  min-width: 180px;
+  text-align: center;
+}
+
+
+
+/* ===========================
+   RESEÑAS - RESPONDER / EDITAR RESPUESTA
+   =========================== */
+
+.seccion--responder-resena {
+  padding: 3rem 0 4rem;
+}
+
+/* reutilizamos .valorar-resenas-container y títulos para que quede igual */
+
+.form-wrapper-respuesta {
+  margin-top: 2rem;
+}
+
+/* Form centrado y un poco más angosto */
+.form--respuesta-resena {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Grupos de campos */
+.form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+/* El select y el textarea ya traen .form-input y .form-textarea
+   desde el forms.py, así que solo ajustamos el ancho */
+.form--respuesta-resena .form-input,
+.form--respuesta-resena .form-textarea,
+.form--respuesta-resena select,
+.form--respuesta-resena textarea {
+  width: 100%;
+}
+
+/* Errores del form */
+.form-errors {
+  font-size: 0.8rem;
+  color: var(--accent-red);
+}
+
+/* Botones / acciones */
+.form-actions {
+  margin-top: 1.4rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: center;
+}
+
+.form-actions .btn-ver {
+  padding-inline: 1.8rem;
+}
+
+/* link "Volver al panel" */
+.btn-link-volver {
+  font-size: 0.9rem;
+  text-decoration: underline;
+  color: var(--accent-orange);
+}
+
+.btn-link-volver:hover {
+  opacity: 0.9;
+}
+
+
+/* ===========================
+   RESEÑAS - FORMULARIO RESPUESTA
+   =========================== */
+
+/* Inputs grises y redondeados */
+.form--respuesta-resena select,
+.form--respuesta-resena textarea {
+  background-color: #202020;
+  color: var(--extra-light-gray);
+  border: 1px solid #333333;
+  font-family: inherit;
+}
+
+/* Select tipo píldora */
+.form--respuesta-resena select {
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+}
+
+/* Textarea redondeada */
+.form--respuesta-resena textarea {
+  border-radius: 16px;
+  padding: 0.7rem 0.9rem;
+  resize: vertical;
+  min-height: 120px;
+  text-align: center;        /* texto centrado dentro del input */
+}
+
+/* Focus */
+.form--respuesta-resena select:focus,
+.form--respuesta-resena textarea:focus {
+  outline: none;
+  border-color: var(--accent-orange);
+  box-shadow: 0 0 0 1px var(--accent-orange);
+}
+
+/* ---------- Toggle de emojis (valoración) ---------- */
+
+.form-group--valoracion .emoji-toggle {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 0.35rem;
+  justify-content: center;   /* centramos las píldoras de emojis */
+}
+
+.emoji-option {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;   /* contenido centrado dentro de la píldora */
+  gap: 0.35rem;
+  padding: 0.4rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid #333333;
+  background-color: #202020;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+/* Ocultamos el radio nativo */
+.emoji-option input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Carita */
+.emoji-face {
+  font-size: 1.1rem;
+}
+
+/* Texto al lado de la carita */
+.emoji-text {
+  color: var(--extra-light-gray);
+}
+
+/* Estado seleccionado */
+.emoji-option input:checked + .emoji-face,
+.emoji-option input:checked + .emoji-face + .emoji-text {
+  color: var(--accent-yellow);
+}
+
+.emoji-option input:checked ~ .emoji-face {
+  transform: scale(1.05);
+}
+
+/* Borde y fondo cuando está seleccionado */
+.emoji-option input:checked ~ .emoji-text,
+.emoji-option input:checked ~ .emoji-face {
+  /* este truco se apoya en el orden de los spans */
+}
+
+.emoji-option input:checked ~ * {
+  border-color: var(--accent-orange);
+}
+
+/* Como no podemos seleccionar el contenedor con :has(), reforzamos así: */
+.emoji-option input:checked + .emoji-face,
+.emoji-option input:checked + .emoji-face + .emoji-text {
+  font-weight: 500;
+}
+
+/* ---------- Botón "Volver al panel de reseñas" ---------- */
+
+.btn-volver-panel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.45rem 1.3rem;
+  border-radius: 999px;
+  border: 1px solid var(--accent-orange);
+  color: var(--accent-orange);
+  font-size: 0.9rem;
   text-decoration: none;
 }
 
-.parrilla-detalle-container .volver-inicio-link::before {
-  content: "← ";
+.btn-volver-panel:hover {
+  background-color: rgba(255, 152, 0, 0.1);
 }
 
-.parrilla-detalle-container .volver-inicio-link:hover {
-  color: var(--accent-orange);
-  text-decoration: underline;
+.form--respuesta-resena {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.form-group {
+  align-items: center;
+}
+
+.form-group label {
+  text-align: center;
+  width: 100%;
+}
+
+.form-actions {
+  justify-content: center;
+}
+
+
+/* ===========================
+   TU RESEÑA - CENTRADO
+   =========================== */
+
+/* La card roja que envuelve el formulario */
+.resena-formulario {
+  max-width: 900px;
+  margin: 3rem auto 0;
+  padding: 1.8rem 1.6rem 2rem;
+  background-color: #141414;
+  border-radius: 24px;
+  box-shadow: 0 18px 30px rgba(0, 0, 0, 0.55);
+  border: 1px solid #262626;
+}
+
+/* Título centrado */
+.resena-formulario .parrilla-detalle-subtitulo {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* Hacemos que TODO el formulario sea más angosto y centrado */
+.resena-formulario form {
+  max-width: 80%;         /* probá 70% si lo querés aún más flaco */
+  margin: 0 auto;
+}
+
+/* Cada campo en columna, con espacio */
+.resena-formulario form p {
+  margin: 0 0 1rem 0;
+}
+
+/* Labels y textos centrados */
+.resena-formulario label,
+.resena-formulario p {
+  text-align: center;
+}
+
+/* Inputs anchos pero centrados */
+.resena-formulario select,
+.resena-formulario textarea {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  max-width: 100%;
+  background-color: #202020;
+  color: var(--extra-light-gray);
+  border: 1px solid #333333;
+  font-family: inherit;
+  text-align: center;
+}
+
+/* Select tipo píldora */
+.resena-formulario select {
+  border-radius: 999px;
+  padding: 0.45rem 0.9rem;
+}
+
+/* Textarea redondeada y sin sobresalir */
+.resena-formulario textarea {
+  border-radius: 16px;
+  padding: 0.8rem 1rem;
+  resize: vertical;
+  min-height: 120px;
+  box-sizing: border-box;
+}
+
+/* Focus lindo */
+.resena-formulario select:focus,
+.resena-formulario textarea:focus {
+  outline: none;
+  border-color: var(--accent-orange);
+  box-shadow: 0 0 0 1px var(--accent-orange);
+}
+
+/* Botón centrado y de ancho cómodo */
+.resena-formulario .btn.btn-primary {
+  display: block;
+  max-width: 360px;
+  width: 100%;
+  margin: 1rem auto 0;
+}
+
+/* El texto "Comentario del usuario..." centrado y gris */
+.resena-formulario p:last-child {
+  font-size: 0.85rem;
+  color: var(--light-gray);
+}
+
+
+
+/* En cualquier lado donde usemos sin-foto.png */
+img[src*="sin-foto"] {
+  object-fit: contain !important;  /* que no explote a pantalla completa */
+  padding: 16px;                   /* aire alrededor del ícono */
+  background-color: #424242b9;       /* fondo gris como los placeholders */
+}
+
+/* En el detalle de parrilla, aún más controlado */
+.parrilla-detalle-foto img[src*="sin-foto"] {
+  max-height: 200px;
+  margin: 0 auto;
+  max-width: 395px;
 }

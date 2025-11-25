@@ -9,7 +9,6 @@
     {# CSS principal #}
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 
-    {# Fuentes y Material Icons como en codigo.html #}
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons"
       rel="stylesheet"
@@ -19,7 +18,6 @@
       rel="stylesheet"
     />
 
-    {# Bloque opcional para CSS/JS extra #}
     {% block extra_head %}{% endblock %}
   </head>
 
@@ -47,9 +45,29 @@
             <ul>
               <li><a href="{% url 'home' %}">Inicio</a></li>
               <li><a href="{% url 'parrillas:lista' %}">Parrillas</a></li>
+              <li><a href="{% url 'parrillas:buscar' %}">Buscar</a></li>
               <li><a href="{% url 'categorias:lista' %}">Categorías</a></li>
               <li><a href="{% url 'ubicaciones:lista' %}">Ubicaciones</a></li>
               <li><a href="{% url 'promociones:lista' %}">Promociones</a></li>
+
+              {% if user.is_authenticated %}
+                {# Dueño de parrilla: ve "Valorar reseñas" #}
+                {% if user.profile.es_duenio_parrilla and user.profile.parrilla_asociada %}
+                  <li>
+                    <a href="{% url 'resenas:valorar_resenas' %}">
+                      Valorar reseñas
+                    </a>
+                  </li>
+                {% else %}
+                  {# Usuario común: ve "Mis reseñas" #}
+                  <li>
+                    <a href="{% url 'resenas:mis_resenas' %}">
+                      Mis reseñas
+                    </a>
+                  </li>
+                {% endif %}
+              {% endif %}
+
             </ul>
           </nav>
 
@@ -87,9 +105,14 @@
       {% endblock %}
     </main>
 
-    {# FOOTER simple por ahora (después lo podemos hacer igual al del HTML de ejemplo) #}
-    <footer>
-      Proyecto ChoriFans — TP Django & Django Ninja — 2025
+    {# FOOTER simple por ahora #}
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <!-- Centro: copy / año -->
+        <span class="footer-copy">
+          TP proyecto ChoriFans | Grupo 7 | Django | Django Ninja &copy;{% now "Y" %}
+        </span>
+      </div>
     </footer>
   </body>
 </html>

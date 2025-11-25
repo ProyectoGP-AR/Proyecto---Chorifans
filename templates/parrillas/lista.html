@@ -1,63 +1,104 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Parrillas - ChoriFans{% endblock %}
 
 {% block content %}
-  <section class="parrillas-lista-container">
+<section class="parrillas-lista-container">
+
     <h1>Parrillas</h1>
     <p class="parrillas-intro">
-      Explorá todas las parrillas de ChoriFans y encontrá tu próximo chori.
+        Explorá todas las parrillas de ChoriFans y encontrá tu próximo chori.
     </p>
 
     {% if parrillas %}
-      <div class="parrillas-grid">
-        {% for parrilla in parrillas %}
-          <article class="parrilla-card">
-            <div class="parrilla-card-img">
-              {% if parrilla.foto_principal %}
-                <img
-                  src="{{ parrilla.foto_principal.url }}"
-                  alt="Foto de {{ parrilla.nombre }}"
-                />
-              {% else %}
-                <div class="parrilla-card-img-placeholder">
-                  Sin foto
-                </div>
-              {% endif %}
-            </div>
+        <div class="parrillas-grid">
+            {% for parrilla in parrillas %}
+                <article class="parrilla-card">
 
-            <div class="parrilla-card-body">
-              <h2 class="parrilla-card-title">
-                {{ parrilla.nombre }}
-              </h2>
+                    {# ============================FOTO DE LA PARRILLA - Si tiene foto_principal → mostramos esa.- Si NO tiene → mostramos sin-foto.png desde static.============================ #}
+                    <div class="parrilla-card-img">
+                        {% if parrilla.foto_principal %}
+                            <img
+                                src="{{ parrilla.foto_principal.url }}"
+                                alt="Foto de {{ parrilla.nombre }}"
+                                class="parrilla-card-img-el"
+                            >
+                        {% else %}
+                            <img
+                                src="{% static 'css/img/sin-foto.png' %}"
+                                alt="Foto no disponible de {{ parrilla.nombre }}"
+                                class="parrilla-card-img-el parrilla-card-img--placeholder"
+                            >
+                        {% endif %}
+                    </div>
 
-              <p class="parrilla-card-meta">
-                {{ parrilla.ubicacion.nombre_barrio }} - {{ parrilla.ubicacion.nombre_ciudad }}
-                · {{ parrilla.categoria.nombre }}
-              </p>
+                    {# ============================CUERPO DE LA CARD Nombre, ubicación, categoría,descripción recortada y puntaje promedio.============================ #}
+                    <div class="parrilla-card-body">
+                        <h2 class="parrilla-card-title">{{ parrilla.nombre }}</h2>
 
-              <p class="parrilla-card-desc">
-                {{ parrilla.descripcion|truncatechars:120 }}
-              </p>
+                        <p class="parrilla-card-meta">
+                            {{ parrilla.ubicacion.nombre_barrio }} - {{ parrilla.ubicacion.nombre_ciudad }}
+                            · {{ parrilla.categoria.nombre }}
+                        </p>
 
-              <p class="parrilla-card-rating">
-                <strong>Puntaje promedio:</strong>
-                {% if parrilla.promedio_puntaje %}
-                  {{ parrilla.promedio_puntaje }} / 5
+                        <p class="parrilla-card-desc">
+                            {{ parrilla.descripcion|truncatechars:120 }}
+                        </p>
+
+                        {# Puntaje promedio expresado en choripanes (de 1 a 5) #}
+                        <div class="parrilla-card-rating">
+                            {% with puntaje=parrilla.promedio_puntaje|default:0 %}
+                                {% with entero=puntaje|floatformat:0 %}
+                                    <div class="puntaje-promedio-iconos">
+                                        {% for i in "12345" %}
+                                            {% if forloop.counter <= entero|add:"0" %}
+                                                <span class="chori chori--lleno">🌭</span>
+                                            {% else %}
+                                                <span class="chori chori--gris">🌭</span>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                {% endwith %}
+                            {% endwith %}
+                        </div>
+
+                        {# Link para ir al detalle completo de la parrilla #}
+                        <a href="{% url 'parrillas:detalle' parrilla.id %}" class="btn-ver">Ver más</a>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+
+        {# ============================PAGINACIÓN MODERNA- Muestra página anterior / siguiente.- Resalta la página actual.============================ #}
+        <div class="pagination-container">
+            <div class="pagination">
+
+                {% if page_obj.has_previous %}
+                    <a class="page-btn" href="?page={{ page_obj.previous_page_number }}">«</a>
                 {% else %}
-                  Sin puntajes todavía.
+                    <span class="page-btn disabled">«</span>
                 {% endif %}
-              </p>
 
-              <a href="{% url 'parrillas:detalle' parrilla.id %}" class="btn-ver">
-                Ver más
-              </a>
+                {% for num in page_obj.paginator.page_range %}
+                    {% if num == page_obj.number %}
+                        <span class="page-btn active">{{ num }}</span>
+                    {% elif num >= page_obj.number|add:"-1" and num <= page_obj.number|add:"1" %}
+                        <a class="page-btn" href="?page={{ num }}">{{ num }}</a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a class="page-btn" href="?page={{ page_obj.next_page_number }}">»</a>
+                {% else %}
+                    <span class="page-btn disabled">»</span>
+                {% endif %}
+
             </div>
-          </article>
-        {% endfor %}
-      </div>
+        </div>
+
     {% else %}
-      <p>No hay parrillas cargadas todavía.</p>
+        <p>No hay parrillas cargadas todavía.</p>
     {% endif %}
-  </section>
+</section>
 {% endblock %}

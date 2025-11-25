@@ -41,26 +41,43 @@
             Ubicación:
             {% if parrilla.ubicacion %}
               {{ parrilla.ubicacion }}
-              {# Si definimos __str__ en Ubicacion, se verá lindo, ej: "Buenos Aires - Caballito" #}
+              {# Si definimos __str__ en Ubicacion, se ve bien, ej: "Buenos Aires - Caballito" #}
             {% else %}
               Sin ubicación
             {% endif %}
           </div>
 
-          <!-- Puntaje en choripanes -->
-          <div class="parrilla-rating">
-         
-            {% with puntaje=parrilla.promedio_puntaje|default:0 %}
-              {% with entero=puntaje|floatformat:0 %}
-                {% for i in "12345" %}
-                  {% if forloop.counter <= entero|add:"0" %}
-                    🌭
-                  {% endif %}
-                {% endfor %}
-                ({{ puntaje }})
-              {% endwith %}
-            {% endwith %}
-          </div>
+         <!-- Puntaje en choripanes -->
+<div class="parrilla-rating">
+
+  {% with puntaje=parrilla.promedio_puntaje|default:0 %}
+      {% with entero=puntaje|floatformat:"0" %}
+          {% with decimal=puntaje|floatformat:"1" %}
+
+              <span class="puntaje-promedio-iconos">
+
+                  {# 🔥 1) Choripanes completos #}
+                  {% for i in "12345" %}
+                      {% if forloop.counter <= entero|add:"0" %}
+                          <span class="chori chori--lleno">🌭</span>
+                      {% else %}
+                          {% if forloop.counter == entero|add:"1" and decimal|floatformat:"1"|slice:"-2:" == ".5" %}
+                              <span class="chori chori--lleno" style="opacity:0.55;">🌭</span>
+                          {% else %}
+                              {# 🔥 3) Choripán apagado (gris) #}
+                              <span class="chori chori--gris">🌭</span>
+                          {% endif %}
+                      {% endif %}
+                  {% endfor %}
+
+              </span>
+
+          {% endwith %}
+      {% endwith %}
+  {% endwith %}
+
+</div>
+
 
           <!-- Botón "Ver más" (por ahora sin link real) -->
           <a href="{% url 'parrillas:detalle' parrilla.id %}" class="btn-ver">

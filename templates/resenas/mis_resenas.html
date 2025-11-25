@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Mis reseñas - ChoriFans{% endblock %}
+
+{% block content %}
+  <section class="mis-resenas-wrapper">
+    <div class="mis-resenas-card">
+      <h1 class="mis-resenas-title">Mis reseñas</h1>
+      <p class="mis-resenas-intro">
+        Acá podés ver todas las reseñas que dejaste en las distintas parrillas.
+      </p>
+
+      {% if resenas %}
+        <ul class="resenas-lista">
+          {% for r in resenas %}
+            <li class="resena-item">
+              <div class="resena-header">
+                <strong class="resena-parrilla">
+                  {{ r.parrilla.nombre }}
+                </strong>
+                <span class="resena-puntaje">
+                  {{ r.get_puntaje_display }}
+                </span>
+                <span class="resena-fecha">
+                  {{ r.created_at|date:"d/m/Y H:i" }}
+                </span>
+              </div>
+
+              <p class="resena-comentario">
+                {{ r.comentario }}
+              </p>
+            </li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="mis-resenas-empty">
+          Todavía no dejaste ninguna reseña. Probá algún chori y contanos qué te pareció 🔥
+        </p>
+      {% endif %}
+    </div>
+  </section>
+{% endblock %}

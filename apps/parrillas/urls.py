@@ -1,9 +1,15 @@
 from django.urls import path
-from . import views
+from .views import ParrillaListView, ParrillaDetailView, ParrillaBuscarView
 
 app_name = "parrillas"
 
 urlpatterns = [
-    path("<int:pk>/", views.parrilla_detalle_view, name="detalle"),
-    path("", views.parrillas_lista_view, name="lista"), 
+    # Lista de parrillas
+    path("", ParrillaListView.as_view(), name="lista"),
+
+    # Buscador de parrillas (FormView)
+    path("buscar/", ParrillaBuscarView.as_view(), name="buscar"),
+
+    # Detalle de una parrilla
+    path("<int:pk>/", ParrillaDetailView.as_view(), name="detalle"),
 ]

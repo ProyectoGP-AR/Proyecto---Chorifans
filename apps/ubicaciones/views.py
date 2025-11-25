@@ -1,44 +1,63 @@
-from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, DetailView
+from django.shortcuts import get_object_or_404
 
 from .models import Ubicacion
 from apps.parrillas.models import Parrilla
 
 
-def ubicaciones_lista_view(request):
+class UbicacionListView(ListView):
     """
     Muestra un listado de todas las ubicaciones activas.
+    Permite navegar parrillas por zona.
     """
-    ubicaciones = Ubicacion.objects.filter(is_active=True).order_by(
-        "nombre_ciudad",
-        "nombre_barrio",
-    )
+    model = Ubicacion
+    template_name = "ubicaciones/lista.html"
+    context_object_name = "ubicaciones"
 
-    contexto = {
-        "ubicaciones": ubicaciones,
-    }
-    return render(request, "ubicaciones/lista.html", contexto)
+    def get_queryset(self):
+        """
+        Devuelve solo ubicaciones activas.
+        Ordenamos por ciudad y luego barrio.
+        """
+        return (
+            Ubicacion.objects
+            .filter(is_active=True)
+            .order_by("nombre_ciudad", "nombre_barrio")
+        )
 
 
-def ubicacion_detalle_view(request, pk):
+class UbicacionDetailView(DetailView):
     """
-    Muestra los datos de una ubicación y las parrillas que se encuentran ahí.
-    Solo se muestran parrillas activas.
+    Muestra la información de UNA ubicación y las parrillas que están allí.
     """
-    ubicacion = get_object_or_404(
-        Ubicacion,
-        pk=pk,
-        is_active=True,
-    )
+    model = Ubicacion
+    template_name = "ubicaciones/detalle.html"
+    context_object_name = "ubicacion"
+    pk_url_kwarg = "pk"                           # Recibe el ID numérico
 
-    parrillas = (
-        Parrilla.objects
-        .filter(ubicacion=ubicacion, is_active=True)
-        .select_related("categoria")
-        .order_by("nombre")
-    )
+    def get_object(self, queryset=None):
+        """
+        Valida que la ubicación exista y esté activa.
+        """
+        return get_object_or_404(
+            Ubicacion,
+            pk=self.kwargs.get(self.pk_url_kwarg),
+            is_active=True,
+        )
 
-    contexto = {
-        "ubicacion": ubicacion,
-        "parrillas": parrillas,
-    }
-    return render(request, "ubicaciones/detalle.html", contexto)
+    def get_context_data(self, **kwargs):
+        """
+        Agregamos todas las parrillas asociadas a esa ubicación.
+        """
+        context = super().get_context_data(**kwargs)
+        ubicacion = self.object
+
+        parrillas = (
+            Parrilla.objects
+            .filter(ubicacion=ubicacion, is_active=True)
+            .select_related("categoria")
+            .order_by("nombre")
+        )
+
+        context["parrillas"] = parrillas           # Se envía al template
+        return context

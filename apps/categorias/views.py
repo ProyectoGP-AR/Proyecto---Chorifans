@@ -1,41 +1,64 @@
-from django.shortcuts import render, get_object_or_404
+from django.views.generic import ListView, DetailView
+from django.shortcuts import get_object_or_404
 
 from .models import Categoria
 from apps.parrillas.models import Parrilla
 
 
-def categorias_lista_view(request):
+class CategoriaListView(ListView):
     """
     Muestra un listado de todas las categorías activas.
+    Ideal para páginas donde se muestran categorías para navegar el sitio.
     """
-    categorias = Categoria.objects.filter(is_active=True).order_by("nombre")
+    model = Categoria
+    template_name = "categorias/lista.html"       # Template de la lista
+    context_object_name = "categorias"            # Nombre de la variable en el template
 
-    contexto = {
-        "categorias": categorias,
-    }
-    return render(request, "categorias/lista.html", contexto)
+    def get_queryset(self):
+        """
+        Devuelve solo categorías activas, ordenadas alfabéticamente.
+        """
+        return (
+            Categoria.objects
+            .filter(is_active=True)
+            .order_by("nombre")
+        )
 
 
-def categoria_detalle_view(request, slug):
+class CategoriaDetailView(DetailView):
     """
-    Muestra los datos de una categoría y las parrillas que pertenecen a esa categoría.
-    Solo se muestran parrillas activas.
+    Muestra la información de UNA categoría.
+    Además, carga todas las parrillas asociadas a dicha categoría.
     """
-    categoria = get_object_or_404(
-        Categoria,
-        slug=slug,
-        is_active=True,
-    )
+    model = Categoria
+    template_name = "categorias/detalle.html"
+    context_object_name = "categoria"
+    slug_field = "slug"                           # Campo que usa para buscar
+    slug_url_kwarg = "slug"                       # Parametro capturado de la URL
 
-    parrillas = (
-        Parrilla.objects
-        .filter(categoria=categoria, is_active=True)
-        .select_related("ubicacion")
-        .order_by("nombre")
-    )
+    def get_object(self, queryset=None):
+        """
+        Sobreescribimos esto para asegurarnos de que la categoría esté activa.
+        """
+        return get_object_or_404(
+            Categoria,
+            slug=self.kwargs.get(self.slug_url_kwarg),
+            is_active=True,
+        )
 
-    contexto = {
-        "categoria": categoria,
-        "parrillas": parrillas,
-    }
-    return render(request, "categorias/detalle.html", contexto)
+    def get_context_data(self, **kwargs):
+        """
+        Agregamos al contexto todas las parrillas que pertenecen a esta categoría.
+        """
+        context = super().get_context_data(**kwargs)
+        categoria = self.object
+
+        parrillas = (
+            Parrilla.objects
+            .filter(categoria=categoria, is_active=True)
+            .select_related("ubicacion")
+            .order_by("nombre")
+        )
+
+        context["parrillas"] = parrillas           # Se envía al template
+        return context

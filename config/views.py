@@ -1,7 +1,6 @@
-from django.shortcuts import render
+from django.views.generic import TemplateView  # Importamos la clase base para vistas de tipo template
+from apps.parrillas.models import Parrilla # Importamos el modelo Parrilla para mostrar info en el inicio
 
-# Importamos el modelo de parrillas desde la app correspondiente
-from apps.parrillas.models import Parrilla
 # ============================================================
 # Vista: home_view
 # Página de inicio de ChoriFans.
@@ -25,23 +24,36 @@ from apps.parrillas.models import Parrilla
 #   - Limita a las primeras 6 para mostrar como "destacadas".
 # ============================================================
 
-def home_view(request):
+class HomeView(TemplateView):
     """
-    Renderiza la página de inicio de ChoriFans con parrillas reales.
+    Vista basada en clases (Class-Based View) para la página de inicio.
 
-    Contexto:
-      - parrillas: queryset de Parrilla con las primeras 6 activas,
-                   ordenadas por promedio_puntaje DESC.
+    Hereda de TemplateView, que está pensada para:
+      - Renderizar un template concreto
+      - Opcionalmente agregar datos al contexto
+
     """
-    # Obtenemos las parrillas activas, ordenadas por puntaje promedio
-    parrillas_qs = (
-        Parrilla.objects
-        .filter(is_active=True)
-        .order_by("-promedio_puntaje")[:6]
-    )
 
-    context = {
-        "parrillas": parrillas_qs,
-    }
+    # Nombre del template que se va a usar para esta vista
+    template_name = "home.html"
 
-    return render(request, "home.html", context)
+    def get_context_data(self, **kwargs):
+        """
+        Método que nos permite agregar datos al contexto del template.
+
+        - Llamamos a super() para obtener el contexto base.
+        - Agregamos la lista de parrillas activas ordenadas por puntaje.
+        """
+        context = super().get_context_data(**kwargs)
+
+        # Obtenemos las parrillas activas, ordenadas por puntaje promedio
+        parrillas_qs = (
+            Parrilla.objects
+            .filter(is_active=True)
+            .order_by("-promedio_puntaje")[:6]
+        )
+
+        # En el template se usa la variable "parrillas"
+        context["parrillas"] = parrillas_qs
+
+        return context

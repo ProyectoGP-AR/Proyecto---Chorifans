@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Buscar parrillas - ChoriFans{% endblock %}
+
+{% block content %}
+<div class="buscar-container">
+
+  <!-- Card grande de búsqueda -->
+  <section class="buscar-card">
+    <h1 class="buscar-title">Buscar Parrillas</h1>
+
+    <p class="buscar-intro">
+      Busca por nombre, ubicación o categoría y encontrá tu próximo chori..
+    </p>
+
+    <form method="post" class="buscar-form">
+      {% csrf_token %}
+
+      <div class="buscar-input-wrapper">
+        <input
+          type="text"
+          name="termino"
+          class="buscar-input"
+          placeholder="Ej: choripán, Palermo, vega"
+          value="{{ form.termino.value|default_if_none:'' }}"
+          required
+        >
+        <button type="submit" class="btn-ver buscar-btn">
+          Buscar
+        </button>
+      </div>
+    </form>
+  </section>
+
+  {# Resultados de la búsqueda #}
+  {% if resultados %}
+    <section class="buscar-resultados">
+      <div class="parrillas-grid">
+        {% for parrilla in resultados %}
+          <article class="parrilla-card">
+            <div class="parrilla-card-img">
+              {% if parrilla.foto_principal %}
+                <img
+                  src="{{ parrilla.foto_principal.url }}"
+                  alt="Foto de {{ parrilla.nombre }}"
+                >
+              {% else %}
+                <div class="parrilla-card-img-placeholder">
+                  Sin foto
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="parrilla-card-body">
+              <h2 class="parrilla-card-title">
+                {{ parrilla.nombre }}
+              </h2>
+
+              <p class="parrilla-card-meta">
+                {{ parrilla.ubicacion.nombre_barrio }}
+                {% if parrilla.ubicacion.nombre_ciudad %}
+                  - {{ parrilla.ubicacion.nombre_ciudad }}
+                {% endif %}
+                {% if parrilla.categoria %}
+                  · {{ parrilla.categoria.nombre }}
+                {% endif %}
+              </p>
+
+              {% if parrilla.descripcion %}
+                <p class="parrilla-card-desc">
+                  {{ parrilla.descripcion }}
+                </p>
+              {% endif %}
+
+                            <p class="parrilla-card-puntaje">
+                {% with puntaje=parrilla.promedio_puntaje|default_if_none:0 %}
+                  <span class="puntaje-promedio-iconos" aria-label="Puntaje {{ puntaje }} de 5">
+                    {% for i in "12345" %}
+                      {% if puntaje >= forloop.counter %}
+                        <span class="chori chori--lleno">🌭</span>
+                      {% elif puntaje >= forloop.counter|add:"-0.5" %}
+                        <span class="chori chori--medio">🌭</span>
+                      {% else %}
+                        <span class="chori chori--gris">🌭</span>
+                      {% endif %}
+                    {% endfor %}
+                  </span>
+                {% endwith %}
+              </p>
+
+
+              <a href="{% url 'parrillas:detalle' parrilla.pk %}" class="btn-ver">
+                Ver más
+              </a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </section>
+
+  {% elif resultados is not None %}
+    <p class="buscar-sin-resultados">
+      No se encontraron parrillas para tu búsqueda.
+    </p>
+  {% endif %}
+</div>
+{% endblock %}
+

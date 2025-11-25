@@ -1,32 +1,31 @@
 from datetime import date
 
-from django.shortcuts import render
+from django.views.generic import ListView
 
 from .models import Promocion
 
 
-def promociones_lista_view(request):
+class PromocionListView(ListView):
     """
-    Muestra un listado de promociones vigentes de todas las parrillas.
-    Solo se muestran:
-      - is_active = True
-      - fecha_inicio <= hoy
-      - fecha_fin >= hoy
+    Muestra un listado de promociones vigentes.
+    Filtra según fecha de inicio y fecha de fin para mostrar solo las activas.
     """
-    hoy = date.today()
+    model = Promocion
+    template_name = "promociones/lista.html"
+    context_object_name = "promociones"
 
-    promociones = (
-        Promocion.objects
-        .filter(
-            is_active=True,
-            fecha_inicio__lte=hoy,
-            fecha_fin__gte=hoy,
+    def get_queryset(self):
+        """
+        Devuelve solo promociones activas y vigentes según la fecha actual.
+        """
+        hoy = date.today()
+        return (
+            Promocion.objects
+            .filter(
+                is_active=True,
+                fecha_inicio__lte=hoy,    # La promo ya empezó
+                fecha_fin__gte=hoy,       # Todavía no terminó
+            )
+            .select_related("parrilla")
+            .order_by("fecha_fin", "parrilla__nombre")
         )
-        .select_related("parrilla")
-        .order_by("fecha_fin", "parrilla__nombre")
-    )
-
-    contexto = {
-        "promociones": promociones,
-    }
-    return render(request, "promociones/lista.html", contexto)

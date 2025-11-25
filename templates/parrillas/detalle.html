@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}{{ parrilla.nombre }} - ChoriFans{% endblock %}
 
@@ -10,6 +11,7 @@
 
     <div class="parrilla-detalle-layout">
       <div class="parrilla-detalle-foto">
+        {# Si la parrilla tiene foto_principal, mostramos esa imagen.Si NO tiene, mostramos una imagen por defecto (sin-foto.png)ubicada en static/css/sin-foto.png#}
         {% if parrilla.foto_principal %}
           <img
             src="{{ parrilla.foto_principal.url }}"
@@ -17,7 +19,11 @@
             class="parrilla-detalle-img"
           />
         {% else %}
-          <p>Sin foto disponible.</p>
+          <img
+            src="{% static 'css/img/sin-foto.png' %}"
+            alt="Foto no disponible de {{ parrilla.nombre }}"
+            class="parrilla-detalle-img parrilla-detalle-img--placeholder"
+          />
         {% endif %}
       </div>
 
@@ -52,14 +58,20 @@
           {{ parrilla.descripcion }}
         </p>
 
-        <p>
-          <strong>Puntaje promedio:</strong>
-          {% if parrilla.promedio_puntaje %}
-            {{ parrilla.promedio_puntaje }} / 5
-          {% else %}
-            Sin puntajes todavía.
-          {% endif %}
-        </p>
+        <div class="puntaje-promedio-iconos">
+          {% with puntaje=parrilla.promedio_puntaje|default:0 %}
+            {% with entero=puntaje|floatformat:0 %}
+              {% for i in "12345" %}
+                {% if forloop.counter <= entero|add:"0" %}
+                  <span class="chori chori--lleno">🌭</span>
+                {% else %}
+                  <span class="chori chori--gris">🌭</span>
+                {% endif %}
+              {% endfor %}
+            {% endwith %}
+          {% endwith %}
+        </div>
+
       </div>
     </div>
 
@@ -88,6 +100,41 @@
               <p class="resena-comentario">
                 {{ r.comentario }}
               </p>
+
+              {# Si la parrilla respondió esta reseña, mostramos la mini-card debajo #}
+              {% if r.respuesta_parrilla %}
+                <div class="respuesta-parrilla-card respuesta-parrilla-card--detalle">
+                  <div class="respuesta-header">
+                    <span class="respuesta-nombre-parrilla">
+                      {{ r.parrilla.nombre|upper }}
+                    </span>
+
+                    <img
+                      src="{% static 'css/img/verified.png' %}"
+                      alt="Cuenta verificada"
+                      class="respuesta-verificado-icon"
+                    />
+
+                    <span class="respuesta-valoracion">
+                      {% if r.respuesta_parrilla.valoracion == "happy" %}
+                        😊
+                      {% else %}
+                        ☹️
+                      {% endif %}
+                    </span>
+
+                  </div>
+
+                  <p class="respuesta-texto">
+                    {{ r.respuesta_parrilla.texto }}
+                  </p>
+
+                  <p class="respuesta-meta">
+                    Respuesta oficial ·
+                    {{ r.respuesta_parrilla.updated_at|date:"d/m/Y H:i" }}
+                  </p>
+                </div>
+              {% endif %}
             </li>
           {% endfor %}
         </ul>
@@ -136,40 +183,66 @@
       {% endif %}
     </div>
 
-    <!-- Formulario para dejar reseña -->
-    <div class="resena-formulario">
-      <h2 class="parrilla-detalle-subtitulo">Tu reseña</h2>
+    {# Formulario para dejar reseña: solo para usuarios que NO son dueños de parrilla #}
+    {% if not es_duenio_parrilla %}
+      <div class="resena-formulario">
+        <h2 class="parrilla-detalle-subtitulo resena-formulario-titulo">
+          Tu reseña
+        </h2>
 
-      {% if user.is_authenticated %}
+        {% if user.is_authenticated %}
 
-        {% if ya_reseño %}
-          <p class="resena-ya-hecha">
-            Ya dejaste una reseña para esta parrilla 😊
+          {% if ya_reseño %}
+            <p class="resena-ya-hecha">
+              Ya dejaste una reseña para esta parrilla 😊
+            </p>
+
+          {% elif puede_reseñar %}
+            <form method="POST" class="resena-form form--crear-resena">
+              {% csrf_token %}
+
+              <div class="resena-form-row">
+                <label for="{{ form.puntaje.id_for_label }}" class="resena-form-label">
+                  Puntaje:
+                </label>
+                {{ form.puntaje }}
+                <p class="resena-help-text">
+                  Elegí de 1 a 5 choripanes (1 = peor, 5 = mejor).
+                </p>
+              </div>
+
+              <div class="resena-form-row">
+                <label for="{{ form.comentario.id_for_label }}" class="resena-form-label">
+                  Comentario:
+                </label>
+                {{ form.comentario }}
+                <p class="resena-help-text">
+                  Comentario del usuario sobre la parrilla.
+                </p>
+              </div>
+
+              <div class="resena-form-acciones">
+                <button type="submit" class="btn btn-primary">
+                  Publicar reseña
+                </button>
+              </div>
+            </form>
+          {% endif %}
+
+        {% else %}
+          <p class="resena-login-msg">
+            Para dejar una reseña necesitás
+            <a href="{% url 'accounts:login' %}">iniciar sesión</a>.
           </p>
-
-        {% elif puede_reseñar %}
-          <form method="POST" class="resena-form">
-            {% csrf_token %}
-            {{ form.as_p }}
-
-            <button type="submit" class="btn btn-primary">
-              Publicar reseña
-            </button>
-          </form>
         {% endif %}
+      </div>
+    {% endif %}
 
-      {% else %}
-        <p class="resena-login-msg">
-          Para dejar una reseña necesitás
-          <a href="{% url 'accounts:login' %}">iniciar sesión</a>.
-        </p>
-      {% endif %}
-    </div>
+    <p class="volver-box">
+      <a href="{% url 'home' %}" class="volver-btn">
+        ← Inicio
+      </a>
+    </p>
 
-      <p class="volver-inicio">
-        <a href="{% url 'home' %}" class="volver-inicio-link">
-          ← Volver al inicio
-        </a>
-      </p>
   </div>
 {% endblock %}

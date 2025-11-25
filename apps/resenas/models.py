@@ -69,3 +69,66 @@ class Resena(models.Model):
         'diex - El Chori de Caballito (4/5)'
         """
         return f"{self.usuario.username} - {self.parrilla.nombre} ({self.puntaje}/5)"
+
+
+class RespuestaResena(models.Model):
+    """
+    Respuesta oficial de la parrilla a una reseña.
+
+    - Solo puede haber UNA respuesta por reseña (OneToOneField).
+    - La respuesta la hace un usuario especial (dueño de la parrilla).
+    - Incluye una valoración tipo carita feliz/triste sobre el comentario.
+    """
+
+    VALORACION_CHOICES = [
+        ("happy", "😊"),
+        ("sad", "☹️"),
+    ]
+
+    # Reseña a la que se responde (1 respuesta por reseña)
+    resena = models.OneToOneField(
+        Resena,
+        on_delete=models.CASCADE,
+        related_name="respuesta_parrilla",   # 👉 r.respuesta_parrilla en templates
+        help_text="Reseña del usuario a la que responde la parrilla.",
+    )
+
+    # Usuario que responde (debería ser el dueño de la parrilla asociada)
+    autor = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="respuestas_resenas",
+        help_text=(
+            "Usuario dueño de la parrilla que responde a la reseña. "
+            "A nivel de lógica, vamos a validar que coincida con la parrilla."
+        ),
+    )
+
+    # Texto de la respuesta de la parrilla
+    texto = models.TextField(
+        help_text="Respuesta pública de la parrilla a la reseña.",
+    )
+
+    # Carita feliz / triste
+    valoracion = models.CharField(
+        max_length=10,
+        choices=VALORACION_CHOICES,
+        help_text="Valoración de la reseña (carita feliz o triste).",
+    )
+
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)  # fecha de creación
+    updated_at = models.DateTimeField(auto_now=True)      # última edición
+
+    class Meta:
+        ordering = ["-created_at"]
+        verbose_name = "Respuesta a reseña"
+        verbose_name_plural = "Respuestas a reseñas"
+
+    def __str__(self):
+        """
+        Ejemplo:
+        'Respuesta de usuarioX a reseña #15'
+        (después en templates vamos a mostrar el nombre de la parrilla, no el username)
+        """
+        return f"Respuesta de {self.autor.username} a reseña #{self.resena.id}"
