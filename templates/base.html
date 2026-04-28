@@ -41,7 +41,7 @@
 
           <nav>
             <ul>
-              <li><a href="{% url 'home' %}">Inicio</a></li>
+              <li><a href="{% url 'home' %}">Home</a></li>
               <li><a href="{% url 'parrillas:lista' %}">Parrillas</a></li>
               <li><a href="{% url 'parrillas:buscar' %}">Buscar</a></li>
               <li><a href="{% url 'categorias:lista' %}">Categorías</a></li>
@@ -117,20 +117,55 @@
         id="chori-bot-bubble"
         class="chori-bot-bubble"
         style="
+          position: relative;
           max-width: 240px;
           background: rgba(24, 24, 24, 0.96);
           color: #F5F5F5;
           border: 1px solid rgba(255, 152, 0, 0.35);
           border-radius: 18px;
-          padding: 0.85rem 1rem;
+          padding: 0.85rem 2rem 0.85rem 1rem;
           box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
           font-size: 0.92rem;
           line-height: 1.4;
           text-align: left;
         "
       >
-        ¡Hola! Soy <strong style="color: #FF9800;">Chori Bot</strong><br />
-        ¿En qué te puedo ayudar?
+        <button
+          type="button"
+          aria-label="Cerrar mensaje de Chori Bot"
+          onclick="return closeChoriBotBubble(event)"
+          ontouchstart="return closeChoriBotBubble(event)"
+          onpointerdown="return closeChoriBotBubble(event)"
+          style="
+            position: absolute;
+            top: 4px;
+            right: 6px;
+            width: 26px;
+            height: 26px;
+            border: none;
+            background: transparent;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 18px;
+            line-height: 1;
+            cursor: pointer;
+            border-radius: 50%;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 5;
+            pointer-events: auto;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+          "
+        >
+          ×
+        </button>
+
+        <div>
+          ¡Hola! Soy <strong style="color: #FF9800;">Chori Bot</strong><br />
+          ¿En qué te puedo ayudar?
+        </div>
       </div>
 
       <button
@@ -139,7 +174,7 @@
         type="button"
         aria-label="Abrir chat de Chori Bot"
         aria-expanded="false"
-        onclick="document.getElementById('chori-bot-panel').style.display='flex'; document.getElementById('chori-bot-panel').style.flexDirection='column'; document.getElementById('chori-bot-bubble').style.display='none';"
+        onclick="openChoriBotPanel()"
         style="
           width: 84px;
           height: 84px;
@@ -250,7 +285,7 @@
             class="chori-bot-close"
             type="button"
             aria-label="Cerrar chat"
-            onclick="document.getElementById('chori-bot-panel').style.display='none'; document.getElementById('chori-bot-bubble').style.display='block';"
+            onclick="closeChoriBotPanel()"
             style="
               border: none;
               background: transparent;
@@ -370,6 +405,56 @@
         isAuthenticated: {% if user.is_authenticated %}true{% else %}false{% endif %},
         username: "{% if user.is_authenticated %}{{ user.username|escapejs }}{% endif %}"
       };
+
+      window.CHORI_BOT_BUBBLE_DISMISSED = false;
+
+      function openChoriBotPanel() {
+        const panel = document.getElementById("chori-bot-panel");
+        const bubble = document.getElementById("chori-bot-bubble");
+
+        if (panel) {
+          panel.style.display = "flex";
+          panel.style.flexDirection = "column";
+        }
+
+        if (bubble) {
+          bubble.style.display = "none";
+        }
+      }
+
+      function closeChoriBotPanel() {
+        const panel = document.getElementById("chori-bot-panel");
+        const bubble = document.getElementById("chori-bot-bubble");
+
+        if (panel) {
+          panel.style.display = "none";
+        }
+
+        if (bubble && !window.CHORI_BOT_BUBBLE_DISMISSED) {
+          bubble.style.display = "block";
+        }
+      }
+
+      function closeChoriBotBubble(event) {
+        if (event) {
+          if (event.preventDefault) {
+            event.preventDefault();
+          }
+          if (event.stopPropagation) {
+            event.stopPropagation();
+          }
+        }
+
+        const bubble = document.getElementById("chori-bot-bubble");
+        if (bubble) {
+          bubble.style.display = "none";
+          bubble.style.visibility = "hidden";
+          bubble.style.pointerEvents = "none";
+        }
+
+        window.CHORI_BOT_BUBBLE_DISMISSED = true;
+        return false;
+      }
     </script>
 
     <script src="{% static 'js/chatbot.js' %}?v=21" defer></script>
