@@ -307,6 +307,103 @@ header nav a {
   white-space: nowrap;
 }
 
+/* ---------- Header laptop ---------- */
+
+@media (max-width: 1280px) and (min-width: 769px) {
+  .container {
+    padding: 0 14px;
+  }
+
+  .header-content {
+    gap: 14px;
+  }
+
+  .logo {
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .logo-icon {
+    width: 72px;
+    height: 72px;
+  }
+
+  .logo-icon img {
+    margin-bottom: 16px;
+  }
+
+  .logo-text {
+    font-size: 24px;
+    margin-bottom: 2px;
+  }
+
+  header nav {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  header nav ul {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 8px;
+    column-gap: 14px;
+  }
+
+  header nav li {
+    margin-left: 0;
+  }
+
+  header nav a {
+    font-size: 15px;
+    letter-spacing: 0.5px;
+  }
+
+  .auth-buttons {
+    margin-left: 0;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    flex-shrink: 0;
+  }
+
+  .header-username {
+    font-size: 15px;
+  }
+
+  .auth-button {
+    min-width: unset;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 1100px) and (min-width: 769px) {
+  .header-content {
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .logo {
+    width: 100%;
+    justify-content: center;
+  }
+
+  header nav {
+    width: 100%;
+    order: 2;
+  }
+
+  header nav ul {
+    justify-content: center;
+  }
+
+  .auth-buttons {
+    width: 100%;
+    order: 3;
+    justify-content: center;
+  }
+}
+
 /* ---------- Header responsive ---------- */
 
 @media (max-width: 768px) {
@@ -2723,5 +2820,380 @@ img[src*="sin-foto"] {
   .chori-bot-send {
     width: 100%;
     min-height: 44px;
+  }
+}
+
+
+
+
+
+@media (max-width: 1280px) and (min-width: 769px) {
+  .header-content {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 12px;
+  }
+
+  header nav {
+    min-width: 0;
+  }
+
+  header nav ul {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 8px;
+    column-gap: 12px;
+  }
+
+  header nav li {
+    margin-left: 0;
+  }
+
+  header nav a {
+    font-size: 14px;
+    letter-spacing: 0.35px;
+  }
+
+  .auth-buttons {
+    margin-left: 0;
+    gap: 8px;
+    flex-wrap: nowrap;
+    justify-content: flex-end;
+    min-width: max-content;
+  }
+
+  .header-username {
+    font-size: 14px;
+    letter-spacing: 0.35px;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .auth-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: auto;
+    padding: 6px 10px;
+    font-size: 11px;
+    letter-spacing: 0.25px;
+    line-height: 1.1;
+  }
+}
+
+@media (max-width: 1180px) and (min-width: 769px) {
+  .header-content {
+    grid-template-columns: 1fr;
+    row-gap: 10px;
+  }
+
+  .logo {
+    justify-content: center;
+  }
+
+  header nav {
+    width: 100%;
+  }
+
+  header nav ul {
+    justify-content: center;
+  }
+
+  .auth-buttons {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .header-username {
+    max-width: none;
+  }
+}
+
+
+
+
+
+@media (max-width: 1460px) and (min-width: 769px) {
+  .header-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.9rem !important;
+    padding: 12px 0 !important;
+  }
+
+  .logo {
+    justify-content: center !important;
+    gap: 10px !important;
+  }
+
+  .logo-icon {
+    width: 72px !important;
+    height: 72px !important;
+  }
+
+  .logo-icon img {
+    margin-bottom: 14px !important;
+  }
+
+  .logo-text {
+    font-size: 24px !important;
+    margin-bottom: 0 !important;
+    white-space: nowrap !important;
+  }
+
+  header nav {
+    width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+  }
+
+  header nav ul {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px 14px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  header nav li {
+    margin-left: 0 !important;
+  }
+
+  header nav a {
+    font-size: 14px !important;
+    letter-spacing: 0.35px !important;
+  }
+
+  .auth-buttons {
+    width: 100% !important;
+    margin-left: 0 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+
+  .header-username {
+    font-size: 14px !important;
+    letter-spacing: 0.35px !important;
+    max-width: none !important;
+    white-space: nowrap !important;
+  }
+
+  .auth-button {
+    min-width: auto !important;
+    width: auto !important;
+    padding: 7px 12px !important;
+    font-size: 11px !important;
+    letter-spacing: 0.2px !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+}
+
+
+
+/* ======================================
+   UBICACIONES - ESTADO VACÍO
+   ====================================== */
+
+.ubicacion-empty-wrap {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 12px;
+}
+
+.ubicacion-empty-card {
+  width: 100%;
+  max-width: 760px;
+  background: rgba(24, 24, 24, 0.96);
+  border: 1px solid rgba(255, 152, 0, 0.22);
+  border-radius: 20px;
+  padding: 26px 22px;
+  text-align: center;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+}
+
+.ubicacion-empty-text {
+  margin: 0;
+  color: var(--extra-light-gray);
+  font-size: 1rem;
+  line-height: 1.6;
+  text-align: center;
+}
+
+
+
+/* ======================================
+   CHORI BOT - MOBILE EN LOGIN / REGISTRO
+   ====================================== */
+
+@media (max-width: 640px) {
+  body:has(.auth-container) .chori-bot-bubble {
+    display: none !important;
+  }
+
+  body:has(.auth-container) .chori-bot-widget {
+    right: 12px !important;
+    left: auto !important;
+    bottom: 92px !important;
+    align-items: flex-end !important;
+  }
+
+  body:has(.auth-container) .chori-bot-toggle {
+    width: 64px !important;
+    height: 64px !important;
+    min-width: 64px !important;
+    min-height: 64px !important;
+  }
+
+  body:has(.auth-container) .chori-bot-avatar {
+    width: 56px !important;
+    height: 56px !important;
+    min-width: 56px !important;
+    min-height: 56px !important;
+  }
+
+  body:has(.auth-container) .auth-container {
+    margin-bottom: 120px !important;
+  }
+}
+
+/* ======================================
+   CHORI BOT - AJUSTE FINAL MOBILE
+   ====================================== */
+
+/* Mobile general */
+@media (max-width: 768px) {
+  .chori-bot-widget {
+    right: 10px !important;
+    left: auto !important;
+    bottom: 84px !important;
+    gap: 8px !important;
+    align-items: flex-end !important;
+  }
+
+  .chori-bot-bubble {
+    max-width: min(180px, calc(100vw - 96px)) !important;
+    padding: 0.6rem 0.75rem !important;
+    font-size: 0.78rem !important;
+    line-height: 1.28 !important;
+    border-radius: 14px !important;
+  }
+
+  .chori-bot-toggle {
+    width: 62px !important;
+    height: 62px !important;
+    min-width: 62px !important;
+    min-height: 62px !important;
+    max-width: 62px !important;
+    max-height: 62px !important;
+  }
+
+  .chori-bot-avatar {
+    width: 54px !important;
+    height: 54px !important;
+    min-width: 54px !important;
+    min-height: 54px !important;
+    max-width: 54px !important;
+    max-height: 54px !important;
+  }
+
+  .chori-bot-panel {
+    width: min(340px, calc(100vw - 20px)) !important;
+    max-width: calc(100vw - 20px) !important;
+    border-radius: 18px !important;
+  }
+
+  .chori-bot-messages {
+    min-height: 200px !important;
+    max-height: 280px !important;
+  }
+}
+
+/* Celulares más chicos */
+@media (max-width: 480px) {
+  .chori-bot-widget {
+    right: 8px !important;
+    bottom: 78px !important;
+  }
+
+  .chori-bot-bubble {
+    display: none !important;
+  }
+
+  .chori-bot-toggle {
+    width: 56px !important;
+    height: 56px !important;
+    min-width: 56px !important;
+    min-height: 56px !important;
+    max-width: 56px !important;
+    max-height: 56px !important;
+  }
+
+  .chori-bot-avatar {
+    width: 48px !important;
+    height: 48px !important;
+    min-width: 48px !important;
+    min-height: 48px !important;
+    max-width: 48px !important;
+    max-height: 48px !important;
+  }
+
+  .chori-bot-panel {
+    width: calc(100vw - 16px) !important;
+    max-width: calc(100vw - 16px) !important;
+  }
+}
+
+/* Login / registro mobile: más chico y más abajo */
+@media (max-width: 640px) {
+  body:has(.auth-container) .chori-bot-widget {
+    right: 8px !important;
+    left: auto !important;
+    bottom: 72px !important;
+    gap: 6px !important;
+  }
+
+  body:has(.auth-container) .chori-bot-bubble {
+    display: none !important;
+  }
+
+  body:has(.auth-container) .chori-bot-toggle {
+    width: 52px !important;
+    height: 52px !important;
+    min-width: 52px !important;
+    min-height: 52px !important;
+    max-width: 52px !important;
+    max-height: 52px !important;
+  }
+
+  body:has(.auth-container) .chori-bot-avatar {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    max-width: 44px !important;
+    max-height: 44px !important;
+  }
+
+  body:has(.auth-container) .chori-bot-panel {
+    width: calc(100vw - 14px) !important;
+    max-width: calc(100vw - 14px) !important;
+  }
+
+  body:has(.auth-container) .auth-container {
+    margin-bottom: 110px !important;
   }
 }
