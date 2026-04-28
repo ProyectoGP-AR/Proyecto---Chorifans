@@ -1,0 +1,69 @@
+{% extends "gestion/base_gestion.html" %}
+
+{% block title %}Dashboard de Gestión | ChoriFans{% endblock %}
+
+{% block content %}
+<section class="gestion-dashboard">
+  <div class="gestion-dashboard__hero">
+    <span class="gestion-dashboard__eyebrow">Backoffice central</span>
+    <h2 class="gestion-dashboard__title">
+      Panel de gestión administrativo de ChoriFans
+    </h2>
+    <p class="gestion-dashboard__description">
+      Panel administrativo para brindar
+      una experiencia visual, intuitiva y ordenada.
+    </p>
+  </div>
+
+  <div class="gestion-grid">
+    <a href="{% url 'gestion:parrillas_lista' %}" class="gestion-card gestion-card--link gestion-card--parrillas">
+      <div class="gestion-card__icon">🔥</div>
+      <h3 class="gestion-card__title">Parrillas</h3>
+      <p class="gestion-card__text">
+        Administrá altas, modificaciones, bajas lógicas y consulta general de
+        parrillas.
+      </p>
+    </a>
+
+    <a href="{% url 'gestion:promociones_lista' %}" class="gestion-card gestion-card--link gestion-card--promociones">
+      <div class="gestion-card__icon">🎁</div>
+      <h3 class="gestion-card__title">Promociones</h3>
+      <p class="gestion-card__text">
+        Cargá ofertas, actualizá vigencias y administrá promociones activas.
+      </p>
+    </a>
+
+    <a href="{% url 'gestion:categorias_lista' %}" class="gestion-card gestion-card--link gestion-card--categorias">
+      <div class="gestion-card__icon">📂</div>
+      <h3 class="gestion-card__title">Categorías</h3>
+      <p class="gestion-card__text">
+        Organizá los tipos de parrillas disponibles dentro de la plataforma.
+      </p>
+    </a>
+
+    <a href="{% url 'gestion:ubicaciones_lista' %}" class="gestion-card gestion-card--link gestion-card--ubicaciones">
+      <div class="gestion-card__icon">📍</div>
+      <h3 class="gestion-card__title">Ubicaciones</h3>
+      <p class="gestion-card__text">
+        Gestioná barrios, ciudades y datos geográficos asociados a las parrillas.
+      </p>
+    </a>
+
+    <a href="{% url 'gestion:resenas_lista' %}" class="gestion-card gestion-card--link gestion-card--resenas">
+      <div class="gestion-card__icon">⭐</div>
+      <h3 class="gestion-card__title">Reseñas</h3>
+      <p class="gestion-card__text">
+        Consultá opiniones, moderá contenido y controlá el historial de reseñas.
+      </p>
+    </a>
+
+    <a href="{% url 'gestion:usuarios_lista' %}" class="gestion-card gestion-card--link gestion-card--usuarios">
+      <div class="gestion-card__icon">👤</div>
+      <h3 class="gestion-card__title">Usuarios de gestión</h3>
+      <p class="gestion-card__text">
+        Controlá accesos administrativos y centralizá permisos del panel.
+      </p>
+    </a>
+  </div>
+</section>
+{% endblock %}

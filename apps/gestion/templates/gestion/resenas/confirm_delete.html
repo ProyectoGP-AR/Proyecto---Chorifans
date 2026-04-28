@@ -1,0 +1,40 @@
+{% extends "gestion/base_gestion.html" %}
+
+{% block title %}Eliminar Reseña | ChoriFans{% endblock %}
+
+{% block content %}
+<section class="gestion-dashboard">
+  <div class="gestion-dashboard__hero">
+    <span class="gestion-dashboard__eyebrow">Módulo de gestión</span>
+    <h2 class="gestion-dashboard__title">Eliminar reseña</h2>
+    <p class="gestion-dashboard__description">
+      Estás por eliminar una reseña del sistema.
+    </p>
+  </div>
+
+  <div class="gestion-form-wrapper">
+    <form method="post" class="gestion-form">
+      {% csrf_token %}
+
+      <div class="gestion-delete-box">
+        <p class="gestion-delete-text">
+          ¿Seguro que querés eliminar la reseña de
+          <strong>{{ object.usuario.username }}</strong>
+          sobre
+          <strong>{{ object.parrilla.nombre }}</strong>?
+        </p>
+      </div>
+
+      <div class="gestion-form-actions">
+        <a href="{% url 'gestion:resenas_lista' %}" class="crud-btn crud-btn--view">
+          Cancelar
+        </a>
+
+        <button type="submit" class="crud-btn crud-btn--delete">
+          Sí, eliminar
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

@@ -52,7 +52,8 @@ INSTALLED_APPS = [
     'apps.promociones',
     'apps.ubicaciones',
     'apps.api',
-
+    "apps.gestion",
+    
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,114 @@
+{% extends "gestion/base_gestion.html" %}
+
+{% block title %}Gestión de Reseñas | ChoriFans{% endblock %}
+
+{% block content %}
+<section class="gestion-dashboard">
+  <div class="gestion-dashboard__hero">
+    <span class="gestion-dashboard__eyebrow">Módulo de gestión</span>
+    <h2 class="gestion-dashboard__title">Reseñas</h2>
+    <p class="gestion-dashboard__description">
+      Desde acá podés ver, crear, editar o eliminar reseñas registradas en ChoriFans.
+    </p>
+  </div>
+
+  <div class="gestion-top-actions">
+    <a href="{% url 'gestion:dashboard' %}" class="crud-btn crud-btn--view">
+      Volver al panel
+    </a>
+
+    <a href="{% url 'gestion:resenas_crear' %}" class="crud-btn crud-btn--create">
+      Crear reseña
+    </a>
+  </div>
+
+<form method="get" class="gestion-filters gestion-filters--compact">
+  <div class="gestion-filters__grid gestion-filters__grid--compact">
+    <div class="gestion-form-group">
+      <label for="id_q" class="gestion-form-label">Buscar</label>
+      <input
+        type="text"
+        name="q"
+        id="id_q"
+        value="{{ q }}"
+        class="gestion-form-input"
+        placeholder="Usuario, comentario o parrilla"
+      />
+    </div>
+
+    <div class="gestion-form-group">
+      <label for="id_parrilla" class="gestion-form-label">Parrilla</label>
+      <select name="parrilla" id="id_parrilla" class="gestion-form-input">
+        <option value="">Todas</option>
+        {% for parrilla in parrillas_filtro %}
+          <option value="{{ parrilla.id }}" {% if parrilla_actual == parrilla.id|stringformat:"s" %}selected{% endif %}>
+            {{ parrilla.nombre }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="gestion-form-group">
+      <label for="id_puntaje" class="gestion-form-label">Calificación</label>
+      <select name="puntaje" id="id_puntaje" class="gestion-form-input">
+        <option value="">Todas</option>
+        <option value="1" {% if puntaje_actual == "1" %}selected{% endif %}>1/5</option>
+        <option value="2" {% if puntaje_actual == "2" %}selected{% endif %}>2/5</option>
+        <option value="3" {% if puntaje_actual == "3" %}selected{% endif %}>3/5</option>
+        <option value="4" {% if puntaje_actual == "4" %}selected{% endif %}>4/5</option>
+        <option value="5" {% if puntaje_actual == "5" %}selected{% endif %}>5/5</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="gestion-form-actions">
+    <button type="submit" class="crud-btn crud-btn--view">Filtrar</button>
+    <a href="{% url 'gestion:resenas_lista' %}" class="crud-btn crud-btn--delete">Limpiar</a>
+  </div>
+</form>
+
+  <div class="gestion-table-wrapper">
+    <table class="gestion-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Usuario</th>
+          <th>Parrilla</th>
+          <th>Puntaje</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for resena in resenas %}
+          <tr>
+            <td>{{ resena.id }}</td>
+            <td>{{ resena.usuario.username }}</td>
+            <td>{{ resena.parrilla.nombre }}</td>
+            <td>{{ resena.puntaje }}/5</td>
+            <td>
+              {% if resena.is_active %}
+                <span class="estado-badge estado-badge--activo">Activa</span>
+              {% else %}
+                <span class="estado-badge estado-badge--inactivo">Inactiva</span>
+              {% endif %}
+            </td>
+            <td class="gestion-table__actions">
+              <a href="{% url 'gestion:resenas_editar' resena.pk %}" class="crud-btn crud-btn--edit">
+                Editar
+              </a>
+              <a href="{% url 'gestion:resenas_eliminar' resena.pk %}" class="crud-btn crud-btn--delete">
+                Eliminar
+              </a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="6">No hay reseñas cargadas todavía.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

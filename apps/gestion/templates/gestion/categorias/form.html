@@ -1,0 +1,53 @@
+{% extends "gestion/base_gestion.html" %}
+
+{% block title %}
+  {% if object %}Editar Categoría{% else %}Crear Categoría{% endif %} | ChoriFans
+{% endblock %}
+
+{% block content %}
+<section class="gestion-dashboard">
+  <div class="gestion-dashboard__hero">
+    <span class="gestion-dashboard__eyebrow">Módulo de gestión</span>
+    <h2 class="gestion-dashboard__title">
+      {% if object %}Editar categoría{% else %}Crear nueva categoría{% endif %}
+    </h2>
+    <p class="gestion-dashboard__description">
+      Completá los datos para guardar la categoría.
+    </p>
+  </div>
+
+  <div class="gestion-form-wrapper">
+    <form method="post" class="gestion-form">
+      {% csrf_token %}
+
+      {% for field in form %}
+        <div class="gestion-form-group">
+          <label for="{{ field.id_for_label }}" class="gestion-form-label">
+            {{ field.label }}
+          </label>
+
+          {{ field }}
+
+          {% if field.help_text %}
+            <small class="gestion-form-help">{{ field.help_text }}</small>
+          {% endif %}
+
+          {% for error in field.errors %}
+            <small class="gestion-form-error">{{ error }}</small>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+      <div class="gestion-form-actions">
+        <a href="{% url 'gestion:categorias_lista' %}" class="crud-btn crud-btn--view">
+          Cancelar
+        </a>
+
+        <button type="submit" class="crud-btn crud-btn--create">
+          {% if object %}Guardar cambios{% else %}Crear categoría{% endif %}
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

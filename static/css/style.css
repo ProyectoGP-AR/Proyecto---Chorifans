@@ -516,7 +516,7 @@ header nav a {
   color: var(--accent-yellow);
 }
 
-.resena-usuario{
+.resena-usuario {
   color: #e0e0e0;
 }
 
@@ -1846,7 +1846,7 @@ header nav a {
 .volver-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
   padding: 10px 22px;
   border-radius: 999px;
   background: rgba(255, 152, 0, 0.2);
@@ -2071,7 +2071,7 @@ header nav a {
   vertical-align: text-bottom;
 
   /* desde static/css/style.css → static/css/img/verified.png */
-  background-image: url("../img/verified.png");
+  background-image: url("./img/verified.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: contain;
@@ -2440,7 +2440,7 @@ img.respuesta-verificado-icon {
 img[src*="sin-foto"] {
   object-fit: contain !important;  /* que no explote a pantalla completa */
   padding: 16px;                   /* aire alrededor del ícono */
-  background-color: #424242b9;       /* fondo gris como los placeholders */
+  background-color: #424242b9;     /* fondo gris como los placeholders */
 }
 
 /* En el detalle de parrilla, aún más controlado */
@@ -2448,4 +2448,280 @@ img[src*="sin-foto"] {
   max-height: 200px;
   margin: 0 auto;
   max-width: 395px;
+}
+
+
+/* ======================================
+   CHORI BOT - WIDGET GLOBAL
+   ====================================== */
+
+.chori-bot-widget {
+  position: fixed;
+  right: 22px;
+  bottom: 104px;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.chori-bot-bubble {
+  max-width: 240px;
+  background: rgba(24, 24, 24, 0.96);
+  color: var(--extra-light-gray);
+  border: 1px solid rgba(255, 152, 0, 0.35);
+  border-radius: 18px;
+  padding: 0.85rem 1rem;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+  font-size: 0.92rem;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.chori-bot-bubble strong {
+  color: var(--accent-orange);
+}
+
+.chori-bot-toggle {
+  width: 84px;
+  height: 84px;
+  border: none;
+  border-radius: 50%;
+  padding: 0;
+  background: radial-gradient(circle at top, #ffb347, var(--accent-orange));
+  box-shadow: 0 10px 24px rgba(255, 152, 0, 0.35);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.chori-bot-toggle:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 14px 30px rgba(255, 152, 0, 0.45);
+}
+
+.chori-bot-avatar {
+  width: 76px;
+  height: 76px;
+  object-fit: contain;
+  display: block;
+  border-radius: 50%;
+}
+
+.chori-bot-panel {
+  width: 360px;
+  max-width: calc(100vw - 24px);
+  background: rgba(20, 20, 20, 0.98);
+  border: 1px solid rgba(255, 152, 0, 0.35);
+  border-radius: 22px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+  display: none;
+}
+
+.chori-bot-panel.is-open {
+  display: flex;
+  flex-direction: column;
+}
+
+.chori-bot-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  background: rgba(33, 33, 33, 0.98);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.chori-bot-panel__brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.chori-bot-panel__avatar {
+  width: 46px;
+  height: 46px;
+  object-fit: contain;
+  border-radius: 50%;
+  background: rgba(255, 152, 0, 0.12);
+  padding: 3px;
+}
+
+.chori-bot-panel__brand h3 {
+  margin: 0;
+  font-family: 'Righteous', cursive;
+  font-size: 1.05rem;
+  color: var(--accent-orange);
+}
+
+.chori-bot-panel__brand p {
+  margin: 0.15rem 0 0;
+  font-size: 0.78rem;
+  color: #d1d1d1;
+}
+
+.chori-bot-close {
+  border: none;
+  background: transparent;
+  color: var(--extra-light-gray);
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.chori-bot-close:hover {
+  color: var(--accent-orange);
+}
+
+.chori-bot-messages {
+  min-height: 240px;
+  max-height: 340px;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(16, 16, 16, 0.98);
+}
+
+.chori-bot-message {
+  max-width: 85%;
+  padding: 0.8rem 0.95rem;
+  border-radius: 16px;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.chori-bot-message--bot {
+  align-self: flex-start;
+  background: rgba(255, 152, 0, 0.14);
+  border: 1px solid rgba(255, 152, 0, 0.22);
+  color: var(--extra-light-gray);
+}
+
+.chori-bot-message--user {
+  align-self: flex-end;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--extra-light-gray);
+}
+
+.chori-bot-form {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  background: rgba(24, 24, 24, 0.98);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.chori-bot-input {
+  flex: 1;
+  border: 1px solid #3a3a3a;
+  background: #111111;
+  color: var(--extra-light-gray);
+  border-radius: 999px;
+  padding: 0.8rem 1rem;
+  font-family: inherit;
+  font-size: 0.92rem;
+  outline: none;
+}
+
+.chori-bot-input:focus {
+  border-color: var(--accent-orange);
+  box-shadow: 0 0 0 1px rgba(255, 152, 0, 0.35);
+}
+
+.chori-bot-send {
+  border: none;
+  border-radius: 999px;
+  background: var(--accent-orange);
+  color: #000;
+  font-weight: 700;
+  font-family: inherit;
+  padding: 0 1rem;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.chori-bot-send:hover {
+  background: #ffb300;
+  transform: translateY(-1px);
+}
+
+.chori-bot-send:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+@media (max-width: 1024px) {
+  .chori-bot-widget {
+    right: 18px;
+    bottom: 100px;
+  }
+
+  .chori-bot-panel {
+    width: 340px;
+  }
+
+  .chori-bot-toggle {
+    width: 78px;
+    height: 78px;
+  }
+
+  .chori-bot-avatar {
+    width: 70px;
+    height: 70px;
+  }
+}
+
+@media (max-width: 768px) {
+  .chori-bot-widget {
+    right: 14px;
+    bottom: 92px;
+    left: 14px;
+    align-items: flex-end;
+  }
+
+  .chori-bot-bubble {
+    max-width: 220px;
+    font-size: 0.86rem;
+    padding: 0.75rem 0.9rem;
+  }
+
+  .chori-bot-toggle {
+    width: 72px;
+    height: 72px;
+  }
+
+  .chori-bot-avatar {
+    width: 64px;
+    height: 64px;
+  }
+
+  .chori-bot-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .chori-bot-messages {
+    min-height: 220px;
+    max-height: 300px;
+  }
+
+  .chori-bot-form {
+    flex-direction: column;
+  }
+
+  .chori-bot-send {
+    width: 100%;
+    min-height: 44px;
+  }
 }

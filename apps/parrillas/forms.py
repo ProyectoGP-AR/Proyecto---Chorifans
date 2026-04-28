@@ -25,3 +25,35 @@ class BuscarParrillaForm(forms.Form):
             }
         ),
     )
+
+
+from .models import Parrilla
+
+
+class ParrillaGestionForm(forms.ModelForm):
+    class Meta:
+        model = Parrilla
+        fields = [
+            "nombre",
+            "descripcion",
+            "direccion",
+            "telefono",
+            "sitio_web",
+            "ubicacion",
+            "categoria",
+            "foto_principal",
+            "promedio_puntaje",
+            "is_active",
+        ]
+        widgets = {
+            "nombre": forms.TextInput(attrs={"class": "gestion-form-input"}),
+            "descripcion": forms.Textarea(attrs={"class": "gestion-form-input", "rows": 4}),
+            "direccion": forms.TextInput(attrs={"class": "gestion-form-input"}),
+            "telefono": forms.TextInput(attrs={"class": "gestion-form-input"}),
+            "sitio_web": forms.URLInput(attrs={"class": "gestion-form-input"}),
+            "ubicacion": forms.Select(attrs={"class": "gestion-form-input"}),
+            "categoria": forms.Select(attrs={"class": "gestion-form-input"}),
+            "foto_principal": forms.ClearableFileInput(attrs={"class": "gestion-form-input"}),
+            "promedio_puntaje": forms.NumberInput(attrs={"class": "gestion-form-input", "step": "0.1", "min": "0", "max": "5"}),
+            "is_active": forms.CheckboxInput(attrs={"class": "gestion-form-checkbox"}),
+        }

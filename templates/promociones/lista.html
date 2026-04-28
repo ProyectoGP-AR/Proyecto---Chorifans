@@ -43,9 +43,15 @@
         {% endfor %}
       </ul>
     {% else %}
-      <p>
-        No hay promociones vigentes en este momento.
-      </p>
-    {% endif %}
+  <div class="promo-empty-wrap">
+    <div class="promo-empty-card">
+      <h2 class="promo-empty-title">No hay promociones vigentes</h2>
+    <p class="promo-empty-text">
+  Por el momento no hay promociones vigentes.<br>
+  Volvé más tarde para ver nuevas ofertas.
+</p>
+    </div>
+  </div>
+{% endif %}
   </div>
 {% endblock %}

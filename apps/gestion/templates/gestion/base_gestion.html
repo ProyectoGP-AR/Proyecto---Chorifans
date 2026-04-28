@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Panel de Gestión | ChoriFans{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'css/gestion.css' %}?v=99" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
+    {% block extra_head %}{% endblock %}
+  </head>
+  <body class="gestion-body">
+    <div class="gestion-shell">
+      <header class="gestion-header">
+        <div class="gestion-header__inner">
+          <div class="gestion-brand">
+            <div class="gestion-brand__badge">CF</div>
+            <div>
+              <h1 class="gestion-brand__title">ChoriFans Gestión</h1>
+              <p class="gestion-brand__subtitle">Panel administrativo</p>
+            </div>
+          </div>
+
+          <div class="gestion-userbox">
+            <div class="gestion-userbox__text">
+              <span class="gestion-userbox__label">Administrador</span>
+              <span class="gestion-userbox__name">{{ request.user.username }}</span>
+            </div>
+
+            <a href="{% url 'accounts:logout' %}" class="gestion-logout-btn">
+              Cerrar sesión
+            </a>
+          </div>
+        </div>
+      </header>
+
+      <main class="gestion-main">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </body>
+</html>

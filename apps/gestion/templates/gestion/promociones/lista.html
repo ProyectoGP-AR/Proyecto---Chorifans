@@ -1,0 +1,131 @@
+{% extends "gestion/base_gestion.html" %}
+
+{% block title %}Gestión de Promociones | ChoriFans{% endblock %}
+
+{% block content %}
+<section class="gestion-dashboard">
+  <div class="gestion-dashboard__hero">
+    <span class="gestion-dashboard__eyebrow">Módulo de gestión</span>
+    <h2 class="gestion-dashboard__title">Promociones</h2>
+    <p class="gestion-dashboard__description">
+      Desde acá podés ver, crear, editar o eliminar promociones registradas en ChoriFans.
+    </p>
+  </div>
+
+  <div class="gestion-top-actions">
+    <a href="{% url 'gestion:dashboard' %}" class="crud-btn crud-btn--view">
+      Volver al panel
+    </a>
+
+    <a href="{% url 'gestion:promociones_crear' %}" class="crud-btn crud-btn--create">
+      Crear promoción
+    </a>
+  </div>
+
+<form method="get" class="gestion-filters">
+  <div class="gestion-filters__grid">
+    <div class="gestion-form-group">
+      <label for="id_q" class="gestion-form-label">Buscar</label>
+      <input
+        type="text"
+        name="q"
+        id="id_q"
+        value="{{ q }}"
+        class="gestion-form-input"
+        placeholder="Título, descripción o parrilla"
+      />
+    </div>
+
+    <div class="gestion-form-group">
+      <label for="id_estado" class="gestion-form-label">Estado</label>
+      <select name="estado" id="id_estado" class="gestion-form-input">
+        <option value="">Todas</option>
+        <option value="activas" {% if estado == "activas" %}selected{% endif %}>Activas</option>
+        <option value="inactivas" {% if estado == "inactivas" %}selected{% endif %}>Inactivas</option>
+      </select>
+    </div>
+
+    <div class="gestion-form-group">
+      <label for="id_vigencia" class="gestion-form-label">Vigencia</label>
+      <select name="vigencia" id="id_vigencia" class="gestion-form-input">
+        <option value="">Todas</option>
+        <option value="vigentes" {% if vigencia == "vigentes" %}selected{% endif %}>Vigentes</option>
+        <option value="vencidas" {% if vigencia == "vencidas" %}selected{% endif %}>Vencidas</option>
+        <option value="futuras" {% if vigencia == "futuras" %}selected{% endif %}>Futuras</option>
+      </select>
+    </div>
+
+    <div class="gestion-form-group">
+      <label for="id_parrilla" class="gestion-form-label">Parrilla</label>
+      <select name="parrilla" id="id_parrilla" class="gestion-form-input">
+        <option value="">Todas</option>
+        {% for parrilla in parrillas_filtro %}
+          <option value="{{ parrilla.id }}" {% if parrilla_actual == parrilla.id|stringformat:"s" %}selected{% endif %}>
+            {{ parrilla.nombre }}
+          </option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div class="gestion-form-actions">
+    <button type="submit" class="crud-btn crud-btn--view">Filtrar</button>
+    <a href="{% url 'gestion:promociones_lista' %}" class="crud-btn crud-btn--delete">Limpiar</a>
+  </div>
+</form>
+
+  <div class="gestion-table-wrapper">
+    <table class="gestion-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Parrilla</th>
+          <th>Título</th>
+          <th>Precio promo</th>
+          <th>Inicio</th>
+          <th>Fin</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for promocion in promociones %}
+          <tr>
+            <td>{{ promocion.id }}</td>
+            <td>{{ promocion.parrilla.nombre }}</td>
+            <td>{{ promocion.titulo }}</td>
+            <td>
+              {% if promocion.precio_promocional %}
+                {{ promocion.precio_promocional }}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+            <td>{{ promocion.fecha_inicio }}</td>
+            <td>{{ promocion.fecha_fin }}</td>
+            <td>
+              {% if promocion.is_active %}
+                <span class="estado-badge estado-badge--activo">Activa</span>
+              {% else %}
+                <span class="estado-badge estado-badge--inactivo">Inactiva</span>
+              {% endif %}
+            </td>
+            <td class="gestion-table__actions">
+              <a href="{% url 'gestion:promociones_editar' promocion.pk %}" class="crud-btn crud-btn--edit">
+                Editar
+              </a>
+              <a href="{% url 'gestion:promociones_eliminar' promocion.pk %}" class="crud-btn crud-btn--delete">
+                Eliminar
+              </a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="8">No hay promociones cargadas todavía.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

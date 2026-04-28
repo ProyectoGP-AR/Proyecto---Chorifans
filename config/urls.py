@@ -20,6 +20,8 @@ urlpatterns = [
     path("api/", api.urls),
 
     path("", HomeView.as_view(), name="home"),
+    
+    path("gestion/", include("apps.gestion.urls")),
 ]
 
 if settings.DEBUG:

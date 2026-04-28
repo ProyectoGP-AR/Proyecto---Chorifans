@@ -1,0 +1,692 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-1: #120902;
+  --bg-2: #1d0f04;
+  --panel: rgba(34, 21, 9, 0.9);
+  --panel-2: rgba(48, 29, 13, 0.92);
+  --text: #fff3df;
+  --muted: #e8cfa8;
+  --line: rgba(255, 186, 73, 0.18);
+  --shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+  --radius-xl: 28px;
+  --radius-lg: 22px;
+  --radius-md: 16px;
+
+  --crud-view: #ffb74d;
+  --crud-create: #43a047;
+  --crud-edit: #1e88e5;
+  --crud-delete: #e53935;
+
+  --card-parrillas: linear-gradient(135deg, #ff9800, #ffb74d);
+  --card-promociones: linear-gradient(135deg, #ef5350, #ff8a65);
+  --card-categorias: linear-gradient(135deg, #8e24aa, #ba68c8);
+  --card-ubicaciones: linear-gradient(135deg, #00897b, #4db6ac);
+  --card-resenas: linear-gradient(135deg, #3949ab, #7986cb);
+  --card-usuarios: linear-gradient(135deg, #6d4c41, #a1887f);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(255, 152, 0, 0.14), transparent 30%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.gestion-body {
+  min-height: 100vh;
+}
+
+.gestion-shell {
+  min-height: 100vh;
+  width: 100%;
+}
+
+.gestion-header {
+  padding: 28px 22px 0;
+}
+
+.gestion-header__inner {
+  max-width: 1280px;
+  margin: 0 auto;
+  background: rgba(38, 22, 9, 0.78);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  box-shadow: var(--shadow);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 22px 26px;
+}
+
+.gestion-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.gestion-brand__badge {
+  width: 58px;
+  height: 58px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #ff9800, #ffca28);
+  color: #2c1600;
+  font-weight: 800;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 24px rgba(255, 152, 0, 0.28);
+}
+
+.gestion-brand__title {
+  margin: 0;
+  font-size: 1.55rem;
+  font-weight: 800;
+}
+
+.gestion-brand__subtitle {
+  margin: 3px 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+.gestion-userbox {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.gestion-userbox__text {
+  display: flex;
+  flex-direction: column;
+  text-align: right;
+}
+
+.gestion-userbox__label {
+  font-size: 0.8rem;
+  color: #ffcf87;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.gestion-userbox__name {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.gestion-logout-btn {
+  background: linear-gradient(135deg, #ef5350, #d32f2f);
+  color: white;
+  text-decoration: none;
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-weight: 700;
+  box-shadow: 0 10px 22px rgba(211, 47, 47, 0.25);
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.gestion-logout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 26px rgba(211, 47, 47, 0.32);
+}
+
+.gestion-main {
+  padding: 34px 22px 48px;
+}
+
+.gestion-dashboard {
+  max-width: 1280px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.gestion-dashboard__hero {
+  max-width: 860px;
+  margin: 0 auto 34px;
+}
+
+.gestion-dashboard__eyebrow {
+  display: inline-block;
+  background: rgba(255, 183, 77, 0.12);
+  color: #ffcf87;
+  border: 1px solid rgba(255, 183, 77, 0.2);
+  border-radius: 999px;
+  padding: 8px 16px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.gestion-dashboard__title {
+  margin: 0 0 12px;
+  font-size: clamp(2rem, 3vw, 3rem);
+  line-height: 1.1;
+  font-weight: 800;
+}
+
+.gestion-dashboard__description {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.gestion-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(260px, 1fr));
+  gap: 24px;
+  align-items: stretch;
+}
+
+/* =========================
+   CARDS DEL DASHBOARD
+   ========================= */
+
+.gestion-card {
+  position: relative;
+  border-radius: var(--radius-xl);
+  padding: 34px 24px 30px;
+  background: linear-gradient(180deg, rgba(38, 22, 9, 0.96), rgba(27, 15, 6, 0.96));
+  border: 1px solid rgba(255, 186, 73, 0.18);
+  box-shadow:
+    0 18px 36px rgba(0, 0, 0, 0.30),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+  text-align: center;
+  transition:
+    transform 0.24s ease,
+    box-shadow 0.24s ease,
+    border-color 0.24s ease;
+}
+
+.gestion-card::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 7px;
+}
+
+.gestion-card::after {
+  content: "";
+  position: absolute;
+  inset: -25% -15%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 190, 80, 0.22) 0%,
+    rgba(255, 190, 80, 0.12) 24%,
+    rgba(255, 190, 80, 0) 62%
+  );
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 0.24s ease, transform 0.24s ease;
+  pointer-events: none;
+}
+
+.gestion-card:hover {
+  transform: translateY(-8px);
+  border-color: rgba(255, 205, 120, 0.40);
+  box-shadow:
+    0 26px 48px rgba(0, 0, 0, 0.34),
+    0 0 0 1px rgba(255, 205, 120, 0.14),
+    0 0 24px rgba(255, 183, 77, 0.22),
+    0 0 60px rgba(255, 183, 77, 0.14);
+}
+
+.gestion-card:hover::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.gestion-card--link,
+.gestion-card--link:link,
+.gestion-card--link:visited,
+.gestion-card--link:hover,
+.gestion-card--link:focus,
+.gestion-card--link:active {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 290px;
+  width: 100%;
+  color: var(--text) !important;
+  text-decoration: none !important;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gestion-card--link * {
+  color: inherit !important;
+  text-decoration: none !important;
+}
+
+.gestion-card--parrillas::before {
+  background: var(--card-parrillas);
+}
+
+.gestion-card--promociones::before {
+  background: var(--card-promociones);
+}
+
+.gestion-card--categorias::before {
+  background: var(--card-categorias);
+}
+
+.gestion-card--ubicaciones::before {
+  background: var(--card-ubicaciones);
+}
+
+.gestion-card--resenas::before {
+  background: var(--card-resenas);
+}
+
+.gestion-card--usuarios::before {
+  background: var(--card-usuarios);
+}
+
+.gestion-card__icon {
+  width: 82px;
+  height: 82px;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 18px;
+  font-size: 2.2rem;
+  line-height: 1;
+  text-align: center;
+  background: rgba(51, 31, 14, 0.98);
+  border: 1px solid rgba(255, 186, 73, 0.18);
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, 0.20),
+    0 0 18px rgba(255, 183, 77, 0.10);
+}
+
+.gestion-card__title {
+  width: 100%;
+  margin: 0 0 12px;
+  font-size: 1.42rem;
+  font-weight: 800;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.gestion-card__text {
+  width: 100%;
+  max-width: 32ch;
+  margin: 0 auto;
+  color: var(--muted);
+  font-size: 0.97rem;
+  line-height: 1.72;
+  text-align: center;
+}
+
+/* =========================
+   BOTONES GENERALES
+   ========================= */
+
+.crud-btn {
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.92rem;
+  border-radius: 12px;
+  padding: 11px 15px;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, opacity 0.16s ease;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.crud-btn:hover {
+  transform: translateY(-2px);
+  opacity: 0.96;
+}
+
+.crud-btn--view {
+  background: var(--crud-view);
+  color: #2b1a00;
+  box-shadow: 0 10px 18px rgba(255, 183, 77, 0.24);
+}
+
+.crud-btn--create {
+  background: var(--crud-create);
+  box-shadow: 0 10px 18px rgba(67, 160, 71, 0.22);
+}
+
+.crud-btn--edit {
+  background: var(--crud-edit);
+  box-shadow: 0 10px 18px rgba(30, 136, 229, 0.22);
+}
+
+.crud-btn--delete {
+  background: var(--crud-delete);
+  box-shadow: 0 10px 18px rgba(229, 57, 53, 0.22);
+}
+
+/* =========================
+   TABLAS Y ACCIONES
+   ========================= */
+
+.gestion-top-actions {
+  max-width: 1280px;
+  margin: 0 auto 22px;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.gestion-table-wrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  background: rgba(38, 22, 9, 0.78);
+  border: 1px solid rgba(255, 186, 73, 0.18);
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+  overflow: hidden;
+}
+
+.gestion-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.gestion-table thead {
+  background: rgba(255, 152, 0, 0.14);
+}
+
+.gestion-table th,
+.gestion-table td {
+  padding: 16px 14px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 186, 73, 0.12);
+  vertical-align: middle;
+}
+
+.gestion-table th {
+  color: #ffcf87;
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.gestion-table td {
+  color: #fff3df;
+  font-size: 0.95rem;
+}
+
+.gestion-table__actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.estado-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.estado-badge--activo {
+  background: rgba(67, 160, 71, 0.18);
+  color: #9df0a0;
+  border: 1px solid rgba(67, 160, 71, 0.25);
+}
+
+.estado-badge--inactivo {
+  background: rgba(229, 57, 53, 0.14);
+  color: #ff9d98;
+  border: 1px solid rgba(229, 57, 53, 0.25);
+}
+
+/* =========================
+   FORMULARIOS
+   ========================= */
+
+.gestion-form-wrapper {
+  max-width: 900px;
+  margin: 0 auto;
+  background: rgba(38, 22, 9, 0.78);
+  border: 1px solid rgba(255, 186, 73, 0.18);
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.28);
+  padding: 28px 24px;
+}
+
+.gestion-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.gestion-form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.gestion-form-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffcf87;
+}
+
+.gestion-form-input,
+.gestion-form select,
+.gestion-form textarea,
+.gestion-form input[type="text"],
+.gestion-form input[type="url"],
+.gestion-form input[type="number"],
+.gestion-form input[type="file"],
+.gestion-form input[type="password"],
+.gestion-form input[type="email"],
+.gestion-form input[type="date"] {
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 186, 73, 0.18);
+  background: rgba(25, 14, 6, 0.88);
+  color: #fff3df;
+  padding: 13px 14px;
+  font-size: 0.96rem;
+  font-family: "Poppins", sans-serif;
+  outline: none;
+}
+
+.gestion-form textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.gestion-form-input:focus,
+.gestion-form select:focus,
+.gestion-form textarea:focus,
+.gestion-form input[type="text"]:focus,
+.gestion-form input[type="url"]:focus,
+.gestion-form input[type="number"]:focus,
+.gestion-form input[type="file"]:focus,
+.gestion-form input[type="password"]:focus,
+.gestion-form input[type="email"]:focus,
+.gestion-form input[type="date"]:focus {
+  border-color: rgba(255, 183, 77, 0.45);
+  box-shadow: 0 0 0 3px rgba(255, 183, 77, 0.12);
+}
+
+.gestion-form-checkbox {
+  width: 18px;
+  height: 18px;
+}
+
+.gestion-form-help {
+  color: #dabb92;
+  font-size: 0.84rem;
+}
+
+.gestion-form-error {
+  color: #ff9d98;
+  font-size: 0.84rem;
+  font-weight: 600;
+}
+
+.gestion-form-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.gestion-delete-box {
+  background: rgba(229, 57, 53, 0.08);
+  border: 1px solid rgba(229, 57, 53, 0.18);
+  border-radius: 18px;
+  padding: 22px 18px;
+}
+
+.gestion-delete-text {
+  margin: 0;
+  color: #fff3df;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* =========================
+   FILTROS
+   ========================= */
+
+.gestion-filters {
+  max-width: 1280px;
+  margin: 0 auto 22px;
+  background: rgba(38, 22, 9, 0.78);
+  border: 1px solid rgba(255, 186, 73, 0.18);
+  border-radius: 24px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
+  padding: 22px 20px;
+}
+
+.gestion-filters__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(180px, 1fr));
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+@media (max-width: 1080px) {
+  .gestion-grid {
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+  }
+
+  .gestion-header__inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gestion-userbox {
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 1000px) {
+  .gestion-filters__grid {
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .gestion-table-wrapper {
+    overflow-x: auto;
+  }
+
+  .gestion-table {
+    min-width: 860px;
+  }
+}
+
+@media (max-width: 700px) {
+  .gestion-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .gestion-header,
+  .gestion-main {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .gestion-header__inner {
+    padding: 18px;
+  }
+
+  .gestion-brand {
+    align-items: flex-start;
+  }
+
+  .gestion-userbox {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .gestion-userbox__text {
+    text-align: left;
+  }
+
+  .crud-btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  .gestion-form-wrapper {
+    padding: 20px 16px;
+  }
+
+  .gestion-top-actions,
+  .gestion-form-actions {
+    flex-direction: column;
+  }
+
+  .gestion-filters__grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gestion-filters--compact {
+  max-width: 900px;
+}
+
+.gestion-filters__grid--compact {
+  grid-template-columns: repeat(3, minmax(180px, 1fr));
+  justify-content: center;
+}
+
+@media (max-width: 1000px) {
+  .gestion-filters__grid--compact {
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .gestion-filters__grid--compact {
+    grid-template-columns: 1fr;
+  }
+}

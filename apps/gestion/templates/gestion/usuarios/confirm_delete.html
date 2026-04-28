@@ -1,0 +1,38 @@
+{% extends "gestion/base_gestion.html" %}
+
+{% block title %}Eliminar Usuario | ChoriFans{% endblock %}
+
+{% block content %}
+<section class="gestion-dashboard">
+  <div class="gestion-dashboard__hero">
+    <span class="gestion-dashboard__eyebrow">Módulo de gestión</span>
+    <h2 class="gestion-dashboard__title">Eliminar usuario</h2>
+    <p class="gestion-dashboard__description">
+      Estás por eliminar un usuario del sistema.
+    </p>
+  </div>
+
+  <div class="gestion-form-wrapper">
+    <form method="post" class="gestion-form">
+      {% csrf_token %}
+
+      <div class="gestion-delete-box">
+        <p class="gestion-delete-text">
+          ¿Seguro que querés eliminar al usuario
+          <strong>{{ object.username }}</strong>?
+        </p>
+      </div>
+
+      <div class="gestion-form-actions">
+        <a href="{% url 'gestion:usuarios_lista' %}" class="crud-btn crud-btn--view">
+          Cancelar
+        </a>
+
+        <button type="submit" class="crud-btn crud-btn--delete">
+          Sí, eliminar
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+{% endblock %}

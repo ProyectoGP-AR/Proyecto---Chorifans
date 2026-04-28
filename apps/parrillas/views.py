@@ -145,6 +145,7 @@ class ParrillaDetailView(FormMixin, DetailView):
         # - está logueado
         # - NO es dueño de parrilla
         # - NO dejó reseña antes en esta parrilla
+        
         puede_reseñar = (
             user.is_authenticated
             and not ya_reseño

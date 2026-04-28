@@ -1,0 +1,117 @@
+{% extends "gestion/base_gestion.html" %}
+
+{% block title %}Gestión de Usuarios | ChoriFans{% endblock %}
+
+{% block content %}
+<section class="gestion-dashboard">
+  <div class="gestion-dashboard__hero">
+    <span class="gestion-dashboard__eyebrow">Módulo de gestión</span>
+    <h2 class="gestion-dashboard__title">Usuarios</h2>
+    <p class="gestion-dashboard__description">
+      Desde acá podés ver, crear, editar o eliminar usuarios del sistema.
+    </p>
+  </div>
+
+  <div class="gestion-top-actions">
+    <a href="{% url 'gestion:dashboard' %}" class="crud-btn crud-btn--view">
+      Volver al panel
+    </a>
+
+    <a href="{% url 'gestion:usuarios_crear' %}" class="crud-btn crud-btn--create">
+      Crear usuario
+    </a>
+  </div>
+
+<form method="get" class="gestion-filters gestion-filters--compact">
+  <div class="gestion-filters__grid gestion-filters__grid--compact">
+    <div class="gestion-form-group">
+      <label for="id_q" class="gestion-form-label">Buscar</label>
+      <input
+        type="text"
+        name="q"
+        id="id_q"
+        value="{{ q }}"
+        class="gestion-form-input"
+        placeholder="Username, nombre, email o nickname"
+      />
+    </div>
+
+    <div class="gestion-form-group">
+      <label for="id_estado" class="gestion-form-label">Estado</label>
+      <select name="estado" id="id_estado" class="gestion-form-input">
+        <option value="">Todos</option>
+        <option value="activos" {% if estado == "activos" %}selected{% endif %}>Activos</option>
+        <option value="inactivos" {% if estado == "inactivos" %}selected{% endif %}>Inactivos</option>
+      </select>
+    </div>
+
+    <div class="gestion-form-group">
+      <label for="id_rol" class="gestion-form-label">Rol</label>
+      <select name="rol" id="id_rol" class="gestion-form-input">
+        <option value="">Todos</option>
+        <option value="admin" {% if rol == "admin" %}selected{% endif %}>Administrador</option>
+        <option value="duenio" {% if rol == "duenio" %}selected{% endif %}>Dueño de parrilla</option>
+        <option value="comun" {% if rol == "comun" %}selected{% endif %}>Usuario común</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="gestion-form-actions">
+    <button type="submit" class="crud-btn crud-btn--view">Filtrar</button>
+    <a href="{% url 'gestion:usuarios_lista' %}" class="crud-btn crud-btn--delete">Limpiar</a>
+  </div>
+</form>
+
+  <div class="gestion-table-wrapper">
+    <table class="gestion-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Username</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Admin panel</th>
+          <th>Activo</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for usuario in usuarios %}
+          <tr>
+            <td>{{ usuario.id }}</td>
+            <td>{{ usuario.username }}</td>
+            <td>{{ usuario.first_name }} {{ usuario.last_name }}</td>
+            <td>{{ usuario.email|default:"—" }}</td>
+            <td>
+              {% if usuario.is_staff %}
+                <span class="estado-badge estado-badge--activo">Sí</span>
+              {% else %}
+                <span class="estado-badge estado-badge--inactivo">No</span>
+              {% endif %}
+            </td>
+            <td>
+              {% if usuario.is_active %}
+                <span class="estado-badge estado-badge--activo">Activo</span>
+              {% else %}
+                <span class="estado-badge estado-badge--inactivo">Inactivo</span>
+              {% endif %}
+            </td>
+            <td class="gestion-table__actions">
+              <a href="{% url 'gestion:usuarios_editar' usuario.pk %}" class="crud-btn crud-btn--edit">
+                Editar
+              </a>
+              <a href="{% url 'gestion:usuarios_eliminar' usuario.pk %}" class="crud-btn crud-btn--delete">
+                Eliminar
+              </a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7">No hay usuarios cargados todavía.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

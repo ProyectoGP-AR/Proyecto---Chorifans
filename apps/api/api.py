@@ -1,46 +1,21 @@
-"""
-API oficial de ChoriFans implementada con Django Ninja.
+from datetime import date, datetime
+from typing import List, Optional
 
-Este archivo está completamente comentado y estructurado para cumplir
-con todos los requisitos del TP final de la materia:
-
-✔ CRUD completo por cada recurso
-✔ Parámetros de ruta y de consulta
-✔ Paginación (requisito 22 del TP)
-✔ Protección de endpoints sensibles (auth=session_auth)
-✔ Schemas basados en Pydantic (Ninja Schema)
-✔ Esquemas anidados simples (categoría + ubicación dentro de parrilla)
-✔ Filtros avanzados en listados
-✔ Manejo claro de errores
-"""
-
-# ============================================================
-#   IMPORTS
-# ============================================================
-
-from typing import List
-from datetime import datetime
-
-from django.utils import timezone
 from django.contrib.auth.models import User
+from django.utils import timezone
 
-from ninja import NinjaAPI, Schema, Query
-from ninja.security import SessionAuth
+from ninja import NinjaAPI, Query, Schema
 from ninja.errors import HttpError
+from ninja.security import SessionAuth
 
-from apps.categorias.models import Categoria
-from apps.ubicaciones.models import Ubicacion
-from apps.parrillas.models import Parrilla
-from apps.resenas.models import Resena
-from apps.promociones.models import Promocion
-
-# Helper para paginación (creado por nosotros en apps/api/pagination.py)
 from apps.api.pagination import paginate_queryset
+from apps.api.services.chatbot_service import get_chori_bot_response
+from apps.categorias.models import Categoria
+from apps.parrillas.models import Parrilla
+from apps.promociones.models import Promocion
+from apps.resenas.models import Resena
+from apps.ubicaciones.models import Ubicacion
 
-
-# ============================================================
-#   API PRINCIPAL
-# ============================================================
 
 api = NinjaAPI(
     title="ChoriFans API",
@@ -48,34 +23,48 @@ api = NinjaAPI(
     description="API oficial del proyecto ChoriFans.",
 )
 
-# Autenticación basada en la sesión del usuario (login del sitio)
 session_auth = SessionAuth()
 
 
-# ============================================================
-#   PING – ENDPOINT DE PRUEBA
-# ============================================================
+def schema_dump(schema_obj):
+    """
+    Compatibilidad entre Pydantic v1 y v2.
+    """
+    if hasattr(schema_obj, "model_dump"):
+        return schema_obj.model_dump()
+    return schema_obj.dict()
+
+
+def convert_parrilla(parrilla: Parrilla):
+    return {
+        "id": parrilla.id,
+        "nombre": parrilla.nombre,
+        "descripcion": parrilla.descripcion,
+        "direccion": parrilla.direccion,
+        "telefono": parrilla.telefono,
+        "sitio_web": parrilla.sitio_web,
+        "is_active": parrilla.is_active,
+        "promedio_puntaje": parrilla.promedio_puntaje,
+        "created_at": parrilla.created_at,
+        "updated_at": parrilla.updated_at,
+        "categoria": {
+            "id": parrilla.categoria.id,
+            "nombre": parrilla.categoria.nombre,
+        },
+        "ubicacion": {
+            "id": parrilla.ubicacion.id,
+            "nombre_ciudad": parrilla.ubicacion.nombre_ciudad,
+            "nombre_barrio": parrilla.ubicacion.nombre_barrio,
+        },
+    }
+
 
 @api.get("/ping")
 def ping(request):
-    """Devuelve pong=True para comprobar que la API funciona."""
     return {"pong": True}
 
 
-# ============================================================
-#   MODELOS DE PAGINACIÓN
-# ============================================================
-
 class PaginatedResponse(Schema):
-    """
-    Esquema estándar para cualquier respuesta paginada.
-
-    page         → Nº de página actual
-    page_size    → Cantidad de elementos por página
-    total_items  → Total de registros en la base
-    total_pages  → Total de páginas calculadas
-    results      → Lista con los datos reales (p.ej., parrillas)
-    """
     page: int
     page_size: int
     total_items: int
@@ -83,106 +72,71 @@ class PaginatedResponse(Schema):
     results: list
 
 
-# ============================================================
-#   SCHEMAS ANIDADOS (Opción B = simple)
-# ============================================================
-
 class CategoriaSimple(Schema):
-    """Esquema simple para anidar dentro de Parrilla."""
     id: int
     nombre: str
 
 
 class UbicacionSimple(Schema):
-    """Esquema simple para anidar dentro de Parrilla."""
     id: int
     nombre_ciudad: str
     nombre_barrio: str
 
 
-# ============================================================
-#   SCHEMAS COMPLETOS POR RECURSO
-# ============================================================
-
-# ------------------- CATEGORÍAS -------------------
-
 class CategoriaBaseSchema(Schema):
-    """Payload para crear/editar categorías."""
     nombre: str
     slug: str
-    descripcion: str | None = None
+    descripcion: Optional[str] = None
     is_active: bool = True
 
 
 class CategoriaOutSchema(CategoriaBaseSchema):
-    """Respuesta enviada al cliente."""
     id: int
     created_at: datetime
     updated_at: datetime
 
 
-# ------------------- UBICACIONES -------------------
-
 class UbicacionBaseSchema(Schema):
-    """Payload para crear/editar ubicaciones."""
     nombre_ciudad: str
     nombre_barrio: str
-    latitud: float | None = None
-    longitud: float | None = None
-    google_maps_url: str | None = None
+    latitud: Optional[float] = None
+    longitud: Optional[float] = None
+    google_maps_url: Optional[str] = None
     is_active: bool = True
 
 
 class UbicacionOutSchema(UbicacionBaseSchema):
-    """Respuesta enviada al cliente."""
     id: int
     created_at: datetime
     updated_at: datetime
 
 
-# ------------------- PARRILLAS -------------------
-
 class ParrillaBaseSchema(Schema):
-    """
-    Payload para crear/editar parrillas.
-    Recibe categoría y ubicación como IDs.
-    """
     nombre: str
-    descripcion: str | None = None
+    descripcion: Optional[str] = None
     direccion: str
-    telefono: str | None = None
-    sitio_web: str | None = None
+    telefono: Optional[str] = None
+    sitio_web: Optional[str] = None
     ubicacion_id: int
     categoria_id: int
     is_active: bool = True
-    promedio_puntaje: float | None = None
+    promedio_puntaje: Optional[float] = None
 
 
 class ParrillaOutSchema(Schema):
-    """
-    Esquema COMPLETO de salida de parrilla:
-
-    ✔ Datos propios
-    ✔ Categoría anidada (simple)
-    ✔ Ubicación anidada (simple)
-    """
     id: int
     nombre: str
-    descripcion: str | None
+    descripcion: Optional[str]
     direccion: str
-    telefono: str | None
-    sitio_web: str | None
+    telefono: Optional[str]
+    sitio_web: Optional[str]
     is_active: bool
-    promedio_puntaje: float | None
+    promedio_puntaje: Optional[float]
     created_at: datetime
     updated_at: datetime
-
-    # Esquemas anidados simples (Opción B)
     categoria: CategoriaSimple
     ubicacion: UbicacionSimple
 
-
-# ------------------- RESEÑAS -------------------
 
 class ResenaBaseSchema(Schema):
     usuario_id: int
@@ -198,15 +152,13 @@ class ResenaOutSchema(ResenaBaseSchema):
     updated_at: datetime
 
 
-# ------------------- PROMOCIONES -------------------
-
 class PromocionBaseSchema(Schema):
     parrilla_id: int
     titulo: str
     descripcion: str
-    precio_promocional: float | None
-    fecha_inicio: datetime
-    fecha_fin: datetime
+    precio_promocional: Optional[float] = None
+    fecha_inicio: date
+    fecha_fin: date
     is_active: bool = True
 
 
@@ -216,8 +168,49 @@ class PromocionOutSchema(PromocionBaseSchema):
     updated_at: datetime
 
 
+class ChatbotContextSchema(Schema):
+    currentPath: Optional[str] = None
+    currentView: Optional[str] = None
+    isAuthenticated: Optional[bool] = None
+    username: Optional[str] = None
+    pageTitle: Optional[str] = None
+
+
+class ChatbotRequestSchema(Schema):
+    message: str
+    context: Optional[ChatbotContextSchema] = None
+
+
+class ChatbotResponseSchema(Schema):
+    reply: str
+
+
+@api.post("/chatbot", response=ChatbotResponseSchema)
+def chori_bot(request, payload: ChatbotRequestSchema):
+    mensaje = (payload.message or "").strip()
+
+    if not mensaje:
+        raise HttpError(400, "El mensaje no puede estar vacío")
+
+    contexto = schema_dump(payload.context) if payload.context else {}
+
+    if request.user.is_authenticated:
+        contexto["django_user_authenticated"] = True
+        contexto["django_username"] = request.user.username
+    else:
+        contexto["django_user_authenticated"] = False
+        contexto["django_username"] = None
+
+    try:
+        respuesta = get_chori_bot_response(mensaje, contexto)
+    except Exception as e:
+        raise HttpError(500, f"Error al generar respuesta del chatbot: {str(e)}")
+
+    return {"reply": respuesta}
+
+
 # ============================================================
-#   CATEGORÍAS – CRUD
+# CATEGORÍAS
 # ============================================================
 
 @api.get("/categorias", response=List[CategoriaOutSchema])
@@ -227,7 +220,7 @@ def listar_categorias(request):
 
 @api.post("/categorias", response=CategoriaOutSchema, auth=session_auth)
 def crear_categoria(request, payload: CategoriaBaseSchema):
-    return Categoria.objects.create(**payload.dict())
+    return Categoria.objects.create(**schema_dump(payload))
 
 
 @api.get("/categorias/{categoria_id}", response=CategoriaOutSchema)
@@ -245,8 +238,8 @@ def actualizar_categoria(request, categoria_id: int, payload: CategoriaBaseSchem
     except Categoria.DoesNotExist:
         raise HttpError(404, "Categoría no encontrada")
 
-    for k, v in payload.dict().items():
-        setattr(categoria, k, v)
+    for key, value in schema_dump(payload).items():
+        setattr(categoria, key, value)
 
     categoria.save()
     return categoria
@@ -263,7 +256,7 @@ def eliminar_categoria(request, categoria_id: int):
 
 
 # ============================================================
-#   UBICACIONES – CRUD
+# UBICACIONES
 # ============================================================
 
 @api.get("/ubicaciones", response=List[UbicacionOutSchema])
@@ -273,7 +266,7 @@ def listar_ubicaciones(request):
 
 @api.post("/ubicaciones", response=UbicacionOutSchema, auth=session_auth)
 def crear_ubicacion(request, payload: UbicacionBaseSchema):
-    return Ubicacion.objects.create(**payload.dict())
+    return Ubicacion.objects.create(**schema_dump(payload))
 
 
 @api.get("/ubicaciones/{ubicacion_id}", response=UbicacionOutSchema)
@@ -291,8 +284,8 @@ def actualizar_ubicacion(request, ubicacion_id: int, payload: UbicacionBaseSchem
     except Ubicacion.DoesNotExist:
         raise HttpError(404, "Ubicación no encontrada")
 
-    for k, v in payload.dict().items():
-        setattr(ubicacion, k, v)
+    for key, value in schema_dump(payload).items():
+        setattr(ubicacion, key, value)
 
     ubicacion.save()
     return ubicacion
@@ -309,26 +302,47 @@ def eliminar_ubicacion(request, ubicacion_id: int):
 
 
 # ============================================================
-#   PARRILLAS – CRUD + FILTROS + PAGINACIÓN
+# PARRILLAS
 # ============================================================
 
 @api.get("/parrillas", response=List[ParrillaOutSchema])
-def listar_parrillas(request, categoria_id: int | None = None, ubicacion_id: int | None = None, min_puntaje: float | None = None):
-    qs = Parrilla.objects.filter(is_active=True)
+def listar_parrillas(
+    request,
+    categoria_id: Optional[int] = None,
+    ubicacion_id: Optional[int] = None,
+    min_puntaje: Optional[float] = None,
+):
+    qs = (
+        Parrilla.objects
+        .filter(is_active=True)
+        .select_related("categoria", "ubicacion")
+        .order_by("nombre")
+    )
 
-    if categoria_id:
+    if categoria_id is not None:
         qs = qs.filter(categoria_id=categoria_id)
-    if ubicacion_id:
+
+    if ubicacion_id is not None:
         qs = qs.filter(ubicacion_id=ubicacion_id)
-    if min_puntaje:
+
+    if min_puntaje is not None:
         qs = qs.filter(promedio_puntaje__gte=min_puntaje)
 
-    return [convert_parrilla(p) for p in qs.order_by("nombre")]
+    return [convert_parrilla(parrilla) for parrilla in qs]
 
 
 @api.get("/parrillas/paginadas", response=PaginatedResponse)
-def listar_parrillas_paginadas(request, page: int = Query(1), page_size: int = Query(10)):
-    qs = Parrilla.objects.filter(is_active=True).order_by("nombre")
+def listar_parrillas_paginadas(
+    request,
+    page: int = Query(1),
+    page_size: int = Query(10),
+):
+    qs = (
+        Parrilla.objects
+        .filter(is_active=True)
+        .select_related("categoria", "ubicacion")
+        .order_by("nombre")
+    )
     return paginate_queryset(qs, page, page_size, converter=convert_parrilla)
 
 
@@ -337,7 +351,7 @@ def crear_parrilla(request, payload: ParrillaBaseSchema):
     try:
         ubicacion = Ubicacion.objects.get(id=payload.ubicacion_id)
         categoria = Categoria.objects.get(id=payload.categoria_id)
-    except:
+    except (Ubicacion.DoesNotExist, Categoria.DoesNotExist):
         raise HttpError(404, "Categoría o ubicación inválida")
 
     parrilla = Parrilla.objects.create(
@@ -358,7 +372,11 @@ def crear_parrilla(request, payload: ParrillaBaseSchema):
 @api.get("/parrillas/{parrilla_id}", response=ParrillaOutSchema)
 def detalle_parrilla(request, parrilla_id: int):
     try:
-        parrilla = Parrilla.objects.get(id=parrilla_id)
+        parrilla = (
+            Parrilla.objects
+            .select_related("categoria", "ubicacion")
+            .get(id=parrilla_id)
+        )
     except Parrilla.DoesNotExist:
         raise HttpError(404, "Parrilla no encontrada")
 
@@ -375,18 +393,20 @@ def actualizar_parrilla(request, parrilla_id: int, payload: ParrillaBaseSchema):
     try:
         ubicacion = Ubicacion.objects.get(id=payload.ubicacion_id)
         categoria = Categoria.objects.get(id=payload.categoria_id)
-    except:
+    except (Ubicacion.DoesNotExist, Categoria.DoesNotExist):
         raise HttpError(404, "Categoría o ubicación inválida")
 
-    for k, v in payload.dict().items():
-        if k == "categoria_id":
-            parrilla.categoria = categoria
-        elif k == "ubicacion_id":
-            parrilla.ubicacion = ubicacion
-        else:
-            setattr(parrilla, k, v)
-
+    parrilla.nombre = payload.nombre
+    parrilla.descripcion = payload.descripcion
+    parrilla.direccion = payload.direccion
+    parrilla.telefono = payload.telefono
+    parrilla.sitio_web = payload.sitio_web
+    parrilla.ubicacion = ubicacion
+    parrilla.categoria = categoria
+    parrilla.is_active = payload.is_active
+    parrilla.promedio_puntaje = payload.promedio_puntaje
     parrilla.save()
+
     return convert_parrilla(parrilla)
 
 
@@ -400,34 +420,8 @@ def eliminar_parrilla(request, parrilla_id: int):
     return {"success": True}
 
 
-# Conversor a esquema anidado simple
-def convert_parrilla(p):
-    return {
-        "id": p.id,
-        "nombre": p.nombre,
-        "descripcion": p.descripcion,
-        "direccion": p.direccion,
-        "telefono": p.telefono,
-        "sitio_web": p.sitio_web,
-        "is_active": p.is_active,
-        "promedio_puntaje": p.promedio_puntaje,
-        "created_at": p.created_at,
-        "updated_at": p.updated_at,
-
-        "categoria": {
-            "id": p.categoria.id,
-            "nombre": p.categoria.nombre,
-        },
-        "ubicacion": {
-            "id": p.ubicacion.id,
-            "nombre_ciudad": p.ubicacion.nombre_ciudad,
-            "nombre_barrio": p.ubicacion.nombre_barrio,
-        }
-    }
-
-
 # ============================================================
-#   RESEÑAS – CRUD
+# RESEÑAS
 # ============================================================
 
 @api.get("/resenas", response=List[ResenaOutSchema])
@@ -440,10 +434,9 @@ def crear_resena(request, payload: ResenaBaseSchema):
     try:
         usuario = User.objects.get(id=payload.usuario_id)
         parrilla = Parrilla.objects.get(id=payload.parrilla_id)
-    except:
+    except (User.DoesNotExist, Parrilla.DoesNotExist):
         raise HttpError(404, "Usuario o parrilla no encontrada")
 
-    # Solo 1 reseña por usuario/parrilla
     if Resena.objects.filter(usuario=usuario, parrilla=parrilla).exists():
         raise HttpError(400, "Ya existe una reseña de este usuario para esta parrilla")
 
@@ -470,11 +463,16 @@ def actualizar_resena(request, resena_id: int, payload: ResenaBaseSchema):
         resena = Resena.objects.get(id=resena_id)
         usuario = User.objects.get(id=payload.usuario_id)
         parrilla = Parrilla.objects.get(id=payload.parrilla_id)
-    except:
+    except (Resena.DoesNotExist, User.DoesNotExist, Parrilla.DoesNotExist):
         raise HttpError(404, "Datos inválidos")
 
-    # Evita duplicados
-    if Resena.objects.filter(usuario=usuario, parrilla=parrilla).exclude(id=resena_id).exists():
+    existe_otra = (
+        Resena.objects
+        .filter(usuario=usuario, parrilla=parrilla)
+        .exclude(id=resena_id)
+        .exists()
+    )
+    if existe_otra:
         raise HttpError(400, "Ya existe otra reseña para esta parrilla")
 
     resena.usuario = usuario
@@ -498,7 +496,7 @@ def eliminar_resena(request, resena_id: int):
 
 
 # ============================================================
-#   PROMOCIONES – CRUD
+# PROMOCIONES
 # ============================================================
 
 @api.get("/promociones", response=List[PromocionOutSchema])
@@ -545,21 +543,21 @@ def detalle_promocion(request, promo_id: int):
 @api.put("/promociones/{promo_id}", response=PromocionOutSchema, auth=session_auth)
 def actualizar_promocion(request, promo_id: int, payload: PromocionBaseSchema):
     try:
-        promo = Promocion.objects.get(id=promo_id)
+        promocion = Promocion.objects.get(id=promo_id)
         parrilla = Parrilla.objects.get(id=payload.parrilla_id)
-    except:
+    except (Promocion.DoesNotExist, Parrilla.DoesNotExist):
         raise HttpError(404, "Datos inválidos")
 
-    promo.parrilla = parrilla
-    promo.titulo = payload.titulo
-    promo.descripcion = payload.descripcion
-    promo.precio_promocional = payload.precio_promocional
-    promo.fecha_inicio = payload.fecha_inicio
-    promo.fecha_fin = payload.fecha_fin
-    promo.is_active = payload.is_active
-    promo.save()
+    promocion.parrilla = parrilla
+    promocion.titulo = payload.titulo
+    promocion.descripcion = payload.descripcion
+    promocion.precio_promocional = payload.precio_promocional
+    promocion.fecha_inicio = payload.fecha_inicio
+    promocion.fecha_fin = payload.fecha_fin
+    promocion.is_active = payload.is_active
+    promocion.save()
 
-    return promo
+    return promocion
 
 
 @api.delete("/promociones/{promo_id}", auth=session_auth)

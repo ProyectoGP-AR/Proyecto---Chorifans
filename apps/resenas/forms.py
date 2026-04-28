@@ -60,3 +60,24 @@ class RespuestaResenaForm(forms.ModelForm):
             "texto": "Respuesta de la parrilla",
             "valoracion": "Valoración de la reseña",
         }
+
+
+class ResenaGestionForm(forms.ModelForm):
+    class Meta:
+        model = Resena
+        fields = [
+            "usuario",
+            "parrilla",
+            "puntaje",
+            "comentario",
+            "is_active",
+        ]
+        widgets = {
+            "usuario": forms.Select(attrs={"class": "gestion-form-input"}),
+            "parrilla": forms.Select(attrs={"class": "gestion-form-input"}),
+            "puntaje": forms.Select(attrs={"class": "gestion-form-input"}),
+            "comentario": forms.Textarea(
+                attrs={"class": "gestion-form-input", "rows": 4}
+            ),
+            "is_active": forms.CheckboxInput(attrs={"class": "gestion-form-checkbox"}),
+        }

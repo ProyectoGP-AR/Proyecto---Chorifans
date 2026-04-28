@@ -1,0 +1,67 @@
+{% extends "gestion/base_gestion.html" %}
+
+{% block title %}Gestión de Categorías | ChoriFans{% endblock %}
+
+{% block content %}
+<section class="gestion-dashboard">
+  <div class="gestion-dashboard__hero">
+    <span class="gestion-dashboard__eyebrow">Módulo de gestión</span>
+    <h2 class="gestion-dashboard__title">Categorías</h2>
+    <p class="gestion-dashboard__description">
+      Desde acá podés ver, crear, editar o eliminar categorías registradas en ChoriFans.
+    </p>
+  </div>
+
+  <div class="gestion-top-actions">
+    <a href="{% url 'gestion:dashboard' %}" class="crud-btn crud-btn--view">
+      Volver al panel
+    </a>
+
+    <a href="{% url 'gestion:categorias_crear' %}" class="crud-btn crud-btn--create">
+      Crear categoría
+    </a>
+  </div>
+
+  <div class="gestion-table-wrapper">
+    <table class="gestion-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Slug</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for categoria in categorias %}
+          <tr>
+            <td>{{ categoria.id }}</td>
+            <td>{{ categoria.nombre }}</td>
+            <td>{{ categoria.slug }}</td>
+            <td>
+              {% if categoria.is_active %}
+                <span class="estado-badge estado-badge--activo">Activa</span>
+              {% else %}
+                <span class="estado-badge estado-badge--inactivo">Inactiva</span>
+              {% endif %}
+            </td>
+            <td class="gestion-table__actions">
+              <a href="{% url 'gestion:categorias_editar' categoria.pk %}" class="crud-btn crud-btn--edit">
+                Editar
+              </a>
+              <a href="{% url 'gestion:categorias_eliminar' categoria.pk %}" class="crud-btn crud-btn--delete">
+                Eliminar
+              </a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5">No hay categorías cargadas todavía.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

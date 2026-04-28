@@ -1,0 +1,83 @@
+{% extends "gestion/base_gestion.html" %}
+
+{% block title %}Gestión de Ubicaciones | ChoriFans{% endblock %}
+
+{% block content %}
+<section class="gestion-dashboard">
+  <div class="gestion-dashboard__hero">
+    <span class="gestion-dashboard__eyebrow">Módulo de gestión</span>
+    <h2 class="gestion-dashboard__title">Ubicaciones</h2>
+    <p class="gestion-dashboard__description">
+      Desde acá podés ver, crear, editar o eliminar ubicaciones registradas en ChoriFans.
+    </p>
+  </div>
+
+  <div class="gestion-top-actions">
+    <a href="{% url 'gestion:dashboard' %}" class="crud-btn crud-btn--view">
+      Volver al panel
+    </a>
+
+    <a href="{% url 'gestion:ubicaciones_crear' %}" class="crud-btn crud-btn--create">
+      Crear ubicación
+    </a>
+  </div>
+
+  <div class="gestion-table-wrapper">
+    <table class="gestion-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Ciudad</th>
+          <th>Barrio</th>
+          <th>Latitud</th>
+          <th>Longitud</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ubicacion in ubicaciones %}
+          <tr>
+            <td>{{ ubicacion.id }}</td>
+            <td>{{ ubicacion.nombre_ciudad }}</td>
+            <td>{{ ubicacion.nombre_barrio }}</td>
+            <td>
+              {% if ubicacion.latitud %}
+                {{ ubicacion.latitud }}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+            <td>
+              {% if ubicacion.longitud %}
+                {{ ubicacion.longitud }}
+              {% else %}
+                —
+              {% endif %}
+            </td>
+            <td>
+              {% if ubicacion.is_active %}
+                <span class="estado-badge estado-badge--activo">Activa</span>
+              {% else %}
+                <span class="estado-badge estado-badge--inactivo">Inactiva</span>
+              {% endif %}
+            </td>
+            <td class="gestion-table__actions">
+              <a href="{% url 'gestion:ubicaciones_editar' ubicacion.pk %}" class="crud-btn crud-btn--edit">
+                Editar
+              </a>
+              <a href="{% url 'gestion:ubicaciones_eliminar' ubicacion.pk %}" class="crud-btn crud-btn--delete">
+                Eliminar
+              </a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="7">No hay ubicaciones cargadas todavía.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}

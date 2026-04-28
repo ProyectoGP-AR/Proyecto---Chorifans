@@ -16,6 +16,11 @@ class UserLoginView(LoginView):
     redirect_authenticated_user = True
 
     def get_success_url(self):
+        user = self.request.user
+
+        if user.is_staff:
+            return reverse_lazy("gestion:dashboard")
+
         return reverse_lazy("home")
 
 
