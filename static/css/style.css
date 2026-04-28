@@ -3404,3 +3404,18 @@ img[src*="sin-foto"] {
     letter-spacing: 0 !important;
   }
 }
+
+
+@media (max-width: 640px) {
+  body:has(.auth-container) .auth-buttons {
+    display: none !important;
+  }
+
+  body:has(.auth-container) .header-content {
+    gap: 0.5rem !important;
+  }
+
+  body:has(.auth-container) nav ul {
+    justify-content: center !important;
+  }
+}
