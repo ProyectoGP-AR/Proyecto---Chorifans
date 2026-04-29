@@ -39,7 +39,7 @@
             <div class="logo-text">ChoriFans</div>
           </div>
 
-          <nav>
+          <nav class="desktop-nav">
             <ul>
               <li><a href="{% url 'home' %}">Home</a></li>
               <li><a href="{% url 'parrillas:lista' %}">Parrillas</a></li>
@@ -69,6 +69,77 @@
           <div class="auth-buttons">
             {% if user.is_authenticated %}
               <span class="header-username">Hola, {{ user.username }}</span>
+              <a
+                href="{% url 'accounts:logout' %}"
+                class="auth-button login-btn"
+              >
+                Cerrar sesión
+              </a>
+            {% else %}
+              <a
+                href="{% url 'accounts:login' %}"
+                class="auth-button login-btn"
+              >
+                Iniciar sesión
+              </a>
+              <a
+                href="{% url 'accounts:register' %}"
+                class="auth-button register-btn"
+              >
+                Registrarse
+              </a>
+            {% endif %}
+          </div>
+
+          <button
+            id="mobile-menu-toggle"
+            class="mobile-menu-toggle"
+            type="button"
+            aria-label="Abrir menú de navegación"
+            aria-controls="mobile-menu-panel"
+            aria-expanded="false"
+          >
+            <span></span>
+            <span></span>
+            <span></span>
+          </button>
+        </div>
+
+        <div
+          id="mobile-menu-panel"
+          class="mobile-menu-panel"
+          aria-hidden="true"
+        >
+          <nav class="mobile-menu-nav">
+            <ul>
+              <li><a href="{% url 'home' %}">Home</a></li>
+              <li><a href="{% url 'parrillas:lista' %}">Parrillas</a></li>
+              <li><a href="{% url 'parrillas:buscar' %}">Buscar</a></li>
+              <li><a href="{% url 'categorias:lista' %}">Categorías</a></li>
+              <li><a href="{% url 'ubicaciones:lista' %}">Ubicaciones</a></li>
+              <li><a href="{% url 'promociones:lista' %}">Promociones</a></li>
+
+              {% if user.is_authenticated %}
+                {% if user.profile.es_duenio_parrilla and user.profile.parrilla_asociada %}
+                  <li>
+                    <a href="{% url 'resenas:valorar_resenas' %}">
+                      Valorar reseñas
+                    </a>
+                  </li>
+                {% else %}
+                  <li>
+                    <a href="{% url 'resenas:mis_resenas' %}">
+                      Mis reseñas
+                    </a>
+                  </li>
+                {% endif %}
+              {% endif %}
+            </ul>
+          </nav>
+
+          <div class="mobile-menu-auth">
+            {% if user.is_authenticated %}
+              <span class="mobile-menu-user">Hola, {{ user.username }}</span>
               <a
                 href="{% url 'accounts:logout' %}"
                 class="auth-button login-btn"
@@ -131,6 +202,7 @@
         "
       >
         <button
+          id="chori-bot-bubble-close"
           type="button"
           aria-label="Cerrar mensaje de Chori Bot"
           onclick="return closeChoriBotBubble(event)"
@@ -399,64 +471,79 @@
     </footer>
 
     <script>
-      window.CHORI_BOT_CONTEXT = {
-        currentPath: "{{ request.path|escapejs }}",
-        currentView: "{% if request.resolver_match %}{{ request.resolver_match.view_name|escapejs }}{% endif %}",
-        isAuthenticated: {% if user.is_authenticated %}true{% else %}false{% endif %},
-        username: "{% if user.is_authenticated %}{{ user.username|escapejs }}{% endif %}"
-      };
+  window.CHORI_BOT_CONTEXT = {
+    currentPath: "{{ request.path|escapejs }}",
+    currentView: "{% if request.resolver_match %}{{ request.resolver_match.view_name|escapejs }}{% endif %}",
+    isAuthenticated: {% if user.is_authenticated %}true{% else %}false{% endif %},
+    username: "{% if user.is_authenticated %}{{ user.username|escapejs }}{% endif %}"
+  };
 
-      window.CHORI_BOT_BUBBLE_DISMISSED = false;
+  window.CHORI_BOT_BUBBLE_DISMISSED = false;
 
-      function openChoriBotPanel() {
-        const panel = document.getElementById("chori-bot-panel");
-        const bubble = document.getElementById("chori-bot-bubble");
+  function openChoriBotPanel() {
+    const panel = document.getElementById("chori-bot-panel");
+    const bubble = document.getElementById("chori-bot-bubble");
 
-        if (panel) {
-          panel.style.display = "flex";
-          panel.style.flexDirection = "column";
-        }
+    if (panel) {
+      panel.style.display = "flex";
+      panel.style.flexDirection = "column";
+    }
 
-        if (bubble) {
-          bubble.style.display = "none";
-        }
+    if (bubble) {
+      bubble.style.display = "none";
+    }
+
+    if (window.clampChoriBotWidgetToViewport) {
+      requestAnimationFrame(() => {
+        window.clampChoriBotWidgetToViewport();
+      });
+    }
+  }
+
+  function closeChoriBotPanel() {
+    const panel = document.getElementById("chori-bot-panel");
+    const bubble = document.getElementById("chori-bot-bubble");
+
+    if (panel) {
+      panel.style.display = "none";
+    }
+
+    if (bubble && !window.CHORI_BOT_BUBBLE_DISMISSED) {
+      bubble.style.display = "block";
+      bubble.style.visibility = "visible";
+      bubble.style.pointerEvents = "auto";
+    }
+
+    if (window.clampChoriBotWidgetToViewport) {
+      requestAnimationFrame(() => {
+        window.clampChoriBotWidgetToViewport();
+      });
+    }
+  }
+
+  function closeChoriBotBubble(event) {
+    if (event) {
+      if (event.preventDefault) {
+        event.preventDefault();
       }
-
-      function closeChoriBotPanel() {
-        const panel = document.getElementById("chori-bot-panel");
-        const bubble = document.getElementById("chori-bot-bubble");
-
-        if (panel) {
-          panel.style.display = "none";
-        }
-
-        if (bubble && !window.CHORI_BOT_BUBBLE_DISMISSED) {
-          bubble.style.display = "block";
-        }
+      if (event.stopPropagation) {
+        event.stopPropagation();
       }
+    }
 
-      function closeChoriBotBubble(event) {
-        if (event) {
-          if (event.preventDefault) {
-            event.preventDefault();
-          }
-          if (event.stopPropagation) {
-            event.stopPropagation();
-          }
-        }
+    const bubble = document.getElementById("chori-bot-bubble");
+    if (bubble) {
+      bubble.style.display = "none";
+      bubble.style.visibility = "hidden";
+      bubble.style.pointerEvents = "none";
+    }
 
-        const bubble = document.getElementById("chori-bot-bubble");
-        if (bubble) {
-          bubble.style.display = "none";
-          bubble.style.visibility = "hidden";
-          bubble.style.pointerEvents = "none";
-        }
-
-        window.CHORI_BOT_BUBBLE_DISMISSED = true;
-        return false;
-      }
-    </script>
-
+    window.CHORI_BOT_BUBBLE_DISMISSED = true;
+    return false;
+  }
+</script>
+    <script src="{% static 'js/chori-bot-drag.js' %}?v=1" defer></script>
+    <script src="{% static 'js/mobile-menu.js' %}?v=1" defer></script>
     <script src="{% static 'js/chatbot.js' %}?v=21" defer></script>
   </body>
 </html>
