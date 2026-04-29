@@ -110,6 +110,12 @@
           class="mobile-menu-panel"
           aria-hidden="true"
         >
+          {% if user.is_authenticated %}
+            <div class="mobile-menu-userbox">
+              <span class="mobile-menu-user-name">Hola, {{ user.username }}</span>
+            </div>
+          {% endif %}
+
           <nav class="mobile-menu-nav">
             <ul>
               <li><a href="{% url 'home' %}">Home</a></li>
@@ -139,7 +145,6 @@
 
           <div class="mobile-menu-auth">
             {% if user.is_authenticated %}
-              <span class="mobile-menu-user">Hola, {{ user.username }}</span>
               <a
                 href="{% url 'accounts:logout' %}"
                 class="auth-button login-btn"
@@ -471,77 +476,78 @@
     </footer>
 
     <script>
-  window.CHORI_BOT_CONTEXT = {
-    currentPath: "{{ request.path|escapejs }}",
-    currentView: "{% if request.resolver_match %}{{ request.resolver_match.view_name|escapejs }}{% endif %}",
-    isAuthenticated: {% if user.is_authenticated %}true{% else %}false{% endif %},
-    username: "{% if user.is_authenticated %}{{ user.username|escapejs }}{% endif %}"
-  };
+      window.CHORI_BOT_CONTEXT = {
+        currentPath: "{{ request.path|escapejs }}",
+        currentView: "{% if request.resolver_match %}{{ request.resolver_match.view_name|escapejs }}{% endif %}",
+        isAuthenticated: {% if user.is_authenticated %}true{% else %}false{% endif %},
+        username: "{% if user.is_authenticated %}{{ user.username|escapejs }}{% endif %}"
+      };
 
-  window.CHORI_BOT_BUBBLE_DISMISSED = false;
+      window.CHORI_BOT_BUBBLE_DISMISSED = false;
 
-  function openChoriBotPanel() {
-    const panel = document.getElementById("chori-bot-panel");
-    const bubble = document.getElementById("chori-bot-bubble");
+      function openChoriBotPanel() {
+        const panel = document.getElementById("chori-bot-panel");
+        const bubble = document.getElementById("chori-bot-bubble");
 
-    if (panel) {
-      panel.style.display = "flex";
-      panel.style.flexDirection = "column";
-    }
+        if (panel) {
+          panel.style.display = "flex";
+          panel.style.flexDirection = "column";
+        }
 
-    if (bubble) {
-      bubble.style.display = "none";
-    }
+        if (bubble) {
+          bubble.style.display = "none";
+        }
 
-    if (window.clampChoriBotWidgetToViewport) {
-      requestAnimationFrame(() => {
-        window.clampChoriBotWidgetToViewport();
-      });
-    }
-  }
-
-  function closeChoriBotPanel() {
-    const panel = document.getElementById("chori-bot-panel");
-    const bubble = document.getElementById("chori-bot-bubble");
-
-    if (panel) {
-      panel.style.display = "none";
-    }
-
-    if (bubble && !window.CHORI_BOT_BUBBLE_DISMISSED) {
-      bubble.style.display = "block";
-      bubble.style.visibility = "visible";
-      bubble.style.pointerEvents = "auto";
-    }
-
-    if (window.clampChoriBotWidgetToViewport) {
-      requestAnimationFrame(() => {
-        window.clampChoriBotWidgetToViewport();
-      });
-    }
-  }
-
-  function closeChoriBotBubble(event) {
-    if (event) {
-      if (event.preventDefault) {
-        event.preventDefault();
+        if (window.clampChoriBotWidgetToViewport) {
+          requestAnimationFrame(() => {
+            window.clampChoriBotWidgetToViewport();
+          });
+        }
       }
-      if (event.stopPropagation) {
-        event.stopPropagation();
+
+      function closeChoriBotPanel() {
+        const panel = document.getElementById("chori-bot-panel");
+        const bubble = document.getElementById("chori-bot-bubble");
+
+        if (panel) {
+          panel.style.display = "none";
+        }
+
+        if (bubble && !window.CHORI_BOT_BUBBLE_DISMISSED) {
+          bubble.style.display = "block";
+          bubble.style.visibility = "visible";
+          bubble.style.pointerEvents = "auto";
+        }
+
+        if (window.clampChoriBotWidgetToViewport) {
+          requestAnimationFrame(() => {
+            window.clampChoriBotWidgetToViewport();
+          });
+        }
       }
-    }
 
-    const bubble = document.getElementById("chori-bot-bubble");
-    if (bubble) {
-      bubble.style.display = "none";
-      bubble.style.visibility = "hidden";
-      bubble.style.pointerEvents = "none";
-    }
+      function closeChoriBotBubble(event) {
+        if (event) {
+          if (event.preventDefault) {
+            event.preventDefault();
+          }
+          if (event.stopPropagation) {
+            event.stopPropagation();
+          }
+        }
 
-    window.CHORI_BOT_BUBBLE_DISMISSED = true;
-    return false;
-  }
-</script>
+        const bubble = document.getElementById("chori-bot-bubble");
+        if (bubble) {
+          bubble.style.display = "none";
+          bubble.style.visibility = "hidden";
+          bubble.style.pointerEvents = "none";
+        }
+
+        window.CHORI_BOT_BUBBLE_DISMISSED = true;
+        return false;
+      }
+    </script>
+
     <script src="{% static 'js/chori-bot-drag.js' %}?v=1" defer></script>
     <script src="{% static 'js/mobile-menu.js' %}?v=1" defer></script>
     <script src="{% static 'js/chatbot.js' %}?v=21" defer></script>
