@@ -3689,3 +3689,130 @@ img[src*="sin-foto"] {
   color: var(--accent-orange);
   line-height: 1.2;
 }
+
+
+
+/* ======================================
+   UBICACIONES – FILTROS
+   ====================================== */
+
+.ubicaciones-filtros-card {
+  max-width: 760px;
+  margin: 0 auto 24px;
+  padding: 20px 22px;
+  background: rgba(24, 24, 24, 0.96);
+  border: 1px solid rgba(255, 152, 0, 0.18);
+  border-radius: 20px;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+}
+
+.ubicaciones-filtros-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 16px;
+}
+
+.ubicaciones-filtro-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ubicaciones-filtro-group label {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--extra-light-gray);
+  text-align: left;
+}
+
+.ubicacion-search-input,
+.ubicacion-region-select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 152, 0, 0.18);
+  background: rgba(66, 66, 66, 0.96);
+  color: var(--extra-light-gray);
+  font-family: inherit;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+
+.ubicacion-search-input:focus,
+.ubicacion-region-select:focus {
+  outline: none;
+  border-color: var(--accent-orange);
+  box-shadow: 0 0 0 1px rgba(255, 152, 0, 0.28);
+}
+
+/* ======================================
+   UBICACIONES – CARD SIMPLIFICADA
+   ====================================== */
+
+.ubicacion-item {
+  gap: 8px;
+}
+
+.ubicacion-titulo {
+  margin: 0;
+}
+
+.ubicacion-titulo a {
+  font-size: 24px;
+}
+
+.ubicacion-region-badge {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 152, 0, 0.14);
+  border: 1px solid rgba(255, 152, 0, 0.24);
+  color: var(--accent-orange);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.ubicaciones-empty-state {
+  margin-top: 10px;
+}
+
+.ubicaciones-empty-card {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 22px 20px;
+  background: rgba(24, 24, 24, 0.96);
+  border: 1px solid rgba(255, 152, 0, 0.18);
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.35);
+}
+
+.ubicaciones-empty-card p {
+  margin: 0;
+  color: var(--extra-light-gray);
+}
+
+/* ======================================
+   UBICACIONES – RESPONSIVE
+   ====================================== */
+
+@media (max-width: 768px) {
+  .ubicaciones-filtros-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ubicaciones-filtros-card {
+    padding: 18px 16px;
+    border-radius: 18px;
+  }
+
+  .ubicacion-titulo a {
+    font-size: 22px;
+  }
+}

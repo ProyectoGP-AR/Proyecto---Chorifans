@@ -3,32 +3,151 @@
 {% block title %}Ubicaciones - ChoriFans{% endblock %}
 
 {% block content %}
-  <section class="ubicaciones-lista-container">
-    <h1>Ubicaciones</h1>
-    <p class="ubicaciones-intro">
-      Elegí un barrio o ciudad para ver las parrillas que hay en esa zona.
-    </p>
+<div class="ubicaciones-lista-container">
+  <h1>Ubicaciones</h1>
+  <p class="ubicaciones-intro">
+    Explorá las localidades disponibles y filtrá por nombre o región.
+  </p>
 
-    {% if ubicaciones %}
-      <ul class="ubicaciones-lista">
-        {% for u in ubicaciones %}
-          <li class="ubicacion-item">
-            <h2 class="ubicacion-titulo">
-              <a href="{% url 'ubicaciones:detalle' u.id %}">
-                {{ u.nombre_barrio }} - {{ u.nombre_ciudad }}
-              </a>
-            </h2>
+  <div class="ubicaciones-filtros-card">
+    <div class="ubicaciones-filtros-grid">
+      <div class="ubicaciones-filtro-group">
+        <label for="ubicacion-search">Buscar ubicación</label>
+        <input
+          type="text"
+          id="ubicacion-search"
+          class="ubicacion-search-input"
+          placeholder="Ej: Avellaneda, Palermo, La Boca..."
+          list="ubicaciones-sugerencias"
+          autocomplete="off"
+        />
+        <datalist id="ubicaciones-sugerencias">
+          {% for ubicacion in ubicaciones %}
+            <option value="{{ ubicacion.nombre_barrio }}"></option>
+          {% endfor %}
+        </datalist>
+      </div>
 
-            {% if u.descripcion %}
-              <p class="ubicacion-descripcion">
-                {{ u.descripcion }}
-              </p>
-            {% endif %}
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p>No hay ubicaciones cargadas todavía.</p>
-    {% endif %}
-  </section>
+      <div class="ubicaciones-filtro-group">
+        <label for="ubicacion-region">Región</label>
+        <select id="ubicacion-region" class="ubicacion-region-select">
+          <option value="">Todas</option>
+          <option value="CABA">CABA</option>
+          <option value="GBA">GBA</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <ul class="ubicaciones-lista" id="ubicaciones-lista">
+    {% for ubicacion in ubicaciones %}
+      <li
+        class="ubicacion-item ubicacion-item-filtrable"
+        data-nombre="{{ ubicacion.nombre_barrio|lower }}"
+        data-region="{% if ubicacion.nombre_ciudad == 'Ciudad Autónoma de Buenos Aires' %}caba{% elif ubicacion.nombre_ciudad == 'Provincia de Buenos Aires' %}gba{% else %}otras{% endif %}"
+      >
+        <h2 class="ubicacion-titulo">
+          <a href="{% url 'ubicaciones:detalle' ubicacion.pk %}">
+            {{ ubicacion.nombre_barrio }}
+          </a>
+        </h2>
+
+        <p class="ubicacion-region-badge">
+          {% if ubicacion.nombre_ciudad == 'Ciudad Autónoma de Buenos Aires' %}
+            CABA
+          {% elif ubicacion.nombre_ciudad == 'Provincia de Buenos Aires' %}
+            GBA
+          {% else %}
+            {{ ubicacion.nombre_ciudad }}
+          {% endif %}
+        </p>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <div id="ubicaciones-empty-state" class="ubicaciones-empty-state" hidden>
+    <div class="ubicaciones-empty-card">
+      <p>No se encontraron ubicaciones con esos filtros.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const input = document.getElementById("ubicacion-search");
+    const select = document.getElementById("ubicacion-region");
+    const lista = document.getElementById("ubicaciones-lista");
+    const cards = Array.from(document.querySelectorAll(".ubicacion-item-filtrable"));
+    const emptyState = document.getElementById("ubicaciones-empty-state");
+
+    function normalizar(texto) {
+      return (texto || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim();
+    }
+
+    function puntajeCoincidencia(nombre, texto) {
+      if (!texto) return 999;
+      if (nombre === texto) return 0;
+      if (nombre.startsWith(texto)) return 1;
+      if (nombre.includes(texto)) return 2;
+      return 9999;
+    }
+
+    function filtrarUbicaciones() {
+      const texto = normalizar(input.value);
+      const region = normalizar(select.value);
+
+      let visibles = [];
+
+      cards.forEach((card) => {
+        const nombre = normalizar(card.dataset.nombre);
+        const cardRegion = normalizar(card.dataset.region);
+
+        const coincideTexto = !texto || nombre.includes(texto);
+        const coincideRegion = !region || cardRegion === region;
+
+        if (coincideTexto && coincideRegion) {
+          const score = puntajeCoincidencia(nombre, texto);
+          visibles.push({ card, nombre, score });
+          card.style.display = "";
+        } else {
+          card.style.display = "none";
+        }
+      });
+
+      visibles.sort((a, b) => {
+        if (a.score !== b.score) return a.score - b.score;
+        return a.nombre.localeCompare(b.nombre, "es");
+      });
+
+      visibles.forEach((item) => {
+        lista.appendChild(item.card);
+      });
+
+      emptyState.hidden = visibles.length !== 0;
+
+      return visibles;
+    }
+
+    input.addEventListener("input", filtrarUbicaciones);
+    select.addEventListener("change", filtrarUbicaciones);
+
+    input.addEventListener("keydown", function (event) {
+      if (event.key !== "Enter") return;
+
+      const visibles = filtrarUbicaciones();
+
+      if (visibles.length === 1) {
+        event.preventDefault();
+        const link = visibles[0].card.querySelector("a");
+        if (link) {
+          window.location.href = link.href;
+        }
+      }
+    });
+  });
+</script>
 {% endblock %}
