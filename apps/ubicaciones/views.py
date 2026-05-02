@@ -1,8 +1,8 @@
-from django.views.generic import ListView, DetailView
 from django.shortcuts import get_object_or_404
+from django.views.generic import DetailView, ListView
 
-from .models import Ubicacion
 from apps.parrillas.models import Parrilla
+from .models import Ubicacion
 
 
 class UbicacionListView(ListView):
@@ -17,13 +17,26 @@ class UbicacionListView(ListView):
     def get_queryset(self):
         """
         Devuelve solo ubicaciones activas.
-        Ordenamos por ciudad y luego barrio.
+        Ahora ordenamos por zona y luego por barrio.
         """
         return (
             Ubicacion.objects
             .filter(is_active=True)
-            .order_by("nombre_ciudad", "nombre_barrio")
+            .order_by("zona", "nombre_barrio")
         )
+
+    def get_context_data(self, **kwargs):
+        """
+        Enviamos las zonas disponibles para usarlas en el filtro del template.
+        """
+        context = super().get_context_data(**kwargs)
+        context["zonas_disponibles"] = [
+            {"value": "CABA", "label": "CABA"},
+            {"value": "GBA_NORTE", "label": "GBA Norte"},
+            {"value": "GBA_OESTE", "label": "GBA Oeste"},
+            {"value": "GBA_SUR", "label": "GBA Sur"},
+        ]
+        return context
 
 
 class UbicacionDetailView(DetailView):
@@ -33,7 +46,7 @@ class UbicacionDetailView(DetailView):
     model = Ubicacion
     template_name = "ubicaciones/detalle.html"
     context_object_name = "ubicacion"
-    pk_url_kwarg = "pk"                           # Recibe el ID numérico
+    pk_url_kwarg = "pk"
 
     def get_object(self, queryset=None):
         """
@@ -59,5 +72,5 @@ class UbicacionDetailView(DetailView):
             .order_by("nombre")
         )
 
-        context["parrillas"] = parrillas           # Se envía al template
+        context["parrillas"] = parrillas
         return context

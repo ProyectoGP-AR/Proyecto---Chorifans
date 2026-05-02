@@ -6,8 +6,9 @@ from .models import Ubicacion
 class UbicacionAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "nombre_ciudad",
         "nombre_barrio",
+        "zona",
+        "nombre_ciudad",
         "latitud",
         "longitud",
         "is_active",
@@ -18,16 +19,18 @@ class UbicacionAdmin(admin.ModelAdmin):
     search_fields = (
         "nombre_ciudad",
         "nombre_barrio",
+        "zona",
         "google_maps_url",
     )
 
     list_filter = (
         "is_active",
+        "zona",
         "nombre_ciudad",
     )
 
     ordering = (
-        "nombre_ciudad",
+        "zona",
         "nombre_barrio",
     )
 
@@ -37,6 +40,7 @@ class UbicacionAdmin(admin.ModelAdmin):
     )
 
     list_editable = (
+        "zona",
         "is_active",
     )
 
@@ -49,6 +53,7 @@ class UbicacionAdmin(admin.ModelAdmin):
                 "fields": (
                     "nombre_ciudad",
                     "nombre_barrio",
+                    "zona",
                     "is_active",
                 )
             },

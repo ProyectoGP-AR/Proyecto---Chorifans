@@ -29,15 +29,26 @@
     <header>
       <div class="container">
         <div class="header-content">
-          <div class="logo">
-            <div class="logo-icon">
-              <img
-                src="{% static 'css/img/logo_chorifans.png' %}"
-                alt="ChoriFans logo"
-              />
-            </div>
-            <div class="logo-text">ChoriFans</div>
-          </div>
+         <div class="logo">
+  <div class="logo-icon logo-icon--intro">
+    <img
+      src="{% static 'css/img/logo_chorifans.png' %}"
+      alt="ChoriFans logo"
+    />
+  </div>
+
+  <div class="logo-text logo-text--intro" aria-label="ChoriFans">
+    <span class="logo-letter" style="--char-index: 0;">C</span>
+    <span class="logo-letter" style="--char-index: 1;">h</span>
+    <span class="logo-letter" style="--char-index: 2;">o</span>
+    <span class="logo-letter" style="--char-index: 3;">r</span>
+    <span class="logo-letter" style="--char-index: 4;">i</span>
+    <span class="logo-letter" style="--char-index: 5;">F</span>
+    <span class="logo-letter" style="--char-index: 6;">a</span>
+    <span class="logo-letter" style="--char-index: 7;">n</span>
+    <span class="logo-letter" style="--char-index: 8;">s</span>
+  </div>
+</div>
 
           <nav class="desktop-nav">
             <ul>
@@ -546,6 +557,38 @@
         window.CHORI_BOT_BUBBLE_DISMISSED = true;
         return false;
       }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const toggle = document.getElementById("chori-bot-toggle");
+        const bubble = document.getElementById("chori-bot-bubble");
+        const panel = document.getElementById("chori-bot-panel");
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        if (!toggle || !bubble) {
+          return;
+        }
+
+        if (reduceMotion) {
+          toggle.classList.add("chori-bot-intro-icon-show");
+          bubble.classList.add("chori-bot-intro-bubble-show");
+          return;
+        }
+
+        toggle.classList.add("chori-bot-intro-icon-hidden");
+        bubble.classList.add("chori-bot-intro-bubble-hidden");
+
+        window.setTimeout(function () {
+          toggle.classList.add("chori-bot-intro-icon-show");
+        }, 2000);
+
+        window.setTimeout(function () {
+          const panelAbierto = panel && panel.style.display === "flex";
+
+          if (!window.CHORI_BOT_BUBBLE_DISMISSED && !panelAbierto) {
+            bubble.classList.add("chori-bot-intro-bubble-show");
+          }
+        }, 3000);
+      });
     </script>
 
     <script src="{% static 'js/chori-bot-drag.js' %}?v=1" defer></script>

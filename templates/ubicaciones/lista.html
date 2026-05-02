@@ -6,7 +6,7 @@
 <div class="ubicaciones-lista-container">
   <h1>Ubicaciones</h1>
   <p class="ubicaciones-intro">
-    Explorá las localidades disponibles y filtrá por nombre o región.
+    Explorá las localidades disponibles y filtrá por nombre o zona.
   </p>
 
   <div class="ubicaciones-filtros-card">
@@ -29,11 +29,12 @@
       </div>
 
       <div class="ubicaciones-filtro-group">
-        <label for="ubicacion-region">Región</label>
+        <label for="ubicacion-region">Zona</label>
         <select id="ubicacion-region" class="ubicacion-region-select">
           <option value="">Todas</option>
-          <option value="CABA">CABA</option>
-          <option value="GBA">GBA</option>
+          {% for zona in zonas_disponibles %}
+            <option value="{{ zona.value|lower }}">{{ zona.label }}</option>
+          {% endfor %}
         </select>
       </div>
     </div>
@@ -42,26 +43,24 @@
   <ul class="ubicaciones-lista" id="ubicaciones-lista">
     {% for ubicacion in ubicaciones %}
       <li
-        class="ubicacion-item ubicacion-item-filtrable"
-        data-nombre="{{ ubicacion.nombre_barrio|lower }}"
-        data-region="{% if ubicacion.nombre_ciudad == 'Ciudad Autónoma de Buenos Aires' %}caba{% elif ubicacion.nombre_ciudad == 'Provincia de Buenos Aires' %}gba{% else %}otras{% endif %}"
-      >
-        <h2 class="ubicacion-titulo">
-          <a href="{% url 'ubicaciones:detalle' ubicacion.pk %}">
-            {{ ubicacion.nombre_barrio }}
-          </a>
-        </h2>
+  class="ubicacion-item ubicacion-item-filtrable"
+  data-nombre="{{ ubicacion.nombre_barrio|lower }}"
+  data-region="{{ ubicacion.zona|default:''|lower }}"
+>
+  <a href="{% url 'ubicaciones:detalle' ubicacion.pk %}" class="ubicacion-card-link">
+    <h2 class="ubicacion-titulo">
+      {{ ubicacion.nombre_barrio }}
+    </h2>
 
-        <p class="ubicacion-region-badge">
-          {% if ubicacion.nombre_ciudad == 'Ciudad Autónoma de Buenos Aires' %}
-            CABA
-          {% elif ubicacion.nombre_ciudad == 'Provincia de Buenos Aires' %}
-            GBA
-          {% else %}
-            {{ ubicacion.nombre_ciudad }}
-          {% endif %}
-        </p>
-      </li>
+    <p class="ubicacion-region-badge">
+      {% if ubicacion.zona_label %}
+        {{ ubicacion.zona_label }}
+      {% else %}
+        {{ ubicacion.nombre_ciudad }}
+      {% endif %}
+    </p>
+  </a>
+</li>
     {% endfor %}
   </ul>
 

@@ -68,6 +68,37 @@ def _safe_str(value: Any) -> str:
     return str(value).strip()
 
 
+def _usuario_pidio_puntaje(mensaje_normalizado: str) -> bool:
+    return any(
+        expresion in mensaje_normalizado
+        for expresion in [
+            "puntaje",
+            "puntuacion",
+            "puntuación",
+            "calificacion",
+            "calificación",
+            "estrellas",
+            "cuantas estrellas",
+            "cuántas estrellas",
+            "cuanto puntaje",
+            "cuánto puntaje",
+            "ranking",
+            "puntuada",
+            "puntuadas",
+            "puntuado",
+            "puntuados",
+            "mejor puntuadas",
+            "mejor puntuados",
+            "top",
+            "1 estrella",
+            "2 estrellas",
+            "3 estrellas",
+            "4 estrellas",
+            "5 estrellas",
+        ]
+    )
+
+
 def _ubicacion_has_coords(ubicacion: Ubicacion) -> bool:
     lat = getattr(ubicacion, "latitud", None)
     lon = getattr(ubicacion, "longitud", None)
@@ -186,23 +217,35 @@ def _extraer_categoria_desde_mensaje(mensaje_normalizado: str) -> str:
     return coincidencias[0][1]
 
 
-def _formatear_parrilla_resultado(parrilla_data: Dict[str, Any], incluir_distancia: bool = False) -> str:
+def _formatear_parrilla_resultado(
+    parrilla_data: Dict[str, Any],
+    incluir_distancia: bool = False,
+    incluir_puntaje: bool = False,
+) -> str:
     nombre = parrilla_data.get("nombre", "Parrilla")
     detalle_url = parrilla_data.get("detalle_url", "#")
     nombre_link = f"[{nombre}]({detalle_url})"
 
     if incluir_distancia and parrilla_data.get("distancia_km") is not None:
-        return (
+        texto = (
             f"• {nombre_link} "
             f"({parrilla_data['barrio']} - {parrilla_data['ciudad']}, "
-            f"{parrilla_data['distancia_km']} km, puntaje {parrilla_data['puntaje']:.1f}/5)"
+            f"{parrilla_data['distancia_km']} km"
         )
+        if incluir_puntaje:
+            texto += f", puntaje {parrilla_data['puntaje']:.1f}/5"
+        texto += ")"
+        return texto
 
-    return (
+    texto = (
         f"• {nombre_link} "
         f"({parrilla_data['categoria']}, {parrilla_data['barrio']} - "
-        f"{parrilla_data['ciudad']}, puntaje {parrilla_data['puntaje']:.1f}/5)"
+        f"{parrilla_data['ciudad']}"
     )
+    if incluir_puntaje:
+        texto += f", puntaje {parrilla_data['puntaje']:.1f}/5"
+    texto += ")"
+    return texto
 
 
 def _get_origen_ubicacion(barrio: str = "", ciudad: str = "") -> Optional[Ubicacion]:
@@ -343,7 +386,7 @@ def _respuesta_bienvenida(context=None) -> str:
             "¡Hola! Soy Chori Bot 👋\n"
             "Estoy para ayudarte con las categorías del sitio. "
             "Si querés, te puedo decir qué tipos de parrillas hay "
-            "o recomendarte alguna según su valoración."
+            "o recomendarte algunas opciones destacadas."
         )
 
     if "ubicacion" in current_path:
@@ -363,7 +406,7 @@ def _respuesta_bienvenida(context=None) -> str:
     return (
         "¡Hola! Soy Chori Bot 👋\n"
         "Puedo ayudarte a encontrar parrillas, categorías, ubicaciones, promociones "
-        "o recomendarte opciones según la mejor valoración."
+        "o recomendarte opciones destacadas."
     )
 
 
@@ -378,6 +421,7 @@ def _fallback_rule_based(message: str, context=None) -> str:
         )
 
     mensaje = _normalize(message.strip())
+    mostrar_puntaje = _usuario_pidio_puntaje(mensaje)
 
     if any(saludo in mensaje for saludo in ["hola", "buenas", "buen dia", "buenas tardes", "buenas noches", "hey"]):
         if len(mensaje.split()) <= 3:
@@ -490,7 +534,7 @@ def _fallback_rule_based(message: str, context=None) -> str:
             )
             if resultado.get("ok") and resultado.get("resultados"):
                 items = "\n".join(
-                    f"{_formatear_parrilla_resultado(p, incluir_distancia=True)} — {_describir_distancia(p['distancia_km'])}"
+                    f"{_formatear_parrilla_resultado(p, incluir_distancia=True, incluir_puntaje=mostrar_puntaje)} — {_describir_distancia(p['distancia_km'])}"
                     for p in resultado["resultados"]
                 )
                 return (
@@ -505,22 +549,27 @@ def _fallback_rule_based(message: str, context=None) -> str:
     if "mejor" in mensaje or "top" in mensaje or "puntuada" in mensaje:
         top = _tool_top_parrillas(limit=5)
         if top["total"] > 0:
-            items = "\n".join(_formatear_parrilla_resultado(p) for p in top["resultados"])
-            return f"Estas son algunas de las mejor puntuadas:\n{items}"
-        return "No encontré parrillas con puntaje para mostrarte ahora."
+            items = "\n".join(
+                _formatear_parrilla_resultado(p, incluir_puntaje=mostrar_puntaje)
+                for p in top["resultados"]
+            )
+            return f"Estas son algunas opciones destacadas:\n{items}"
+        return "No encontré parrillas destacadas para mostrarte ahora."
 
     if "peor" in mensaje:
-        bottom = _tool_bottom_parrillas(limit=5)
-        if bottom["total"] > 0:
-            items = "\n".join(_formatear_parrilla_resultado(p) for p in bottom["resultados"])
-            return f"Estas son algunas de las peor puntuadas:\n{items}"
-        return "No encontré parrillas con puntaje para mostrarte ahora."
+        return (
+            "Prefiero recomendarte opciones destacadas del sitio. "
+            "Si querés, te muestro parrillas recomendadas por zona, categoría o cercanía."
+        )
 
     if "recomendada" in mensaje or "recomendadas" in mensaje:
         recomendadas = _tool_parrillas_recomendadas(min_puntaje=3.0, limit=5)
         if recomendadas["total"] > 0:
-            items = "\n".join(_formatear_parrilla_resultado(p) for p in recomendadas["resultados"])
-            return f"Estas son algunas parrillas recomendadas (más de 3/5):\n{items}"
+            items = "\n".join(
+                _formatear_parrilla_resultado(p, incluir_puntaje=mostrar_puntaje)
+                for p in recomendadas["resultados"]
+            )
+            return f"Estas son algunas parrillas recomendadas:\n{items}"
         return "No encontré parrillas recomendadas en este momento."
 
     if "categoria" in mensaje or "categorias" in mensaje or "categorías" in mensaje:
@@ -533,13 +582,13 @@ def _fallback_rule_based(message: str, context=None) -> str:
     return (
         "Puedo ayudarte con cosas como estas:\n"
         "• decirte qué categorías hay\n"
-        "• mostrarte las mejor o peor puntuadas\n"
-        "• listar parrillas recomendadas (más de 3/5)\n"
+        "• mostrarte opciones destacadas\n"
+        "• listar parrillas recomendadas\n"
         "• buscar opciones por barrio o ciudad\n"
         "• mostrarte promociones vigentes\n"
         "• decirte cuál te queda más cerca\n\n"
         "Por ejemplo:\n"
-        "“¿Cuáles son las mejor puntuadas?”\n"
+        "“¿Qué me recomendás?”\n"
         "“¿Qué hay en Boedo?”\n"
         "“¿Qué recomendadas hay en Pilar?”\n"
         "“Estoy en Almagro, ¿qué tan lejos me queda una parrilla de Pilar?”"
@@ -591,7 +640,12 @@ def _tool_busca_parrillas(
     }
 
 
-def _tool_top_parrillas(categoria: str = "", barrio: str = "", ciudad: str = "", limit: int = 5) -> Dict[str, Any]:
+def _tool_top_parrillas(
+    categoria: str = "",
+    barrio: str = "",
+    ciudad: str = "",
+    limit: int = 5,
+) -> Dict[str, Any]:
     limit = _safe_int(limit, default=5, min_value=1, max_value=10)
     qs = _apply_parrilla_filters(
         _base_parrillas_queryset(),
@@ -599,11 +653,17 @@ def _tool_top_parrillas(categoria: str = "", barrio: str = "", ciudad: str = "",
         barrio=barrio,
         ciudad=ciudad,
     ).order_by("-promedio_puntaje", "nombre")
+
     resultados = [_serialize_parrilla(parrilla) for parrilla in qs[:limit]]
     return {"total": len(resultados), "resultados": resultados}
 
 
-def _tool_bottom_parrillas(categoria: str = "", barrio: str = "", ciudad: str = "", limit: int = 5) -> Dict[str, Any]:
+def _tool_bottom_parrillas(
+    categoria: str = "",
+    barrio: str = "",
+    ciudad: str = "",
+    limit: int = 5,
+) -> Dict[str, Any]:
     limit = _safe_int(limit, default=5, min_value=1, max_value=10)
     qs = _apply_parrilla_filters(
         _base_parrillas_queryset(),
@@ -611,6 +671,7 @@ def _tool_bottom_parrillas(categoria: str = "", barrio: str = "", ciudad: str = 
         barrio=barrio,
         ciudad=ciudad,
     ).order_by("promedio_puntaje", "nombre")
+
     resultados = [_serialize_parrilla(parrilla) for parrilla in qs[:limit]]
     return {"total": len(resultados), "resultados": resultados}
 
@@ -633,12 +694,15 @@ def _tool_parrillas_recomendadas(
         min_puntaje=min_puntaje,
         solo_con_promociones=_safe_bool(solo_con_promociones),
     ).order_by("-promedio_puntaje", "nombre")
+
     resultados = [_serialize_parrilla(parrilla) for parrilla in qs[:limit]]
     return {
-        "criterio": f"puntaje mayor o igual a {min_puntaje:.1f}/5",
         "total": len(resultados),
         "resultados": resultados,
     }
+
+
+
 
 
 def _tool_listar_categorias(limit: int = 20) -> Dict[str, Any]:
@@ -833,7 +897,7 @@ def _build_tool_declarations() -> List[types.Tool]:
         ),
         types.FunctionDeclaration(
             name="top_parrillas",
-            description="Devuelve las parrillas mejor puntuadas.",
+            description="Devuelve parrillas destacadas según el ranking del sitio.",
             parameters={
                 "type": "object",
                 "properties": {
@@ -846,7 +910,7 @@ def _build_tool_declarations() -> List[types.Tool]:
         ),
         types.FunctionDeclaration(
             name="bottom_parrillas",
-            description="Devuelve las parrillas peor puntuadas.",
+            description="Devuelve opciones de menor valoración para uso interno del asistente.",
             parameters={
                 "type": "object",
                 "properties": {
@@ -859,7 +923,7 @@ def _build_tool_declarations() -> List[types.Tool]:
         ),
         types.FunctionDeclaration(
             name="parrillas_recomendadas",
-            description="Lista parrillas recomendadas. En ChoriFans, recomendadas significa puntaje mayor o igual a 3/5.",
+            description="Lista parrillas recomendadas según el criterio interno de recomendación de ChoriFans.",
             parameters={
                 "type": "object",
                 "properties": {
@@ -1035,14 +1099,15 @@ def _build_system_instruction(context: Optional[Dict[str, Any]] = None) -> str:
         "Si una consulta pide datos del sitio, primero llamá a la herramienta adecuada. "
         "Después, con el resultado, redactá una respuesta humana y útil. "
         "Reglas importantes: "
-        "1) Si preguntan por la mejor o mejores puntadas, usá top_parrillas. "
-        "2) Si preguntan por la peor o peores, usá bottom_parrillas. "
-        "3) Si preguntan por recomendadas, usá parrillas_recomendadas; por defecto, recomendadas significa puntaje >= 3/5. "
-        "4) Si preguntan qué tan lejos queda una parrilla o una ubicación, usá distancia_entre_ubicaciones. "
-        "5) Si preguntan cuál queda más cerca, usá parrillas_cercanas. "
-        "6) Si preguntan por promociones, usá promociones_vigentes. "
-        "7) Si no hay coordenadas para calcular distancia, decilo claramente y ofrecé alternativas por barrio o ciudad. "
-        "8) Cuando haya varias opciones, listalas y destacá las más relevantes. "
+        "1) Si preguntan por opciones destacadas o mejores, usá top_parrillas. "
+        "2) Si preguntan por recomendadas, usá parrillas_recomendadas con el criterio interno del sistema, pero no expliques umbrales, mínimos de puntaje ni reglas internas al usuario. "
+        "3) No menciones puntajes, estrellas ni valoraciones bajas o negativas salvo que el usuario lo pida explícitamente. "
+        "4) Si preguntan por peores o valoraciones negativas, reconducí la conversación hacia opciones destacadas del sitio sin exponer puntajes bajos. "
+        "5) Si preguntan qué tan lejos queda una parrilla o una ubicación, usá distancia_entre_ubicaciones. "
+        "6) Si preguntan cuál queda más cerca, usá parrillas_cercanas. "
+        "7) Si preguntan por promociones, usá promociones_vigentes. "
+        "8) Si no hay coordenadas para calcular distancia, decilo claramente y ofrecé alternativas por barrio o ciudad. "
+        "9) Cuando haya varias opciones, listalas y destacá las más relevantes. "
         "Contexto actual del usuario: "
         f"currentPath={current_path}; currentView={current_view}; "
         f"pageTitle={page_title}; isAuthenticated={is_authenticated}."
@@ -1148,15 +1213,13 @@ def get_chori_bot_response(message: str, context=None) -> str:
         if "429" in error_text or "RESOURCE_EXHAUSTED" in error_text:
             respuesta_local = _fallback_rule_based(message, context)
             return (
-                "Ahora mismo estoy con mucho uso de IA y no puedo consultar Gemini. "
-                "Igual te respondo con la información disponible del sitio:\n\n"
+                " "
                 f"{respuesta_local}"
             )
 
         respuesta_local = _fallback_rule_based(message, context)
         return (
-            "Tuve un problema momentáneo con la IA. "
-            "Igual te respondo con la información disponible del sitio:\n\n"
+            " "
             f"{respuesta_local}"
         )
 
