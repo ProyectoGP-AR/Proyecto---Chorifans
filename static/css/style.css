@@ -4264,3 +4264,31 @@ img[src*="sin-foto"] {
     white-space: nowrap;
   }
 }
+
+/* ======================================
+   CAPAS: MAPA < HEADER / FOOTER < BOT
+   ====================================== */
+
+.ubicacion-mapa-card,
+.ubicacion-map,
+.leaflet-container {
+  position: relative;
+  z-index: 1;
+}
+
+header {
+  z-index: 2000;
+}
+
+.site-footer {
+  z-index: 1900;
+}
+
+.chori-bot-widget {
+  z-index: 3000 !important;
+}
+
+.chori-bot-panel {
+  position: relative;
+  z-index: 3001;
+}
