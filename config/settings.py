@@ -28,7 +28,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS = [
@@ -149,7 +149,7 @@ STATICFILES_DIRS = [
 ]
 
 # Opcionalmente, para cuando se haga deploy (no afecta en desarrollo)
-# STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 
 # Archivos subidos por el usuario (imágenes, etc.)
