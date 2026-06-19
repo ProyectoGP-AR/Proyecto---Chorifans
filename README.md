@@ -1,6 +1,7 @@
 # 🔥 ChoriFans – Plataforma de Parrillas, Promociones y Reseñas
 
-Proyecto integrador final – Backend  
+Proyecto final de carrera
+
 Autores: **Diego Murgana & Leandro Sosa**  
 
 ChoriFans es una aplicación web construida con **Django + Django Ninja**, pensada para la comunidad choripanera.  
